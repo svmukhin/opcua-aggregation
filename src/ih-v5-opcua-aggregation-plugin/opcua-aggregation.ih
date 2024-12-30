@@ -1,0 +1,6 @@
+{
+  "id":"opcua-aggregation",
+  "description":"Opc UA Aggregation plugin" ,
+  "version":"0.0.1",
+  "cross":true 
+}
