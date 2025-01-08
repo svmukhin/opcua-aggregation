@@ -13,16 +13,18 @@ public class OpcuaAggregationController: ControllerBase
         var result = new {
             Session = new {
                 Id = id,
-                Data = new Dictionary<string, object> { 
-                    { "ai1", 0.21},
-                    { "ai2", 0.15},
-                    { "ai3", 10 },
-                    { "ai4", 0},
-                    { "di1", false},
-                    { "di2", true},
+                Data = new Dictionary<string, OpcTag> { 
+                    { "p5g257.ns=4;MAIN.group.kl3122.ai.ai[1]", new OpcTag(0.21, DateTime.Now)},
+                    { "p5g257.ns=4;MAIN.group.kl3122.ai.ai[2]", new OpcTag(0.15, DateTime.Now)},
+                    { "p5g257.ns=4;MAIN.group.kl3122.ai.ai[3]", new OpcTag(10, DateTime.Now) },
+                    { "p5g257.ns=4;MAIN.group.kl3122.ai.ai[4]", new OpcTag(0, DateTime.Now)},
+                    { "p5g257.ns=4;MAIN.group.kl1408.di.di[1]", new OpcTag(false, DateTime.Now)},
+                    { "p5g257.ns=4;MAIN.group.kl1408.di.di[2]", new OpcTag(true, DateTime.Now)},
                 }
             }
         };
-        return Ok(JsonSerializer.Serialize(result));
+        return new JsonResult(JsonSerializer.Serialize(result));
     }
 }
+
+public record OpcTag(object value, DateTime Timestamp);
