@@ -1,4 +1,8 @@
+using OpcuaAggregationClient.Infrastructure;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddInfrastructureServices();
 
 builder.Services.AddCors(options => {
     options.AddPolicy("AllowAll",
