@@ -2,6 +2,8 @@ using OpcuaAggregationClient.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddMemoryCache();
+
 builder.Services.AddInfrastructureServices(builder.Configuration);
 
 builder.Services.AddCors(options => {

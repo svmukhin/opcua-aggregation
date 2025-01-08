@@ -1,4 +1,5 @@
 using System.Collections;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Opc.Ua;
 using Opc.Ua.Client;
@@ -9,7 +10,8 @@ public class UaClient(
     UaClientConfiguration uaClientConfiguration,
     ApplicationConfiguration configuration,
     ILogger<UaClient>  logger,
-    Action<IList, IList> validateResponse
+    Action<IList, IList> validateResponse,
+    IMemoryCache memoryCache
 ) : IDisposable
 {
     private readonly object _lock = new();
@@ -19,6 +21,7 @@ public class UaClient(
     private readonly ApplicationConfiguration _configuration = configuration;
     private readonly ILogger _logger = logger;
     private readonly Action<IList, IList> _validateResponse = validateResponse;
+    private readonly IMemoryCache _memoryCache = memoryCache;
     private readonly int _publishingInterval = 5000;
     private readonly int _samplingInterval = 2500;
 
@@ -240,10 +243,18 @@ public class UaClient(
         if (e.NotificationValue is not MonitoredItemNotification notification)
             return;
 
-        var nodeIdString = monitoredItem.StartNodeId.ToString();
-        var idx = monitoredItem.DisplayName.IndexOf(':');
-        var name = monitoredItem.DisplayName[(idx + 1)..];
+        if(notification.Value.WrappedValue.TypeInfo.BuiltInType == BuiltInType.Boolean)
+        {
+            _memoryCache.Set(
+                monitoredItem.DisplayName, 
+                new AggregationTag(
+                    (bool)notification.Value.WrappedValue.Value == true ? 1 : 0, 
+                    notification.Value.SourceTimestamp
+                )
+            );
+            return;
+        }
 
-        _logger.LogInformation("Notification received for {NodeId} - {Name}", nodeIdString, name);
+        _memoryCache.Set(monitoredItem.DisplayName, new AggregationTag(notification.Value.WrappedValue.Value, notification.Value.SourceTimestamp));
     }
 }

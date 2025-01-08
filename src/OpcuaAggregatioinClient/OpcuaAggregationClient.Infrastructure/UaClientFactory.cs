@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Opc.Ua;
 using Opc.Ua.Configuration;
@@ -6,10 +7,12 @@ using OpcuaAggregationClient.Infrastructure.Entities;
 namespace OpcuaAggregationClient.Infrastructure;
 
 public class UaClientFactory(
-    ILoggerFactory loggerFactory
+    ILoggerFactory loggerFactory,
+    IMemoryCache memoryCache
 )
 {
     private readonly ILoggerFactory _loggerFactory = loggerFactory;
+    private readonly IMemoryCache _memoryCache = memoryCache;
     private ApplicationInstance? _application;
     private readonly object _lock = new();
 
@@ -38,6 +41,7 @@ public class UaClientFactory(
             clientConfiguration,
             _application.ApplicationConfiguration,
             _loggerFactory.CreateLogger<UaClient>(),
-            ClientBase.ValidateResponse);
+            ClientBase.ValidateResponse,
+            _memoryCache);
     }
 }
