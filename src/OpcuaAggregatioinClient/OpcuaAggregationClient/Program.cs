@@ -2,7 +2,7 @@ using OpcuaAggregationClient.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddInfrastructureServices();
+builder.Services.AddInfrastructureServices(builder.Configuration);
 
 builder.Services.AddCors(options => {
     options.AddPolicy("AllowAll",
