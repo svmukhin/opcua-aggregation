@@ -15,4 +15,10 @@
     <ProjectReference Include="..\OpcuaAggregationClient.Infrastructure\OpcuaAggregationClient.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="OpcuaAggregation.OpcUaClient.Config.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
