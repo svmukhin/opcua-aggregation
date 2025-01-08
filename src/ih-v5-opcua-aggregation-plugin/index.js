@@ -1,29 +1,29 @@
+/**
+ * opcua-aggregation index.js
+ */
 const util = require('util');
 
-const app = require('./app'); // Модуль, который будет содержать основной цикл плагина
+// const plugin = require('ih-plugin-api')();
+const app = require('./app');
 
-(async () => {
-
+(async () => {  
   let plugin;
   try {
-    // Получить основные параметры, переданные при запуске
     const opt = getOptFromArgs();
-
-     // Объект plugin предоставляет доступ к API ядра
     const pluginapi = opt && opt.pluginapi ? opt.pluginapi : 'ih-plugin-api';
     plugin = require(pluginapi+'/index.js')();
-    plugin.log('Плагин стартовал.');
+    
+    plugin.log('Plugin opcua aggregation has started.', 0);
 
-    // Получить параметры плагина
+    // Получить параметры 
     plugin.params.data = await plugin.params.get();
-    plugin.log('Получены параметры: '+ util.inspect(plugin.params.data));
+    plugin.log('Received params data:'+util.inspect(plugin.params.data));
 
-    // Получить каналы - если плагин их использует
+    // Получить каналы 
     plugin.channels.data = await plugin.channels.get();
-    plugin.log('Получены каналы '+util.inspect(plugin.params.data));
+    plugin.log('Received channels data: '+util.inspect(plugin.channels.data));
 
-    app(plugin); // Запустить модуль
-                 // Либо разместить код основного цикла прямо здесь
+    app(plugin);
   } catch (err) {
     plugin.exit(8, `Error: ${util.inspect(err)}`);
   }

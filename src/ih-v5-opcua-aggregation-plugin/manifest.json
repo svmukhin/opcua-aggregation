@@ -1,5 +1,30 @@
 {
-    "module": "index.js",
-    "single":1,
-    "nochannels":0
- }
+  "module": "index.js",
+  "single":1,
+  "nochannels":0,
+  "innerId": 1,
+  "share_node_folder_fields":["sessionname"],
+  "channel_folder_popup": {
+    "add": [
+      { "id": "channel_folder", "title": "New folder" },
+      { "id": "channel_node_folder", "title": "New session" },
+      { "id": "channel", "title": "New channel" }
+    ],
+    "copypaste": true,
+    "delete": true
+  },
+  "default_channel_node_folder": {
+      "foldertype": "node",
+      "chan": "pNgN"
+  },
+  "default_channel_folder": {
+      "chan": "New folder"
+  },
+  "default_channel": {
+      "chan": "New channel"
+  },
+  "channel_popup": {        
+    "copypaste":true,
+    "delete":true
+  }
+}
