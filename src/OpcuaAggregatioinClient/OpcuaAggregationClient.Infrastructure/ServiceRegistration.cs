@@ -10,5 +10,6 @@ public static class ServiceRegistration
         services.AddKeyedSingleton("DefaultDataSource", Npgsql.NpgsqlDataSource.Create(configuration.GetConnectionString("DefaultConnection")!));
         services.AddSingleton<UaClientFactory>();
         services.AddSingleton<UaClientConfigurationStore>();
+        services.AddHostedService<ClientsBootstrap>();
     }
 }
