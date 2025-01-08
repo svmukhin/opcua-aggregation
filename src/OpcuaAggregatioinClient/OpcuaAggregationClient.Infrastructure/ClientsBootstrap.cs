@@ -83,6 +83,12 @@ public class ClientsBootstrap(
 
     private async Task StartUaClientAsync(UaClientConfiguration config, CancellationToken cancellationToken = default)
     {
+        if(config.Id is null)
+        {
+            _logger.LogError("Client configuration {config} does not have an Id", config);
+            return;
+        }
+        
         var client = _uaClientFactory.GetInstance(config);
         var connected = await client.ConnectAsync(config.ServerUri);
         if(!connected)
