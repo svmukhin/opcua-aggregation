@@ -4,7 +4,7 @@ Description=OPC UA Aggregation Client
 [Service]
 WorkingDirectory=/srv/OpcuaAggregationClient
 ExecStart=/home/mukhin/.dotnet/dotnet /srv/OpcuaAggregationClient/OpcuaAggregationClient.dll
-SyslogIdentifiers=opcua-Aggregation
+SyslogIdentifier=opcua-aggregation
 User=mukhin
 Restart=always
 RestartSec=10
