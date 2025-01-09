@@ -1,9 +1,9 @@
 {
   "module": "index.js",
-  "single":1,
-  "nochannels":0,
+  "single": 1,
+  "nochannels": 0,
   "innerId": 1,
-  "share_node_folder_fields":["sessionname"],
+  "share_node_folder_fields": ["sessionname"],
   "channel_folder_popup": {
     "add": [
       { "id": "channel_folder", "title": "New folder" },
@@ -14,17 +14,17 @@
     "delete": true
   },
   "default_channel_node_folder": {
-      "foldertype": "node",
-      "chan": "pNgN"
+    "foldertype": "node",
+    "chan": "pNgN"
   },
   "default_channel_folder": {
-      "chan": "New folder"
+    "chan": "New folder"
   },
   "default_channel": {
-      "chan": "New channel"
+    "chan": "New channel"
   },
-  "channel_popup": {        
-    "copypaste":true,
-    "delete":true
+  "channel_popup": {
+    "copypaste": true,
+    "delete": true
   }
 }
