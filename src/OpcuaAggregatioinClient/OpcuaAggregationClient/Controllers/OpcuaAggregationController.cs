@@ -12,13 +12,16 @@ public class OpcuaAggregationController: ControllerBase
     [HttpGet]
     public IActionResult GetAggregationTags([FromQuery]IEnumerable<string> tagids, [FromServices] IMemoryCache memoryCache)
     {
-        var Data = new Dictionary<string, AggregationTag?>();
+        var Data = new List<object>();
 
         foreach (var tagid in tagids)
         {
             if(memoryCache.TryGetValue(tagid, out AggregationTag? aggregationTag))
             {
-                Data.Add(tagid, aggregationTag);
+                if(aggregationTag is null)
+                    continue;
+
+                Data.Add( new { tagid, aggregationTag.Value, aggregationTag.StatusCode, aggregationTag.Timestamp });
             }
         }
 

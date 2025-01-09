@@ -248,13 +248,14 @@ public class UaClient(
             _memoryCache.Set(
                 monitoredItem.DisplayName, 
                 new AggregationTag(
-                    (bool)notification.Value.WrappedValue.Value == true ? 1 : 0, 
+                    (bool)notification.Value.WrappedValue.Value == true ? 1 : 0,
+                    notification.Value.StatusCode.Code,
                     notification.Value.SourceTimestamp
                 )
             );
             return;
         }
 
-        _memoryCache.Set(monitoredItem.DisplayName, new AggregationTag(notification.Value.WrappedValue.Value, notification.Value.SourceTimestamp));
+        _memoryCache.Set(monitoredItem.DisplayName, new AggregationTag(notification.Value.WrappedValue.Value, notification.Value.StatusCode.Code, notification.Value.SourceTimestamp));
     }
 }
