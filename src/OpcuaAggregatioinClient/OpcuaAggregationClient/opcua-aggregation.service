@@ -1,0 +1,13 @@
+[Unit]
+Description=OPC UA Aggregation Client
+
+[Service]
+WorkingDirectory=/srv/OpcuaAggregationClient
+ExecStart=/home/mukhin/.dotnet/dotnet /srv/OpcuaAggregationClient/OpcuaAggregationClient.dll
+SyslogIdentifiers=opcua-Aggregation
+User=mukhin
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
