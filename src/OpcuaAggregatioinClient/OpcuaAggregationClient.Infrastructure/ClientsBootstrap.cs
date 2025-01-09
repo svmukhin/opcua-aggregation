@@ -90,7 +90,7 @@ public class ClientsBootstrap(
         }
         
         var client = _uaClientFactory.GetInstance(config);
-        var connected = await client.ConnectAsync(config.ServerUri);
+        var connected = await client.ConnectAsync(config.ServerUri, false);
         if(!connected)
         {
             _logger.LogError("Failed to connect to {serverUri}", config.ServerUri);
