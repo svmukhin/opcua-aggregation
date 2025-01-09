@@ -57,7 +57,7 @@ public class ClientsBootstrap(
             tasks.Clear();
             foreach (var config in await _uaClientConfigurationStore.GetUaClientConfigurationsAsync(stoppingToken))
             {
-                if(_uaClients.FindIndex(c => c.ClientId == config.Id) == -1)
+                if(_uaClients.FindIndex(c => c.ClientId == config.Id) != -1)
                 {
                     _logger.LogInformation("Client {sessionName} is already running", config.SessionName);
                     continue;
