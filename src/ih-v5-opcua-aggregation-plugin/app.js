@@ -62,8 +62,8 @@ module.exports = async function (plugin) {
         acc[key] = {};
         acc[key].ref = [];
       }
-      if (uniq[obj.chan] == undefined) {
-        uniq[obj.chan] = obj;
+      if (uniq[obj.chanId] == undefined) {
+        uniq[obj.chanId] = obj;
         acc[key].ref.push(obj);
       }
 

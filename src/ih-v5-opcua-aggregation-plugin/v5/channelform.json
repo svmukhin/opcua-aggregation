@@ -18,7 +18,8 @@
   "p2": [
     { "prop": "chan", "title": "Name", "type": "input" },
     { "prop": "nodeid", "title": "Node ID", "type": "input" },
-    { "prop": "dataType", "title": "Data type", "type": "input" }
+    { "prop": "dataType", "title": "Data type", "type": "input" },
+    { "prop": "description", "title": "Description", "type": "input" }
   ],
 
   "p3": [

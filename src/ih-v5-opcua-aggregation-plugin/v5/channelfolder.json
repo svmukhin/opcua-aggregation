@@ -28,6 +28,11 @@
       "title": "Description",
       "type": "input",
       "default": ""
+    },
+    {
+      "prop": "serveruri",
+      "title": "Server Uri",
+      "type": "text"
     }
   ]
 }
