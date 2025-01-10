@@ -17,6 +17,7 @@ public class UaClient(
     private readonly object _lock = new();
     private ISession? _session;
     private SessionReconnectHandler? _reconnectHandler;
+    private IEnumerable<UaClientChannelConfiguration>? _subscribedItems;
     private readonly UaClientConfiguration _uaClientConfiguration = uaClientConfiguration;
     private readonly ApplicationConfiguration _configuration = configuration;
     private readonly ILogger _logger = logger;
@@ -135,6 +136,22 @@ public class UaClient(
                         _logger.LogWarning("Session {SessionName}: KeepAlive status {Status}, reconnecting in {ReconnectPeriod}ms.", _session.SessionName, e.Status, ReconnectPeriod);
                         _reconnectHandler = new SessionReconnectHandler(true);
                         _reconnectHandler.BeginReconnect(_session, ReconnectPeriod, OnReconnectCompleted);
+                        if (_subscribedItems is null)
+                        {
+                            return;
+                        }
+                        foreach (var item in _subscribedItems)
+                        {
+                            var key = $"{_session.SessionName}.{item.NodeId}";
+                            if (_memoryCache.TryGetValue(key, out AggregationTag? tag))
+                            {
+                                if (tag is null)
+                                {
+                                    continue;
+                                }
+                                _memoryCache.Set(key, new AggregationTag(tag.Value, StatusCodes.Bad, tag.Timestamp));
+                            }
+                        }
                     }
                     else
                     {
@@ -229,6 +246,8 @@ public class UaClient(
             }
 
             subscription.ApplyChanges();
+
+            _subscribedItems = items;
         }
         catch (Exception ex)
         {
