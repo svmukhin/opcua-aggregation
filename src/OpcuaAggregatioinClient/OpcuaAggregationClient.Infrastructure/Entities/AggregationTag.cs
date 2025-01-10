@@ -1,3 +1,3 @@
 namespace OpcuaAggregationClient.Infrastructure.Entities;
 
-public record AggregationTag(object Value, uint StatusCode, DateTime Timestamp);
+public record AggregationTag(object Value, int StatusCode, DateTime Timestamp);

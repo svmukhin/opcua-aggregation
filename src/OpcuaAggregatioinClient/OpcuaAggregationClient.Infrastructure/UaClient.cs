@@ -149,7 +149,7 @@ public class UaClient(
                                 {
                                     continue;
                                 }
-                                _memoryCache.Set(key, new AggregationTag(tag.Value, StatusCodes.Bad, tag.Timestamp));
+                                _memoryCache.Set(key, new AggregationTag(tag.Value, 1, tag.Timestamp));
                             }
                         }
                     }
@@ -267,13 +267,13 @@ public class UaClient(
                 monitoredItem.DisplayName, 
                 new AggregationTag(
                     (bool)notification.Value.WrappedValue.Value == true ? 1 : 0,
-                    notification.Value.StatusCode.Code,
+                    notification.Value.StatusCode.Code == 0 ? 0 : 1,
                     notification.Value.SourceTimestamp
                 )
             );
             return;
         }
 
-        _memoryCache.Set(monitoredItem.DisplayName, new AggregationTag(notification.Value.WrappedValue.Value, notification.Value.StatusCode.Code, notification.Value.SourceTimestamp));
+        _memoryCache.Set(monitoredItem.DisplayName, new AggregationTag(notification.Value.WrappedValue.Value, notification.Value.StatusCode.Code == 0 ? 0 : 1, notification.Value.SourceTimestamp));
     }
 }
