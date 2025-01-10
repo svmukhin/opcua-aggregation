@@ -124,7 +124,7 @@ public class UaClient(
             {
                 if (ReconnectPeriod <= 0)
                 {
-                    _logger.LogWarning("KeepAlive status {Status}, but reconnect is disabled.", e.Status);
+                    _logger.LogWarning("Session {SessionName}: KeepAlive status {Status}, but reconnect is disabled.", _session.SessionName, e.Status);
                     return;
                 }
 
@@ -132,14 +132,13 @@ public class UaClient(
                 {
                     if (_reconnectHandler == null)
                     {
-                        _logger.LogWarning("KeepAlive status {Status}, reconnecting in {ReconnectPeriod}ms.", e.Status, ReconnectPeriod);
-                        _logger.LogWarning("--- RECONNECTING {Status} ---", e.Status);
+                        _logger.LogWarning("Session {SessionName}: KeepAlive status {Status}, reconnecting in {ReconnectPeriod}ms.", _session.SessionName, e.Status, ReconnectPeriod);
                         _reconnectHandler = new SessionReconnectHandler(true);
                         _reconnectHandler.BeginReconnect(_session, ReconnectPeriod, OnReconnectCompleted);
                     }
                     else
                     {
-                        _logger.LogInformation("KeepAlive status {Status}, reconnect in progress.", e.Status);
+                        _logger.LogInformation("Session {SessionName}: KeepAlive status {Status}, reconnect in progress.", _session.SessionName, e.Status);
                     }
                 }
 
@@ -170,7 +169,7 @@ public class UaClient(
             _reconnectHandler = null;
         }
 
-        _logger.LogInformation("--- RECONNECTED ---");
+        _logger.LogInformation("Session {SessionName}: --- RECONNECTED ---", _session?.SessionName);
     }
 
     protected virtual void CertificateValidation(CertificateValidator sender, CertificateValidationEventArgs e)
