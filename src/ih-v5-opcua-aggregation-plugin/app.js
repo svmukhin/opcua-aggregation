@@ -50,8 +50,7 @@ module.exports = async function (plugin) {
         });
       } catch (error) {
         plugin.log(
-          "Can't fetch data from server. Error: ",
-          util.inspect(error)
+          "Can't fetch data from server. Error: " + util.inspect(error)
         );
       }
     });
