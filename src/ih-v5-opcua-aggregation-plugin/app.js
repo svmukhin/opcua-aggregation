@@ -29,24 +29,31 @@ module.exports = async function (plugin) {
         itemsToFetch[channelkey] = channel;
       });
 
-      const res = await axios.get(
-        "http://localhost:5000/api/aggregation/tags",
-        {
-          params: { tagids: Object.keys(itemsToFetch) },
-          paramsSerializer: { indexes: null },
-        }
-      );
+      try {
+        const res = await axios.get(
+          "http://localhost:5000/api/aggregation/tags",
+          {
+            params: { tagids: Object.keys(itemsToFetch) },
+            paramsSerializer: { indexes: null },
+          }
+        );
 
-      res.data.data.forEach((tag) => {
-        let item = itemsToFetch[tag.tagid];
-        let ts = new Date(tag.timestamp).getTime();
-        toSend.push({
-          id: item.id,
-          value: tag.value,
-          chstatus: tag.statusCode,
-          ts: ts,
+        res.data.data.forEach((tag) => {
+          let item = itemsToFetch[tag.tagid];
+          let ts = new Date(tag.timestamp).getTime();
+          toSend.push({
+            id: item.id,
+            value: tag.value,
+            chstatus: tag.statusCode,
+            ts: ts,
+          });
         });
-      });
+      } catch (error) {
+        plugin.log(
+          "Can't fetch data from server. Error: ",
+          util.inspect(error)
+        );
+      }
     });
 
     setTimeout(() => {
