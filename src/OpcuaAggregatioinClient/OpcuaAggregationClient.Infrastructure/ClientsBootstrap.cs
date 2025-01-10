@@ -29,8 +29,6 @@ public class ClientsBootstrap(
 
     private async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        var tasks = new List<Task>();
-
         try
         {
             foreach (var config in await _uaClientConfigurationStore.GetUaClientConfigurationsAsync(stoppingToken))
@@ -41,9 +39,8 @@ public class ClientsBootstrap(
                     continue;
                 }
 
-                tasks.Add(StartUaClientAsync(config, stoppingToken));
+                await StartUaClientAsync(config, stoppingToken);
             }
-            await Task.WhenAll(tasks);
             _logger.LogInformation("All clients started");
         }
         catch (Exception ex)
@@ -54,7 +51,6 @@ public class ClientsBootstrap(
 
         while(!stoppingToken.IsCancellationRequested)
         {
-            tasks.Clear();
             foreach (var config in await _uaClientConfigurationStore.GetUaClientConfigurationsAsync(stoppingToken))
             {
                 if(_uaClients.FindIndex(c => c.ClientId == config.Id) != -1)
@@ -69,12 +65,7 @@ public class ClientsBootstrap(
                     continue;
                 }
 
-                tasks.Add(StartUaClientAsync(config, stoppingToken));
-            }
-
-            if(tasks.Count > 0)
-            {
-                await Task.WhenAll(tasks);
+                await StartUaClientAsync(config, stoppingToken);
             }
 
             await Task.Delay(TimeSpan.FromSeconds(15), stoppingToken);
