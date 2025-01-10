@@ -41,16 +41,24 @@ module.exports = async function (plugin) {
         res.data.data.forEach((tag) => {
           let item = itemsToFetch[tag.tagid];
           let ts = new Date(tag.timestamp).getTime();
-          toSend.push({
-            id: item.id,
-            value: tag.value,
-            chstatus: tag.statusCode,
-            ts: ts,
-          });
+          if (tag.statusCode === 0) {
+            toSend.push({
+              id: item.id,
+              value: tag.value,
+              chstatus: tag.statusCode,
+              ts: ts,
+            });
+          } else {
+            toSend.push({
+              id: item.id,
+              chstatus: tag.statusCode,
+              ts: ts,
+            });
+          }
         });
       } catch (error) {
         plugin.log(
-          "Can't fetch data from server. Error: " + util.inspect(error)
+          "Can't fetch data from server. Error: " + util.inspect(error.cause)
         );
       }
     });
