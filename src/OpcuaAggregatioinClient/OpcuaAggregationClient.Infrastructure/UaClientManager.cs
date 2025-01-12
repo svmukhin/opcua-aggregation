@@ -51,4 +51,8 @@ public class UaClientManager(
 
         _logger.LogInformation("Ua clients stopped.");
     }
+
+    public UaClientStatus? GetClientStatusById(int id) => _clients.FirstOrDefault(c => c.ClientId == id)?.GetStatus();
+
+    public IEnumerable<UaClientStatus> GetClientsStatus() => _clients.Select(c => c.GetStatus());
 }

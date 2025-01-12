@@ -6,6 +6,7 @@ using Opc.Ua.Client;
 using OpcuaAggregationClient.Infrastructure.Entities;
 
 namespace OpcuaAggregationClient.Infrastructure;
+
 public class UaClient(
     UaClientConfiguration uaClientConfiguration,
     ApplicationConfiguration configuration,
@@ -275,5 +276,18 @@ public class UaClient(
         }
 
         _memoryCache.Set(monitoredItem.DisplayName, new AggregationTag(notification.Value.WrappedValue.Value, notification.Value.StatusCode.Code == 0 ? 0 : 1, notification.Value.SourceTimestamp));
+    }
+
+    public UaClientStatus GetStatus()
+    {
+        var connectError = _session is not null && _reconnectHandler is null ? (_session.Connected ? 0 : 1) : 1;
+        return new UaClientStatus
+        {
+            Id = _uaClientConfiguration.Id!.Value,
+            SessionName = _uaClientConfiguration.SessionName,
+            ServerUri = _uaClientConfiguration.ServerUri,
+            ConnectError = connectError,
+            MonitoredItems = _subscribedItems?.Select(item => $"{_uaClientConfiguration.SessionName}.{item.NodeId}")
+        };
     }
 }
