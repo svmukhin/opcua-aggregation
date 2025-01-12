@@ -22,6 +22,11 @@ var app = builder.Build();
 
 app.UseCors("AllowAll");
 
+app.UseDefaultFiles();
+app.UseStaticFiles();
+
+app.UseRouting();
+
 app.MapGet("/", () => "Opc UA Aggregation Client");
 app.MapControllers();
 
