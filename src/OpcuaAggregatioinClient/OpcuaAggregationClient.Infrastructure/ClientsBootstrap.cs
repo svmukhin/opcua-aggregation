@@ -1,21 +1,19 @@
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using OpcuaAggregationClient.Infrastructure.Entities;
 
 namespace OpcuaAggregationClient.Infrastructure;
 
 public class ClientsBootstrap(
     UaClientConfigurationStore uaClientConfigurationStore,
-    UaClientFactory uaClientFactory,
+    UaClientManager clientManager,
     ILogger<ClientsBootstrap> logger
 ) : IHostedService, IDisposable
 {
     private readonly UaClientConfigurationStore _uaClientConfigurationStore = uaClientConfigurationStore;
-    private readonly UaClientFactory _uaClientFactory = uaClientFactory;
+    private readonly UaClientManager _clientManager = clientManager;
     private readonly ILogger<ClientsBootstrap> _logger = logger;
     private Task? _executingTask;
     private readonly CancellationTokenSource _stoppingCts = new();
-    private readonly List<UaClient> _uaClients = [];
 
     public Task StartAsync(CancellationToken cancellationToken)
     {
@@ -39,7 +37,7 @@ public class ClientsBootstrap(
                     continue;
                 }
 
-                await StartUaClientAsync(config, stoppingToken);
+                await _clientManager.StartUaClientAsync(config, stoppingToken);
             }
             _logger.LogInformation("All clients started");
         }
@@ -53,7 +51,7 @@ public class ClientsBootstrap(
         {
             foreach (var config in await _uaClientConfigurationStore.GetUaClientConfigurationsAsync(stoppingToken))
             {
-                if(_uaClients.FindIndex(c => c.ClientId == config.Id) != -1)
+                if(_clientManager.ClientExists(config.Id!.Value))
                 {
                     _logger.LogInformation("Client {sessionName} is already running", config.SessionName);
                     continue;
@@ -65,33 +63,11 @@ public class ClientsBootstrap(
                     continue;
                 }
 
-                await StartUaClientAsync(config, stoppingToken);
+                await _clientManager.StartUaClientAsync(config, stoppingToken);
             }
 
             await Task.Delay(TimeSpan.FromSeconds(15), stoppingToken);
         }
-    }
-
-    private async Task StartUaClientAsync(UaClientConfiguration config, CancellationToken cancellationToken = default)
-    {
-        if(config.Id is null)
-        {
-            _logger.LogError("Client configuration {config} does not have an Id", config);
-            return;
-        }
-        
-        var client = _uaClientFactory.GetInstance(config);
-        var connected = await client.ConnectAsync(config.ServerUri, false);
-        if(!connected)
-        {
-            _logger.LogError("Failed to connect to {serverUri}", config.ServerUri);
-            return;
-        }
-
-        _uaClients.Add(client);
-
-        var channels = await _uaClientConfigurationStore.GetUaClientChannelConfigurationsAsync(config.Id.Value);
-        client.AddSubscription(channels, config.SessionName);
     }
 
     public async Task StopAsync(CancellationToken cancellationToken)
@@ -105,16 +81,7 @@ public class ClientsBootstrap(
         }
         finally
         {
-            if(_uaClients.Count > 0)
-            {
-                foreach (var client in _uaClients)
-                {
-                    await client.Disconnect();
-                    client.Dispose();
-                }
-            }
-
-            _logger.LogInformation("Ua clients stopped.");
+            await _clientManager.DisposeClientsAsync();
         }
     }
 
