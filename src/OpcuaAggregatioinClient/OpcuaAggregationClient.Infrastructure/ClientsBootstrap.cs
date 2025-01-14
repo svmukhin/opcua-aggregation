@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Opc.Ua;
 using OpcuaAggregationClient.Infrastructure.Entities;
 
 namespace OpcuaAggregationClient.Infrastructure;
@@ -7,18 +8,20 @@ namespace OpcuaAggregationClient.Infrastructure;
 public class ClientsBootstrap(
     UaClientConfigurationStore uaClientConfigurationStore,
     UaClientFactory uaClientFactory,
-    ILogger<ClientsBootstrap> logger
+    ILoggerFactory loggerFactory
 ) : IHostedService, IDisposable
 {
     private readonly UaClientConfigurationStore _uaClientConfigurationStore = uaClientConfigurationStore;
     private readonly UaClientFactory _uaClientFactory = uaClientFactory;
-    private readonly ILogger<ClientsBootstrap> _logger = logger;
+    private readonly ILoggerFactory _loggerFactory = loggerFactory;
+    private readonly ILogger<ClientsBootstrap> _logger = loggerFactory.CreateLogger<ClientsBootstrap>();
     private Task? _executingTask;
     private readonly CancellationTokenSource _stoppingCts = new();
     private readonly List<UaClient> _uaClients = [];
 
     public Task StartAsync(CancellationToken cancellationToken)
     {
+        Utils.SetLogger(_loggerFactory.CreateLogger("OpcUaUtilsLogger"));
         _executingTask = ExecuteAsync(_stoppingCts.Token);
 
         if (_executingTask.IsCompleted)
@@ -107,9 +110,17 @@ public class ClientsBootstrap(
         {
             if(_uaClients.Count > 0)
             {
+                var tasks = new List<Task>();
+
                 foreach (var client in _uaClients)
                 {
-                    await client.Disconnect();
+                    tasks.Add(client.Disconnect());
+                }
+
+                await Task.WhenAll(tasks);
+
+                foreach (var client in _uaClients)
+                {
                     client.Dispose();
                 }
             }

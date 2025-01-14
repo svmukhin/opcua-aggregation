@@ -46,7 +46,7 @@ public class UaClient(
             }
             else
             {
-                _logger.LogInformation("Connecting to... {serverUrl}", serverUrl);
+                _logger.LogInformation("Connecting to... {SessionName} with {serverUrl}",_uaClientConfiguration.SessionName, serverUrl);
                 EndpointDescription endpointDescription = CoreClientUtils.SelectEndpoint(_configuration, serverUrl, useSecurity);
                 EndpointConfiguration endpointConfiguration = EndpointConfiguration.Create(_configuration);
                 ConfiguredEndpoint endpoint = new(null, endpointDescription, endpointConfiguration);
@@ -68,6 +68,7 @@ public class UaClient(
                     _session.KeepAliveInterval = KeepAliveInterval;
                     _session.KeepAlive += new KeepAliveEventHandler(OnKeepAlive);
                     _logger.LogInformation("New Session Created with SessionName = {SessionName}", _session.SessionName);
+                     _memoryCache.Set($"{_session?.SessionName}.connectError", new AggregationTag(0, 0, DateTime.UtcNow));
                 }
             }
 
@@ -136,6 +137,7 @@ public class UaClient(
                         _logger.LogWarning("Session {SessionName}: KeepAlive status {Status}, reconnecting in {ReconnectPeriod}ms.", _session.SessionName, e.Status, ReconnectPeriod);
                         _reconnectHandler = new SessionReconnectHandler(true);
                         _reconnectHandler.BeginReconnect(_session, ReconnectPeriod, OnReconnectCompleted);
+                        _memoryCache.Set($"{_session.SessionName}.connectError", new AggregationTag(1, 0, DateTime.UtcNow));
                         if (_subscribedItems is null)
                         {
                             return;
@@ -184,6 +186,8 @@ public class UaClient(
 
             _reconnectHandler?.Dispose();
             _reconnectHandler = null;
+
+            _memoryCache.Set($"{_session?.SessionName}.connectError", new AggregationTag(0, 0, DateTime.UtcNow));
         }
 
         _logger.LogInformation("Session {SessionName}: --- RECONNECTED ---", _session?.SessionName);
@@ -233,16 +237,18 @@ public class UaClient(
 
             foreach (var item in items)
             {
+                var displayName = $"{subscriptionName}.{item.NodeId}";
                 MonitoredItem monitoredItem = new(subscription.DefaultItem)
                 {
                     StartNodeId = new NodeId(item.NodeId),
                     AttributeId = Attributes.Value,
-                    DisplayName = $"{subscriptionName}.{item.NodeId}",
+                    DisplayName = displayName,
                     SamplingInterval = _samplingInterval
                 };
                 monitoredItem.Notification += OnMonitoredItemNotification;
 
                 subscription.AddItem(monitoredItem);
+                _memoryCache.Set(displayName, new AggregationTag(0, 1, DateTime.UtcNow));
             }
 
             subscription.ApplyChanges();
