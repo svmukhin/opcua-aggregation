@@ -63,7 +63,7 @@
 			<ua:String>http://{0}/UADiscovery/Default.svc</ua:String>
 		</WellKnownDiscoveryUrls>
 		<DiscoveryServers></DiscoveryServers>
-		<MinSubscriptionLifetime>10000</MinSubscriptionLifetime>
+		<MinSubscriptionLifetime>60000</MinSubscriptionLifetime>
 	</ClientConfiguration>
 
 	<Extensions>
