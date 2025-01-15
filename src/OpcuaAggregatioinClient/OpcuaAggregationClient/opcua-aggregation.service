@@ -1,5 +1,7 @@
 [Unit]
 Description=OPC UA Aggregation Client
+Require=postgresql.service
+After=postgresql.service
 
 [Service]
 WorkingDirectory=/srv/OpcuaAggregationClient
