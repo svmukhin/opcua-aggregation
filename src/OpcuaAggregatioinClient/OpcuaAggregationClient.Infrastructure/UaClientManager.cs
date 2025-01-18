@@ -33,7 +33,7 @@ public class UaClientManager(
         _clients.Add(client);
 
         var channels = await _uaClientConfigurationStore.GetUaClientChannelConfigurationsAsync(config.Id.Value);
-        client.AddSubscription(channels, config.SessionName);
+        await client.AddSubscription(channels, config.SessionName);
     }
 
     public bool ClientExists(int configId) => _clients.FindIndex(c => c.ClientId == configId) != -1;
@@ -42,9 +42,17 @@ public class UaClientManager(
     {
         if(_clients.Count > 0)
         {
+            var tasks = new List<Task>();
+
             foreach (var client in _clients)
             {
-                await client.Disconnect();
+                tasks.Add(client.Disconnect());
+            }
+
+            await Task.WhenAll(tasks);
+
+            foreach (var client in _clients)
+            {
                 client.Dispose();
             }
         }
