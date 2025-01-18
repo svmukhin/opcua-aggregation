@@ -60,6 +60,12 @@ public class ClientsBootstrap : IHostedService, IDisposable
             {
                 foreach (var config in await _uaClientConfigurationStore.GetUaClientConfigurationsAsync(stoppingToken))
                 {
+                    if (config.Id is null)
+                    {
+                        _logger.LogInformation("ClientId is null");
+                        continue;
+                    }
+
                     if (_clientManager.ClientExists(config.Id.Value))
                     {
                         _logger.LogInformation("Client {sessionName} is already running", config.SessionName);
