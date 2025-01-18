@@ -5,6 +5,10 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     </PropertyGroup>
+    <PropertyGroup>
+        <VersionPrefix>0.0.1</VersionPrefix>
+        <VersionSuffix>alpha</VersionSuffix>
+    </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)'=='Debug'">
         <OutputPath>$(SolutionDir)\bin\Debug\</OutputPath>
     </PropertyGroup>
