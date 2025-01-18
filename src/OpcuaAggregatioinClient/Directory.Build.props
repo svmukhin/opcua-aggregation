@@ -9,10 +9,8 @@
         <VersionPrefix>0.0.1</VersionPrefix>
         <VersionSuffix>alpha</VersionSuffix>
     </PropertyGroup>
-    <PropertyGroup Condition="'$(Configuration)'=='Debug'">
-        <OutputPath>$(SolutionDir)\bin\Debug\</OutputPath>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Configuration)'=='Release'">
-        <OutputPath>$(SolutionDir)\bin\Release\</OutputPath>
+    <PropertyGroup>
+        <ArtifactsPath>$(SolutionDir)\.artifacts\</ArtifactsPath>
+        <PublishDir>$(SolutionDir)\.artifacts\publish\</PublishDir>
     </PropertyGroup>
 </Project>

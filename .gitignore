@@ -362,7 +362,8 @@ MigrationBackup/
 FodyWeavers.xsd
 
 # Folder for generated intrascada plugin archives
-.archives/
+.assets/
+.artifacts/
 
 # Folder with node modules for wwwroot
 src/opcua-aggregation-wwwroot/node_modules

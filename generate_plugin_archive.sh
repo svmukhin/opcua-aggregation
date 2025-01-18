@@ -1,4 +1,4 @@
-mkdir -p .archives
-rm -f .archives/ih-v5-opcua-aggregation-plugin.zip
+mkdir -p .assets
+rm -f .assets/ih-v5-opcua-aggregation-plugin.zip
 cd src/ih-v5-opcua-aggregation-plugin
-zip -r ../../.archives/ih-v5-opcua-aggregation-plugin.zip .
+zip -r ../../.assets/ih-v5-opcua-aggregation-plugin.zip .
