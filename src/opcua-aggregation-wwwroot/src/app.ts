@@ -1,8 +1,6 @@
-import m from "mithril";
-import clientsStatusList from "./components/clients-status";
+import m from 'mithril';
+import { Routes } from './routes';
 
 const root = document.body;
 
-m.route(root, "/status", {
-  "/status": clientsStatusList,
-});
+m.route(root, '/status', Routes);

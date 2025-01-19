@@ -2159,46 +2159,82 @@
 	const clientsStatus = {
 	    list: [],
 	    loadList: function () {
-	        return m.request({
-	            method: "GET",
-	            url: "http://192.168.122.114:5000/api/aggregation/status",
+	        return m
+	            .request({
+	            method: 'GET',
+	            url: 'http://192.168.122.114:5000/api/aggregation/status',
 	            withCredentials: true,
 	        })
 	            .then(function (result) {
 	            clientsStatus.list = result;
 	        });
-	    }
+	    },
 	};
 
-	var clientsStatusList = {
+	const UaClientsStatusPage = {
 	    oninit: clientsStatus.loadList,
-	    view: function () {
-	        return m("div", { class: "" }, m("table", { class: "table table-sm table-striped table-hover" }, [
-	            m("thead", [
-	                m("tr", [
-	                    m("th", "Name"),
-	                    m("th", "Server Uri"),
-	                    m("th", "Connect Error"),
-	                    m("th", "Monitored Items"),
-	                ]),
+	    view: () => m('div', { class: '' }, m('table', { class: 'table table-sm table-striped table-hover' }, [
+	        m('thead', [
+	            m('tr', [
+	                m('th', 'Name'),
+	                m('th', 'Server Uri'),
+	                m('th', 'Connect Error'),
+	                m('th', 'Monitored Items'),
 	            ]),
-	            m("tbody", clientsStatus.list.map(function (status) {
-	                return m("tr", [
-	                    m("td", status.sessionName),
-	                    m("td", status.serverUri),
-	                    m("td", status.connectError),
-	                    m("td", m("ol", status.monitoredItems.map(function (item) {
-	                        return m("li", item);
-	                    }))),
-	                ]);
-	            })),
-	        ]));
+	        ]),
+	        m('tbody', clientsStatus.list.map(function (status) {
+	            return m('tr', [
+	                m('td', status.sessionName),
+	                m('td', status.serverUri),
+	                m('td', status.connectError),
+	                m('td', m('ol', status.monitoredItems.map(function (item) {
+	                    return m('li', item);
+	                }))),
+	            ]);
+	        })),
+	    ])),
+	};
+	const UaClientStatusPage = {
+	    view: (vnode) => m('div', m('p', 'Status page for UaClient with id: ' + vnode.attrs.id)),
+	};
+
+	const UaClientListPage = {
+	    view: () => m('div', m('p', 'Page for list of UaClients')),
+	};
+	const UaClientConfigPage = {
+	    view: (vnode) => m('div', m('p', 'Config page for clients with id ' + vnode.attrs.id)),
+	};
+
+	const NavBar = {
+	    view: () => m('nav', [
+	        m(m.route.Link, { href: '/status' }, 'Status'),
+	        m(m.route.Link, { href: '/config/uaclient' }, 'Config'),
+	    ]),
+	};
+
+	const Layout = {
+	    view: (vnode) => m('main.layout', [
+	        m(NavBar),
+	        m('section', vnode.children),
+	    ]),
+	};
+
+	const Routes = {
+	    '/status': {
+	        view: () => m(Layout, m(UaClientsStatusPage)),
+	    },
+	    '/status/:id': {
+	        view: (vnode) => m(Layout, m(UaClientStatusPage, vnode.attrs)),
+	    },
+	    '/config/uaclient': {
+	        view: () => m(Layout, m(UaClientListPage)),
+	    },
+	    '/config/uaclient/:id': {
+	        view: (vnode) => m(Layout, m(UaClientConfigPage, vnode.attrs)),
 	    },
 	};
 
 	const root = document.body;
-	m.route(root, "/status", {
-	    "/status": clientsStatusList,
-	});
+	m.route(root, '/status', Routes);
 
 })();
