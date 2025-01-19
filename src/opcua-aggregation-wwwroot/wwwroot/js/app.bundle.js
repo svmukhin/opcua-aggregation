@@ -2173,7 +2173,7 @@
 	var clientsStatusList = {
 	    oninit: clientsStatus.loadList,
 	    view: function () {
-	        return m("div", { class: "status-list" }, m("table", { class: "status-table" }, [
+	        return m("div", { class: "" }, m("table", { class: "table table-sm table-striped table-hover" }, [
 	            m("thead", [
 	                m("tr", [
 	                    m("th", "Name"),
