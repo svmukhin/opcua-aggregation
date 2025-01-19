@@ -79,10 +79,14 @@ public class UaClient(
                     _session.TransferSubscriptionsOnReconnect = true;
                     _session.KeepAlive += OnKeepAlive;
                     _reconnectHandler = new SessionReconnectHandler(true, ReconnectPeriodExponentialBackoff);
+                    _logger.LogInformation("New Session Created with Name: {SessionName}, Id: {Id}", _session.SessionName, session.SessionId);
+                    _memoryCache.Set($"{_session.SessionName}.connectError", new AggregationTag(0, 0, DateTime.UtcNow));
                 }
+                else
+                {
+                    _memoryCache.Set($"{_uaClientConfiguration.SessionName}.connectError", new AggregationTag(0, 0, DateTime.UtcNow));
 
-                _logger.LogInformation("New Session Created with SessionName = {SessionName}", _session?.SessionName);
-                _memoryCache.Set($"{_session?.SessionName}.connectError", new AggregationTag(0, 0, DateTime.UtcNow));
+                }
             }
 
             return true;
@@ -143,8 +147,9 @@ public class UaClient(
     {
         try
         {
-            if (!ReferenceEquals(session, _session))
+            if (!_session!.Equals(Session))
             {
+                _logger.LogWarning("OnKeepAlive from discarded session! Session Name: {name}, Id: {Id}", session.SessionName, session.SessionId);
                 return;
             }
 
@@ -274,7 +279,6 @@ public class UaClient(
                 MaxNotificationsPerPublish = 1000,
                 MinLifetimeInterval = (uint)_session.SessionTimeout,
                 FastDataChangeCallback = FastDataChangeNotification,
-                FastKeepAliveCallback = FastKeepAliveNotification,
             };
 
             _session.AddSubscription(subscription);
@@ -305,19 +309,6 @@ public class UaClient(
         {
             _logger.LogError("{Message}", ex.Message);
             throw;
-        }
-    }
-
-    private void FastKeepAliveNotification(Subscription subscription, NotificationData notification)
-    {
-        try
-        {
-            _logger.LogInformation("Keep Alive  : Id={Id} Name={Name} PublishTime={PublishTime} SequenceNumber={SequenceNumber}.",
-                    subscription.Id, subscription.DisplayName, notification.PublishTime, notification.SequenceNumber);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError("FastKeepAliveNotification error: {0}", ex.Message);
         }
     }
 
@@ -364,7 +355,14 @@ public class UaClient(
 
     public UaClientStatus GetStatus()
     {
-        var connectError = _session is not null && _reconnectHandler is null ? (_session.Connected ? 0 : 1) : 1;
+        var connectError = 1;
+        if (_memoryCache.TryGetValue($"{_session?.SessionName}.connectError", out AggregationTag? tag))
+        {
+            if(tag is not null)
+            {
+                connectError = (int)tag.Value;
+            }
+        }
         return new UaClientStatus
         {
             Id = _uaClientConfiguration.Id!.Value,
