@@ -2156,7 +2156,49 @@
 	var mithrilExports = requireMithril();
 	var m = /*@__PURE__*/getDefaultExportFromCjs(mithrilExports);
 
-	var root = document.body;
-	m.render(root, "Hello World");
+	const clientsStatus = {
+	    list: [],
+	    loadList: function () {
+	        return m.request({
+	            method: "GET",
+	            url: "http://192.168.122.114:5000/api/aggregation/status",
+	            withCredentials: true,
+	        })
+	            .then(function (result) {
+	            clientsStatus.list = result;
+	        });
+	    }
+	};
+
+	var clientsStatusList = {
+	    oninit: clientsStatus.loadList,
+	    view: function () {
+	        return m("div", { class: "status-list" }, m("table", { class: "status-table" }, [
+	            m("thead", [
+	                m("tr", [
+	                    m("th", "Name"),
+	                    m("th", "Server Uri"),
+	                    m("th", "Connect Error"),
+	                    m("th", "Monitored Items"),
+	                ]),
+	            ]),
+	            m("tbody", clientsStatus.list.map(function (status) {
+	                return m("tr", [
+	                    m("td", status.sessionName),
+	                    m("td", status.serverUri),
+	                    m("td", status.connectError),
+	                    m("td", m("ol", status.monitoredItems.map(function (item) {
+	                        return m("li", item);
+	                    }))),
+	                ]);
+	            })),
+	        ]));
+	    },
+	};
+
+	const root = document.body;
+	m.route(root, "/status", {
+	    "/status": clientsStatusList,
+	});
 
 })();

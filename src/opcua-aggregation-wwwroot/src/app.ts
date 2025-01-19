@@ -1,5 +1,8 @@
 import m from "mithril";
+import clientsStatusList from "./components/clients-status";
 
-var root = document.body;
+const root = document.body;
 
-m.render(root, "Hello World");
+m.route(root, "/status", {
+  "/status": clientsStatusList,
+});
