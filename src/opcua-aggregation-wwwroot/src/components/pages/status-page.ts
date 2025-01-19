@@ -1,5 +1,5 @@
 import m from 'mithril';
-import { clientsStatus } from '../../../models/uaclient-model';
+import { clientsStatus } from '../../models/uaclient-model';
 
 export const UaClientsStatusPage = {
   oninit: clientsStatus.loadList,

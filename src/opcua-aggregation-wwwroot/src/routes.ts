@@ -2,11 +2,11 @@ import m, { render } from 'mithril';
 import {
   UaClientsStatusPage,
   UaClientStatusPage,
-} from './components/layout/pages/status-page';
+} from './components/pages/status-page';
 import {
   UaClientConfigPage,
   UaClientListPage,
-} from './components/layout/pages/config-page';
+} from './components/pages/config-page';
 import { Layout } from './components/layout/layout';
 
 export const Routes = {
