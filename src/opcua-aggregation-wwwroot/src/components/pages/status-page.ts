@@ -1,8 +1,8 @@
 import m from 'mithril';
-import { clientsStatus } from '../../models/uaclient-model';
+import { clientStatus, clientStatusList } from '../../models/uaclient-model';
 
 export const UaClientsStatusPage = {
-  oninit: clientsStatus.loadList,
+  oninit: clientStatusList.loadList,
   view: () =>
     m(
       'div',
@@ -18,28 +18,42 @@ export const UaClientsStatusPage = {
         ]),
         m(
           'tbody',
-          clientsStatus.list.map(function (status) {
-            return m('tr', [
+          clientStatusList.list.map((status) =>
+            m('tr', [
               m('td', status.sessionName),
               m('td', status.serverUri),
               m('td', status.connectError),
               m(
                 'td',
-                m(
-                  'ol',
-                  status.monitoredItems.map(function (item) {
-                    return m('li', item);
-                  })
-                )
+                m(m.route.Link, { href: '/status/' + status.id }, 'Details')
               ),
-            ]);
-          })
+            ])
+          )
         ),
       ])
     ),
 };
 
 export const UaClientStatusPage = {
-  view: (vnode) =>
-    m('div', m('p', 'Status page for UaClient with id: ' + vnode.attrs.id)),
+  oninit: (vnode) => {
+    clientStatus.loadStatus(vnode.attrs.id);
+  },
+  view: () =>
+    m('div', [
+      m('h3', 'UaClient: '),
+      m('p', 'Session ID: ' + clientStatus.status.id),
+      m('p', 'Session Name: ' + clientStatus.status.sessionName),
+      m('p', 'Server URI: ' + clientStatus.status.serverUri),
+      m('p', 'Connect Error: ' + clientStatus.status.connectError),
+      m('div', [
+        m('p', 'Monitored Items:'),
+        m(
+          'ol',
+          { class: 'list-group list-group-numbered' },
+          clientStatus.status.monitoredItems?.map((item) => {
+            return m('li', { class: 'list-group-item' }, item);
+          })
+        ),
+      ]),
+    ]),
 };

@@ -2156,23 +2156,62 @@
 	var mithrilExports = requireMithril();
 	var m = /*@__PURE__*/getDefaultExportFromCjs(mithrilExports);
 
-	const clientsStatus = {
+	/******************************************************************************
+	Copyright (c) Microsoft Corporation.
+
+	Permission to use, copy, modify, and/or distribute this software for any
+	purpose with or without fee is hereby granted.
+
+	THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+	REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+	AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+	INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+	LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+	OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+	PERFORMANCE OF THIS SOFTWARE.
+	***************************************************************************** */
+	/* global Reflect, Promise, SuppressedError, Symbol, Iterator */
+
+
+	function __awaiter(thisArg, _arguments, P, generator) {
+	    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+	    return new (P || (P = Promise))(function (resolve, reject) {
+	        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+	        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+	        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+	        step((generator = generator.apply(thisArg, _arguments || [])).next());
+	    });
+	}
+
+	typeof SuppressedError === "function" ? SuppressedError : function (error, suppressed, message) {
+	    var e = new Error(message);
+	    return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
+	};
+
+	const clientStatusList = {
 	    list: [],
-	    loadList: function () {
-	        return m
-	            .request({
+	    loadList: () => __awaiter(undefined, undefined, undefined, function* () {
+	        clientStatusList.list = (yield m.request({
 	            method: 'GET',
 	            url: 'http://192.168.122.114:5000/api/aggregation/status',
 	            withCredentials: true,
-	        })
-	            .then(function (result) {
-	            clientsStatus.list = result;
-	        });
-	    },
+	        }));
+	    }),
+	};
+	const clientStatus = {
+	    status: {},
+	    loadStatus: (id) => __awaiter(undefined, undefined, undefined, function* () {
+	        clientStatus.status = (yield m.request({
+	            method: 'GET',
+	            url: 'http://192.168.122.114:5000/api/aggregation/status',
+	            params: { sessionId: id },
+	            withCredentials: true,
+	        }));
+	    }),
 	};
 
 	const UaClientsStatusPage = {
-	    oninit: clientsStatus.loadList,
+	    oninit: clientStatusList.loadList,
 	    view: () => m('div', { class: '' }, m('table', { class: 'table table-sm table-striped table-hover' }, [
 	        m('thead', [
 	            m('tr', [
@@ -2182,20 +2221,34 @@
 	                m('th', 'Monitored Items'),
 	            ]),
 	        ]),
-	        m('tbody', clientsStatus.list.map(function (status) {
-	            return m('tr', [
-	                m('td', status.sessionName),
-	                m('td', status.serverUri),
-	                m('td', status.connectError),
-	                m('td', m('ol', status.monitoredItems.map(function (item) {
-	                    return m('li', item);
-	                }))),
-	            ]);
-	        })),
+	        m('tbody', clientStatusList.list.map((status) => m('tr', [
+	            m('td', status.sessionName),
+	            m('td', status.serverUri),
+	            m('td', status.connectError),
+	            m('td', m(m.route.Link, { href: '/status/' + status.id }, 'Details')),
+	        ]))),
 	    ])),
 	};
 	const UaClientStatusPage = {
-	    view: (vnode) => m('div', m('p', 'Status page for UaClient with id: ' + vnode.attrs.id)),
+	    oninit: (vnode) => {
+	        clientStatus.loadStatus(vnode.attrs.id);
+	    },
+	    view: () => {
+	        var _a;
+	        return m('div', [
+	            m('h3', 'UaClient: '),
+	            m('p', 'Session ID: ' + clientStatus.status.id),
+	            m('p', 'Session Name: ' + clientStatus.status.sessionName),
+	            m('p', 'Server URI: ' + clientStatus.status.serverUri),
+	            m('p', 'Connect Error: ' + clientStatus.status.connectError),
+	            m('div', [
+	                m('p', 'Monitored Items:'),
+	                m('ol', { class: 'list-group list-group-numbered' }, (_a = clientStatus.status.monitoredItems) === null || _a === undefined ? undefined : _a.map((item) => {
+	                    return m('li', { class: 'list-group-item' }, item);
+	                })),
+	            ]),
+	        ]);
+	    },
 	};
 
 	const UaClientListPage = {
