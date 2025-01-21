@@ -6,5 +6,5 @@ export const UaClientListPage = {
 
 export const UaClientConfigPage = {
   view: (vnode) =>
-    m('div', m('p', 'Config page for clients with id ' + vnode.attrs.id)),
+    m('div', m('p', 'Config page for clients with id ' + vnode.attrs.key)),
 };

@@ -1,10 +1,14 @@
 import m from 'mithril';
-import { NavBar } from './navbar';
+import { Header } from './header';
+import { Footer } from './footer';
+
+const header = document.getElementById('header');
+const footer = document.getElementById('footer');
 
 export const Layout = {
-  view: (vnode) =>
-    m('main.layout', [
-      m(NavBar),
-      m('section', { class: 'container mt-5' }, vnode.children),
-    ]),
+  oninit: () => {
+    m.mount(header, Header);
+    m.mount(footer, Footer);
+  },
+  view: (vnode) => m('div', { class: 'container mt-5' }, vnode.children),
 };

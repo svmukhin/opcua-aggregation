@@ -36,21 +36,21 @@ export const UaClientsStatusPage = {
 
 export const UaClientStatusPage = {
   oninit: (vnode) => {
-    clientStatus.loadStatus(vnode.attrs.id);
+    clientStatus.loadStatus(vnode.attrs.key);
   },
   view: () =>
     m('div', [
       m('h3', 'UaClient: '),
-      m('p', 'Session ID: ' + clientStatus.status.id),
-      m('p', 'Session Name: ' + clientStatus.status.sessionName),
-      m('p', 'Server URI: ' + clientStatus.status.serverUri),
-      m('p', 'Connect Error: ' + clientStatus.status.connectError),
+      m('p', 'Session ID: ' + clientStatus.status?.id),
+      m('p', 'Session Name: ' + clientStatus.status?.sessionName),
+      m('p', 'Server URI: ' + clientStatus.status?.serverUri),
+      m('p', 'Connect Error: ' + clientStatus.status?.connectError),
       m('div', [
         m('p', 'Monitored Items:'),
         m(
           'ol',
           { class: 'list-group list-group-numbered' },
-          clientStatus.status.monitoredItems?.map((item) => {
+          clientStatus.status?.monitoredItems?.map((item) => {
             return m('li', { class: 'list-group-item' }, item);
           })
         ),

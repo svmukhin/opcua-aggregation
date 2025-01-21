@@ -2156,6 +2156,52 @@
 	var mithrilExports = requireMithril();
 	var m = /*@__PURE__*/getDefaultExportFromCjs(mithrilExports);
 
+	const Header = {
+	    view: () => m('nav', { class: 'navbar navbar-expand-lg navbar-light bg-body-tertiary' }, m('div', { class: 'container' }, [
+	        m(m.route.Link, { class: 'navbar-brand', href: '/status' }, 'UA Aggregation'),
+	        m('button', {
+	            class: 'navbar-toggler',
+	            type: 'button',
+	            'data-bs-toggle': 'collapse',
+	            'data-bs-target': '#navbarNav',
+	            'aria-controls': 'navbarNav',
+	            'aria-expanded': 'false',
+	            'aria-label': 'Toggle navigation',
+	        }, m('span', { class: 'navbar-toggler-icon' })),
+	        m('div', {
+	            class: 'collapse navbar-collapse justify-content-center',
+	            id: 'navbarNav',
+	        }, [
+	            m('ul', { class: 'navbar-nav' }, [
+	                m('li', { class: 'nav-item' }, m(m.route.Link, {
+	                    class: 'nav-link active',
+	                    'aria-current': 'page',
+	                    href: '/status',
+	                }, 'Status')),
+	                m('li', { class: 'nav-item' }, m(m.route.Link, {
+	                    class: 'nav-link active',
+	                    'aria-current': 'page',
+	                    href: '/config/uaclient',
+	                }, 'Config')),
+	            ]),
+	        ]),
+	    ])),
+	};
+
+	const Footer = {
+	    view: () => m('footer', { class: 'footer mt-auto py-3 bg-body-tertiary fixed-bottom' }, m('div', { class: 'container' }, m('span', { class: 'text-muted' }, 'OPC UA Aggregation Client'))),
+	};
+
+	const header = document.getElementById('header');
+	const footer = document.getElementById('footer');
+	const Layout = {
+	    oninit: () => {
+	        m.mount(header, Header);
+	        m.mount(footer, Footer);
+	    },
+	    view: (vnode) => m('div', { class: 'container mt-5' }, vnode.children),
+	};
+
 	/******************************************************************************
 	Copyright (c) Microsoft Corporation.
 
@@ -2231,19 +2277,19 @@
 	};
 	const UaClientStatusPage = {
 	    oninit: (vnode) => {
-	        clientStatus.loadStatus(vnode.attrs.id);
+	        clientStatus.loadStatus(vnode.attrs.key);
 	    },
 	    view: () => {
-	        var _a;
+	        var _a, _b, _c, _d, _e, _f;
 	        return m('div', [
 	            m('h3', 'UaClient: '),
-	            m('p', 'Session ID: ' + clientStatus.status.id),
-	            m('p', 'Session Name: ' + clientStatus.status.sessionName),
-	            m('p', 'Server URI: ' + clientStatus.status.serverUri),
-	            m('p', 'Connect Error: ' + clientStatus.status.connectError),
+	            m('p', 'Session ID: ' + ((_a = clientStatus.status) === null || _a === undefined ? undefined : _a.id)),
+	            m('p', 'Session Name: ' + ((_b = clientStatus.status) === null || _b === undefined ? undefined : _b.sessionName)),
+	            m('p', 'Server URI: ' + ((_c = clientStatus.status) === null || _c === undefined ? undefined : _c.serverUri)),
+	            m('p', 'Connect Error: ' + ((_d = clientStatus.status) === null || _d === undefined ? undefined : _d.connectError)),
 	            m('div', [
 	                m('p', 'Monitored Items:'),
-	                m('ol', { class: 'list-group list-group-numbered' }, (_a = clientStatus.status.monitoredItems) === null || _a === undefined ? undefined : _a.map((item) => {
+	                m('ol', { class: 'list-group list-group-numbered' }, (_f = (_e = clientStatus.status) === null || _e === undefined ? undefined : _e.monitoredItems) === null || _f === undefined ? undefined : _f.map((item) => {
 	                    return m('li', { class: 'list-group-item' }, item);
 	                })),
 	            ]),
@@ -2255,41 +2301,24 @@
 	    view: () => m('div', m('p', 'Page for list of UaClients')),
 	};
 	const UaClientConfigPage = {
-	    view: (vnode) => m('div', m('p', 'Config page for clients with id ' + vnode.attrs.id)),
+	    view: (vnode) => m('div', m('p', 'Config page for clients with id ' + vnode.attrs.key)),
 	};
 
-	const NavBar = {
-	    view: () => m('nav', {
-	        class: 'navbar navbar-expand-sm bg-body-tertiary justify-content-center',
-	    }, m('div', { class: 'container-fluid' }, m('ul', { class: 'navbar-nav' }, [
-	        m('li', { class: 'nav-item' }, m(m.route.Link, { class: 'nav-link', href: '/status' }, 'Status')),
-	        m('li', { class: 'nav-item' }, m(m.route.Link, { class: 'nav-link', href: '/config/uaclient' }, 'Config')),
-	    ]))),
-	};
-
-	const Layout = {
-	    view: (vnode) => m('main.layout', [
-	        m(NavBar),
-	        m('section', { class: 'container mt-5' }, vnode.children),
-	    ]),
-	};
-
+	const content = document.getElementById('content');
 	const Routes = {
 	    '/status': {
-	        view: () => m(Layout, m(UaClientsStatusPage)),
+	        render: () => m(Layout, m(UaClientsStatusPage)),
 	    },
-	    '/status/:id': {
-	        view: (vnode) => m(Layout, m(UaClientStatusPage, vnode.attrs)),
+	    '/status/:key': {
+	        render: (vnode) => m(Layout, m(UaClientStatusPage, vnode.attrs)),
 	    },
 	    '/config/uaclient': {
-	        view: () => m(Layout, m(UaClientListPage)),
+	        render: () => m(Layout, m(UaClientListPage)),
 	    },
-	    '/config/uaclient/:id': {
-	        view: (vnode) => m(Layout, m(UaClientConfigPage, vnode.attrs)),
+	    '/config/uaclient/:key': {
+	        render: (vnode) => m(Layout, m(UaClientConfigPage, vnode.attrs)),
 	    },
 	};
-
-	const root = document.body;
-	m.route(root, '/status', Routes);
+	m.route(content, '/status', Routes);
 
 })();
