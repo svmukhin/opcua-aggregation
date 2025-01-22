@@ -10,7 +10,7 @@ namespace OpcuaAggregationClient.Infrastructure;
 public class UaClient(
     UaClientConfiguration uaClientConfiguration,
     ApplicationConfiguration configuration,
-    ILogger<UaClient>  logger,
+    ILogger<UaClient> logger,
     Action<IList, IList> validateResponse,
     IMemoryCache memoryCache
 ) : IDisposable
@@ -40,7 +40,7 @@ public class UaClient(
 
     public async Task<bool> ConnectAsync(string serverUrl, bool useSecurity = false)
     {
-        if(_disposed) throw new ObjectDisposedException(nameof(UaClient));
+        if (_disposed) throw new ObjectDisposedException(nameof(UaClient));
         ArgumentNullException.ThrowIfNull(serverUrl);
 
         try
@@ -51,7 +51,7 @@ public class UaClient(
             }
             else
             {
-                _logger.LogInformation("Connecting to... {SessionName} with {serverUrl}",_uaClientConfiguration.SessionName, serverUrl);
+                _logger.LogInformation("Connecting to... {SessionName} with {serverUrl}", _uaClientConfiguration.SessionName, serverUrl);
                 ITransportWaitingConnection? connection = null;
                 EndpointDescription endpointDescription = CoreClientUtils.SelectEndpoint(_configuration, serverUrl, useSecurity);
                 EndpointConfiguration endpointConfiguration = EndpointConfiguration.Create(_configuration);
@@ -84,7 +84,7 @@ public class UaClient(
                 }
                 else
                 {
-                    _memoryCache.Set($"{_uaClientConfiguration.SessionName}.connectError", new AggregationTag(0, 0, DateTime.UtcNow));
+                    _memoryCache.Set($"{_uaClientConfiguration.SessionName}.connectError", new AggregationTag(1, 0, DateTime.UtcNow));
 
                 }
             }
@@ -107,7 +107,7 @@ public class UaClient(
             {
                 _logger.LogInformation("Disconnecting...");
 
-                lock(_lock)
+                lock (_lock)
                 {
                     _session.KeepAlive -= OnKeepAlive;
                     _reconnectHandler?.Dispose();
@@ -115,7 +115,7 @@ public class UaClient(
                 }
 
                 await _session.CloseAsync(cancellationToken);
-                if(leaveChannelOpen)
+                if (leaveChannelOpen)
                 {
                     _session.DetachChannel();
                 }
@@ -164,7 +164,7 @@ public class UaClient(
                 var state = _reconnectHandler?.BeginReconnect(_session, ReconnectPeriod, OnReconnectCompleted);
                 if (state == SessionReconnectHandler.ReconnectState.Triggered)
                 {
-                    _logger.LogWarning("Session {SessionName}: KeepAlive status {status}, reconnect status {state}, reconnect period {ReconnectPeriod}ms.",_session.SessionName, e.Status, state, ReconnectPeriod);
+                    _logger.LogWarning("Session {SessionName}: KeepAlive status {status}, reconnect status {state}, reconnect period {ReconnectPeriod}ms.", _session.SessionName, e.Status, state, ReconnectPeriod);
                 }
                 else
                 {
@@ -175,22 +175,6 @@ public class UaClient(
                 e.CancelKeepAlive = true;
 
                 _memoryCache.Set($"{_session.SessionName}.connectError", new AggregationTag(1, 0, DateTime.UtcNow));
-                if (_subscribedItems is null)
-                {
-                    return;
-                }
-                foreach (var item in _subscribedItems)
-                {
-                    var key = $"{_session.SessionName}.{item.NodeId}";
-                    if (_memoryCache.TryGetValue(key, out AggregationTag? tag))
-                    {
-                        if (tag is null)
-                        {
-                            continue;
-                        }
-                        _memoryCache.Set(key, new AggregationTag(tag.Value, 1, tag.Timestamp));
-                    }
-                }
 
                 return;
             }
@@ -217,7 +201,7 @@ public class UaClient(
                 // after reactivate, the same session instance may be returned
                 if (!Object.ReferenceEquals(_session, _reconnectHandler.Session))
                 {
-                    _logger.LogInformation("Session {SessionName}: --- RECONNECTED TO NEW SESSION --- {0}", _reconnectHandler.Session.SessionName,  _reconnectHandler.Session.SessionId);
+                    _logger.LogInformation("Session {SessionName}: --- RECONNECTED TO NEW SESSION --- {0}", _reconnectHandler.Session.SessionName, _reconnectHandler.Session.SessionId);
                     var session = _session;
                     _session = _reconnectHandler.Session;
                     Utils.SilentDispose(session);
@@ -230,7 +214,7 @@ public class UaClient(
             else
             {
                 _logger.LogInformation("Session {SessionName}: --- RECONNECT KeepAlive recovered ---", _session?.SessionName);
-            }            
+            }
 
             _memoryCache.Set($"{_session?.SessionName}.connectError", new AggregationTag(0, 0, DateTime.UtcNow));
         }
@@ -316,18 +300,18 @@ public class UaClient(
     {
         try
         {
-            foreach(var notification in dataChangeNotification.MonitoredItems)
+            foreach (var notification in dataChangeNotification.MonitoredItems)
             {
                 var monitoredItem = subscription.MonitoredItems.FirstOrDefault(item => item.ClientHandle == notification.ClientHandle);
-                if(monitoredItem == null)
+                if (monitoredItem == null)
                 {
                     continue;
                 }
 
-                if(notification.Value.WrappedValue.TypeInfo.BuiltInType == BuiltInType.Boolean)
+                if (notification.Value.WrappedValue.TypeInfo.BuiltInType == BuiltInType.Boolean)
                 {
                     _memoryCache.Set(
-                        monitoredItem.DisplayName, 
+                        monitoredItem.DisplayName,
                         new AggregationTag(
                             (bool)notification.Value.WrappedValue.Value == true ? 1 : 0,
                             notification.Value.StatusCode.Code == 0 ? 0 : 1,
@@ -338,10 +322,10 @@ public class UaClient(
                 }
 
                 _memoryCache.Set(
-                    monitoredItem.DisplayName, 
+                    monitoredItem.DisplayName,
                     new AggregationTag(
-                        notification.Value.WrappedValue.Value, 
-                        notification.Value.StatusCode.Code == 0 ? 0 : 1, 
+                        notification.Value.WrappedValue.Value,
+                        notification.Value.StatusCode.Code == 0 ? 0 : 1,
                         notification.Value.SourceTimestamp
                     )
                 );
@@ -358,7 +342,7 @@ public class UaClient(
         var connectError = 1;
         if (_memoryCache.TryGetValue($"{_session?.SessionName}.connectError", out AggregationTag? tag))
         {
-            if(tag is not null)
+            if (tag is not null)
             {
                 connectError = (int)tag.Value;
             }

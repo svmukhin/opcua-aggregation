@@ -33,7 +33,7 @@ module.exports = async function (plugin) {
         const res = await axios.get(
           "http://localhost:5000/api/aggregation/tags",
           {
-            params: { tagids: Object.keys(itemsToFetch) },
+            params: { sessionName: key, tagids: Object.keys(itemsToFetch) },
             paramsSerializer: { indexes: null },
           }
         );
