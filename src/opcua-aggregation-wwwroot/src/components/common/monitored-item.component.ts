@@ -1,8 +1,9 @@
 import m from 'mithril';
 import { utils } from '../../utils/utils';
+import { MonitoredItem } from '../../models/monitored-item.model';
 
 export const MonitoredItemComponent = {
-  view: ({ attrs: { item } }) =>
+  view: ({ attrs: { item } }: { attrs: { item: MonitoredItem } }) =>
     m(
       'div',
       { class: 'list-group-item' },
