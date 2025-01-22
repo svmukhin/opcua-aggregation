@@ -1,5 +1,6 @@
 import m from 'mithril';
-import { clientStatus, clientStatusList } from '../../models/uaclient-model';
+import { clientStatus, clientStatusList } from '../../models/ua-client.model';
+import { MonitoredItemComponent } from '../common/monitored-item.component';
 
 export const UaClientsStatusPage = {
   oninit: clientStatusList.loadList,
@@ -41,17 +42,17 @@ export const UaClientStatusPage = {
   view: () =>
     m('div', [
       m('h3', 'UaClient: '),
-      m('p', 'Session ID: ' + clientStatus.status?.id),
-      m('p', 'Session Name: ' + clientStatus.status?.sessionName),
-      m('p', 'Server URI: ' + clientStatus.status?.serverUri),
-      m('p', 'Connect Error: ' + clientStatus.status?.connectError),
+      m('h5', 'Session ID: ' + clientStatus.status?.id),
+      m('h5', 'Session Name: ' + clientStatus.status?.sessionName),
+      m('h5', 'Server URI: ' + clientStatus.status?.serverUri),
+      m('h5', 'Connect Error: ' + clientStatus.status?.connectError),
       m('div', [
-        m('p', 'Monitored Items:'),
+        m('h5', 'Monitored Items:'),
         m(
-          'ol',
-          { class: 'list-group list-group-numbered' },
+          'div',
+          { class: 'list-group' },
           clientStatus.status?.monitoredItems?.map((item) => {
-            return m('li', { class: 'list-group-item' }, item);
+            return m(MonitoredItemComponent, { item });
           })
         ),
       ]),

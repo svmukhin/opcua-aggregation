@@ -353,7 +353,21 @@ public class UaClient(
             SessionName = _uaClientConfiguration.SessionName,
             ServerUri = _uaClientConfiguration.ServerUri,
             ConnectError = connectError,
-            MonitoredItems = _subscribedItems?.Select(item => $"{_uaClientConfiguration.SessionName}.{item.NodeId}")
+            MonitoredItems = _subscribedItems?.Select(item =>
+            {
+                var tagId = $"{_uaClientConfiguration.SessionName}.{item.NodeId}";
+                var tag = _memoryCache.Get<AggregationTag>(tagId);
+                if (tag is null)
+                {
+                    tag = new AggregationTag(0, 1, DateTime.UtcNow);
+                }
+                else if (connectError == 1)
+                {
+                    return new Entities.MonitoredItemStatus(tagId, new AggregationTag(tag.Value, 1, tag.Timestamp));
+                }
+
+                return new Entities.MonitoredItemStatus(tagId, tag);
+            })
         };
     }
 }

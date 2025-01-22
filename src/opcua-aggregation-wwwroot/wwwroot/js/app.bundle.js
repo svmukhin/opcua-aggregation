@@ -2256,6 +2256,31 @@
 	    }),
 	};
 
+	const utils = {
+	    formatTimestamp: (timestamp) => {
+	        const date = new Date(timestamp);
+	        const options = {
+	            year: 'numeric',
+	            month: 'short',
+	            day: 'numeric',
+	            hour: '2-digit',
+	            minute: '2-digit',
+	            second: '2-digit',
+	        };
+	        return date.toLocaleDateString('ru-RU', options);
+	    },
+	    formatStatusCode: (statusCode) => statusCode === 0 ? 'Good' : 'Bad',
+	};
+
+	const MonitoredItemComponent = {
+	    view: ({ attrs: { item } }) => m('div', { class: 'list-group-item' }, m('div', { class: 'd-flex w-100' }, [
+	        m('h6', { class: 'p-2 w-50' }, item.tagId),
+	        m('h6', { class: 'p-2 w-25' }, item.aggregationTag.value),
+	        m('h6', { class: 'p-2' }, utils.formatTimestamp(item.aggregationTag.timestamp)),
+	        m('h6', { class: 'p-2' }, utils.formatStatusCode(item.aggregationTag.statusCode)),
+	    ])),
+	};
+
 	const UaClientsStatusPage = {
 	    oninit: clientStatusList.loadList,
 	    view: () => m('div', { class: '' }, m('table', { class: 'table table-sm table-striped table-hover' }, [
@@ -2283,14 +2308,14 @@
 	        var _a, _b, _c, _d, _e, _f;
 	        return m('div', [
 	            m('h3', 'UaClient: '),
-	            m('p', 'Session ID: ' + ((_a = clientStatus.status) === null || _a === undefined ? undefined : _a.id)),
-	            m('p', 'Session Name: ' + ((_b = clientStatus.status) === null || _b === undefined ? undefined : _b.sessionName)),
-	            m('p', 'Server URI: ' + ((_c = clientStatus.status) === null || _c === undefined ? undefined : _c.serverUri)),
-	            m('p', 'Connect Error: ' + ((_d = clientStatus.status) === null || _d === undefined ? undefined : _d.connectError)),
+	            m('h5', 'Session ID: ' + ((_a = clientStatus.status) === null || _a === undefined ? undefined : _a.id)),
+	            m('h5', 'Session Name: ' + ((_b = clientStatus.status) === null || _b === undefined ? undefined : _b.sessionName)),
+	            m('h5', 'Server URI: ' + ((_c = clientStatus.status) === null || _c === undefined ? undefined : _c.serverUri)),
+	            m('h5', 'Connect Error: ' + ((_d = clientStatus.status) === null || _d === undefined ? undefined : _d.connectError)),
 	            m('div', [
-	                m('p', 'Monitored Items:'),
-	                m('ol', { class: 'list-group list-group-numbered' }, (_f = (_e = clientStatus.status) === null || _e === undefined ? undefined : _e.monitoredItems) === null || _f === undefined ? undefined : _f.map((item) => {
-	                    return m('li', { class: 'list-group-item' }, item);
+	                m('h5', 'Monitored Items:'),
+	                m('div', { class: 'list-group' }, (_f = (_e = clientStatus.status) === null || _e === undefined ? undefined : _e.monitoredItems) === null || _f === undefined ? undefined : _f.map((item) => {
+	                    return m(MonitoredItemComponent, { item });
 	                })),
 	            ]),
 	        ]);

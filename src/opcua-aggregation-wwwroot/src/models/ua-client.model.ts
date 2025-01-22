@@ -1,11 +1,12 @@
 import m from 'mithril';
+import { MonitoredItem } from './monitored-item.model';
 
 export interface UaClientstatus {
   id: string;
   serverUri: string;
   sessionName: string;
   connectError: number;
-  monitoredItems: string[];
+  monitoredItems: MonitoredItem[];
 }
 
 export const clientStatusList = {

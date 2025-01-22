@@ -3,11 +3,11 @@ import { Layout } from './components/layout/layout';
 import {
   UaClientsStatusPage,
   UaClientStatusPage,
-} from './components/pages/status-page';
+} from './components/pages/status.page';
 import {
   UaClientConfigPage,
   UaClientListPage,
-} from './components/pages/config-page';
+} from './components/pages/config.page';
 
 const content = document.getElementById('content');
 
