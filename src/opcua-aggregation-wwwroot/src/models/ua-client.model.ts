@@ -1,33 +1,25 @@
-import m from 'mithril';
+import { ClientStatusService } from '../services/client-status.service';
 import { MonitoredItem } from './monitored-item.model';
 
-export interface UaClientstatus {
+export type UaClientStatus = {
   id: string;
   serverUri: string;
   sessionName: string;
   connectError: number;
   monitoredItems: MonitoredItem[];
+};
+
+export class StatusPageModel {
+  current: UaClientStatus | undefined;
+  list: UaClientStatus[] | undefined;
+
+  constructor(private _service: ClientStatusService) {}
+
+  async init() {
+    this.list = await this._service.getClientStatuses();
+  }
+
+  async load(id: number) {
+    this.current = await this._service.getClientStatus(id);
+  }
 }
-
-export const clientStatusList = {
-  list: [] as UaClientstatus[],
-  loadList: async () => {
-    clientStatusList.list = (await m.request({
-      method: 'GET',
-      url: 'http://192.168.122.114:5000/api/aggregation/status',
-      withCredentials: true,
-    })) as UaClientstatus[];
-  },
-};
-
-export const clientStatus = {
-  status: {} as UaClientstatus,
-  loadStatus: async (id) => {
-    clientStatus.status = (await m.request({
-      method: 'GET',
-      url: 'http://192.168.122.114:5000/api/aggregation/status',
-      params: { sessionId: id },
-      withCredentials: true,
-    })) as UaClientstatus;
-  },
-};

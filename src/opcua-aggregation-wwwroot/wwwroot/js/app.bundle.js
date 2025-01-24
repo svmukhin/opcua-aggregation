@@ -2234,26 +2234,27 @@
 	    return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
 	};
 
-	const clientStatusList = {
-	    list: [],
-	    loadList: () => __awaiter(undefined, undefined, undefined, function* () {
-	        clientStatusList.list = (yield m.request({
-	            method: 'GET',
-	            url: 'http://192.168.122.114:5000/api/aggregation/status',
-	            withCredentials: true,
-	        }));
-	    }),
-	};
-	const clientStatus = {
-	    status: {},
-	    loadStatus: (id) => __awaiter(undefined, undefined, undefined, function* () {
-	        clientStatus.status = (yield m.request({
-	            method: 'GET',
-	            url: 'http://192.168.122.114:5000/api/aggregation/status',
-	            params: { sessionId: id },
-	            withCredentials: true,
-	        }));
-	    }),
+	const StatusPage = {
+	    oninit: (vnode) => __awaiter(undefined, undefined, undefined, function* () { return yield vnode.attrs.statusModel.init(); }),
+	    view: (vnode) => {
+	        var _a;
+	        return m('div', { class: '' }, m('table', { class: 'table table-sm table-striped table-hover' }, [
+	            m('thead', [
+	                m('tr', [
+	                    m('th', 'Name'),
+	                    m('th', 'Server Uri'),
+	                    m('th', 'Connect Error'),
+	                    m('th', 'Monitored Items'),
+	                ]),
+	            ]),
+	            m('tbody', (_a = vnode.attrs.statusModel.list) === null || _a === undefined ? undefined : _a.map((status) => m('tr', [
+	                m('td', status.sessionName),
+	                m('td', status.serverUri),
+	                m('td', status.connectError),
+	                m('td', m(m.route.Link, { href: '/status/' + status.id }, 'Details')),
+	            ]))),
+	        ]));
+	    },
 	};
 
 	const utils = {
@@ -2273,48 +2274,27 @@
 	};
 
 	const MonitoredItemComponent = {
-	    view: ({ attrs: { item } }) => m('div', { class: 'list-group-item' }, m('div', { class: 'd-flex w-100' }, [
-	        m('h6', { class: 'p-2 w-50' }, item.tagId),
-	        m('h6', { class: 'p-2 w-25' }, item.aggregationTag.value),
-	        m('h6', { class: 'p-2' }, utils.formatTimestamp(item.aggregationTag.timestamp)),
-	        m('h6', { class: 'p-2' }, utils.formatStatusCode(item.aggregationTag.statusCode)),
+	    view: (vnode) => m('div', { class: 'list-group-item' }, m('div', { class: 'd-flex w-100' }, [
+	        m('h6', { class: 'p-2 w-50' }, vnode.attrs.item.tagId),
+	        m('h6', { class: 'p-2 w-25' }, vnode.attrs.item.aggregationTag.value),
+	        m('h6', { class: 'p-2' }, utils.formatTimestamp(vnode.attrs.item.aggregationTag.timestamp)),
+	        m('h6', { class: 'p-2' }, utils.formatStatusCode(vnode.attrs.item.aggregationTag.statusCode)),
 	    ])),
 	};
 
-	const UaClientsStatusPage = {
-	    oninit: clientStatusList.loadList,
-	    view: () => m('div', { class: '' }, m('table', { class: 'table table-sm table-striped table-hover' }, [
-	        m('thead', [
-	            m('tr', [
-	                m('th', 'Name'),
-	                m('th', 'Server Uri'),
-	                m('th', 'Connect Error'),
-	                m('th', 'Monitored Items'),
-	            ]),
-	        ]),
-	        m('tbody', clientStatusList.list.map((status) => m('tr', [
-	            m('td', status.sessionName),
-	            m('td', status.serverUri),
-	            m('td', status.connectError),
-	            m('td', m(m.route.Link, { href: '/status/' + status.id }, 'Details')),
-	        ]))),
-	    ])),
-	};
-	const UaClientStatusPage = {
-	    oninit: (vnode) => {
-	        clientStatus.loadStatus(vnode.attrs.key);
-	    },
-	    view: () => {
+	const StatusDetailsPage = {
+	    oninit: (vnode) => __awaiter(undefined, undefined, undefined, function* () { return yield vnode.attrs.statusModel.load(vnode.attrs.id); }),
+	    view: (vnode) => {
 	        var _a, _b, _c, _d, _e, _f;
 	        return m('div', [
 	            m('h3', 'UaClient: '),
-	            m('h5', 'Session ID: ' + ((_a = clientStatus.status) === null || _a === undefined ? undefined : _a.id)),
-	            m('h5', 'Session Name: ' + ((_b = clientStatus.status) === null || _b === undefined ? undefined : _b.sessionName)),
-	            m('h5', 'Server URI: ' + ((_c = clientStatus.status) === null || _c === undefined ? undefined : _c.serverUri)),
-	            m('h5', 'Connect Error: ' + ((_d = clientStatus.status) === null || _d === undefined ? undefined : _d.connectError)),
+	            m('h5', 'Session ID: ' + ((_a = vnode.attrs.statusModel.current) === null || _a === undefined ? undefined : _a.id)),
+	            m('h5', 'Session Name: ' + ((_b = vnode.attrs.statusModel.current) === null || _b === undefined ? undefined : _b.sessionName)),
+	            m('h5', 'Server URI: ' + ((_c = vnode.attrs.statusModel.current) === null || _c === undefined ? undefined : _c.serverUri)),
+	            m('h5', 'Connect Error: ' + ((_d = vnode.attrs.statusModel.current) === null || _d === undefined ? undefined : _d.connectError)),
 	            m('div', [
 	                m('h5', 'Monitored Items:'),
-	                m('div', { class: 'list-group' }, (_f = (_e = clientStatus.status) === null || _e === undefined ? undefined : _e.monitoredItems) === null || _f === undefined ? undefined : _f.map((item) => {
+	                m('div', { class: 'list-group' }, (_f = (_e = vnode.attrs.statusModel.current) === null || _e === undefined ? undefined : _e.monitoredItems) === null || _f === undefined ? undefined : _f.map((item) => {
 	                    return m(MonitoredItemComponent, { item });
 	                })),
 	            ]),
@@ -2329,13 +2309,59 @@
 	    view: (vnode) => m('div', m('p', 'Config page for clients with id ' + vnode.attrs.key)),
 	};
 
+	class ClientStatusService {
+	    constructor(_baseUrl = 'http://localhost:5000/') {
+	        this._baseUrl = _baseUrl;
+	    }
+	    getClientStatuses() {
+	        return __awaiter(this, undefined, undefined, function* () {
+	            return yield m.request({
+	                method: 'GET',
+	                url: this._baseUrl + 'api/aggregation/status',
+	                withCredentials: true,
+	            });
+	        });
+	    }
+	    getClientStatus(id) {
+	        return __awaiter(this, undefined, undefined, function* () {
+	            return yield m.request({
+	                method: 'GET',
+	                url: this._baseUrl + 'api/aggregation/status',
+	                params: { sessionId: id },
+	                withCredentials: true,
+	            });
+	        });
+	    }
+	}
+
+	class StatusPageModel {
+	    constructor(_service) {
+	        this._service = _service;
+	    }
+	    init() {
+	        return __awaiter(this, undefined, undefined, function* () {
+	            this.list = yield this._service.getClientStatuses();
+	        });
+	    }
+	    load(id) {
+	        return __awaiter(this, undefined, undefined, function* () {
+	            this.current = yield this._service.getClientStatus(id);
+	        });
+	    }
+	}
+
 	const content = document.getElementById('content');
+	const statusService = new ClientStatusService('http://192.168.122.114:5000/');
+	const statusModel = new StatusPageModel(statusService);
 	const Routes = {
 	    '/status': {
-	        render: () => m(Layout, m(UaClientsStatusPage)),
+	        render: () => m(Layout, m(StatusPage, { statusModel })),
 	    },
 	    '/status/:key': {
-	        render: (vnode) => m(Layout, m(UaClientStatusPage, vnode.attrs)),
+	        render: (vnode) => m(Layout, m(StatusDetailsPage, {
+	            statusModel,
+	            id: vnode.attrs.key,
+	        })),
 	    },
 	    '/config/uaclient': {
 	        render: () => m(Layout, m(UaClientListPage)),

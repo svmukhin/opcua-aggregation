@@ -1,10 +1,11 @@
 import m from 'mithril';
-import { clientStatus, clientStatusList } from '../../models/ua-client.model';
-import { MonitoredItemComponent } from '../common/monitored-item.component';
+import { StatusPageModel } from '../../models/ua-client.model';
 
-export const UaClientsStatusPage = {
-  oninit: clientStatusList.loadList,
-  view: () =>
+export const StatusPage = {
+  oninit: async (vnode: { attrs: { statusModel: StatusPageModel } }) =>
+    await vnode.attrs.statusModel.init(),
+
+  view: (vnode: { attrs: { statusModel: StatusPageModel } }) =>
     m(
       'div',
       { class: '' },
@@ -19,7 +20,7 @@ export const UaClientsStatusPage = {
         ]),
         m(
           'tbody',
-          clientStatusList.list.map((status) =>
+          vnode.attrs.statusModel.list?.map((status) =>
             m('tr', [
               m('td', status.sessionName),
               m('td', status.serverUri),
@@ -33,28 +34,4 @@ export const UaClientsStatusPage = {
         ),
       ])
     ),
-};
-
-export const UaClientStatusPage = {
-  oninit: (vnode) => {
-    clientStatus.loadStatus(vnode.attrs.key);
-  },
-  view: () =>
-    m('div', [
-      m('h3', 'UaClient: '),
-      m('h5', 'Session ID: ' + clientStatus.status?.id),
-      m('h5', 'Session Name: ' + clientStatus.status?.sessionName),
-      m('h5', 'Server URI: ' + clientStatus.status?.serverUri),
-      m('h5', 'Connect Error: ' + clientStatus.status?.connectError),
-      m('div', [
-        m('h5', 'Monitored Items:'),
-        m(
-          'div',
-          { class: 'list-group' },
-          clientStatus.status?.monitoredItems?.map((item) => {
-            return m(MonitoredItemComponent, { item });
-          })
-        ),
-      ]),
-    ]),
 };
