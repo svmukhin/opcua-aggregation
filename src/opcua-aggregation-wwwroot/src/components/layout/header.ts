@@ -4,42 +4,34 @@ export const Header = {
   view: () =>
     m(
       'nav',
-      { class: 'navbar navbar-expand-lg navbar-light bg-body-tertiary' },
-      m('div', { class: 'container' }, [
+      {
+        class:
+          'rounded-lg border shadow-lg overflow-hidden p-2 bg-white border-stone-200 shadow-stone-950/5 mx-auto w-full max-w-screen-xl',
+      },
+      m('div', { class: 'flex items-center' }, [
         m(
           m.route.Link,
-          { class: 'navbar-brand', href: '/status' },
+          {
+            class:
+              'font-sans antialiased text-sm text-current mx-2 block py-1 font-semibold',
+            href: '/status',
+          },
           'UA Aggregation'
         ),
-        m(
-          'button',
-          {
-            class: 'navbar-toggler',
-            type: 'button',
-            'data-bs-toggle': 'collapse',
-            'data-bs-target': '#navbarNav',
-            'aria-controls': 'navbarNav',
-            'aria-expanded': 'false',
-            'aria-label': 'Toggle navigation',
-          },
-          m('span', { class: 'navbar-toggler-icon' })
-        ),
-        m(
-          'div',
-          {
-            class: 'collapse navbar-collapse justify-content-center',
-            id: 'navbarNav',
-          },
-          [
-            m('ul', { class: 'navbar-nav' }, [
+        m('div', { class: 'ml-auto mr-2 block' }, [
+          m(
+            'ul',
+            {
+              class: 'm-2 flex flex-row gap-x-3 gap-y-1 m-0 items-center',
+            },
+            [
               m(
                 'li',
-                { class: 'nav-item' },
                 m(
                   m.route.Link,
                   {
-                    class: 'nav-link active',
-                    'aria-current': 'page',
+                    class:
+                      'font-sans antialiased text-sm text-current p-1 hover:text-primary',
                     href: '/status',
                   },
                   'Status'
@@ -47,20 +39,19 @@ export const Header = {
               ),
               m(
                 'li',
-                { class: 'nav-item' },
                 m(
                   m.route.Link,
                   {
-                    class: 'nav-link active',
-                    'aria-current': 'page',
+                    class:
+                      'font-sans antialiased text-sm text-current p-1 hover:text-primary',
                     href: '/config/uaclient',
                   },
                   'Config'
                 )
               ),
-            ]),
-          ]
-        ),
+            ]
+          ),
+        ]),
       ])
     ),
 };

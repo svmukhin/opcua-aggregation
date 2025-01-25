@@ -8,26 +8,55 @@ export const StatusPage = {
   view: (vnode: { attrs: { statusModel: StatusPageModel } }) =>
     m(
       'div',
-      { class: '' },
-      m('table', { class: 'table table-sm table-striped table-hover' }, [
-        m('thead', [
-          m('tr', [
-            m('th', 'Name'),
-            m('th', 'Server Uri'),
-            m('th', 'Connect Error'),
-            m('th', 'Monitored Items'),
-          ]),
-        ]),
+      { class: 'w-full overflow-hidden rounded-lg border border-stone-200' },
+      m('table', { class: 'w-full' }, [
+        m(
+          'thead',
+          {
+            class:
+              'border-b border-stone-200 bg-stone-100 text-sm font-medium text-stone-600 dark:bg-surface-dark',
+          },
+          [
+            m('tr', [
+              m('th', { class: 'px-2.5 py-2 text-start font-medium' }, 'Name'),
+              m(
+                'th',
+                { class: 'px-2.5 py-2 text-start font-medium' },
+                'Server Uri'
+              ),
+              m(
+                'th',
+                { class: 'px-2.5 py-2 text-start font-medium' },
+                'Connect Error'
+              ),
+              m(
+                'th',
+                { class: 'px-2.5 py-2 text-start font-medium' },
+                'Monitored Items'
+              ),
+            ]),
+          ]
+        ),
         m(
           'tbody',
+          { class: 'group text-sm text-stone-800' },
           vnode.attrs.statusModel.list?.map((status) =>
-            m('tr', [
-              m('td', status.sessionName),
-              m('td', status.serverUri),
-              m('td', status.connectError),
+            m('tr', { class: 'border-b border-stone-200 last:border-0' }, [
+              m('td', { class: 'p-3' }, status.sessionName),
+              m('td', { class: 'p-3' }, status.serverUri),
+              m('td', { class: 'p-3' }, status.connectError),
               m(
                 'td',
-                m(m.route.Link, { href: '/status/' + status.id }, 'Details')
+                { class: 'p-3' },
+                m(
+                  m.route.Link,
+                  {
+                    class:
+                      'font-sans antialiased text-sm text-current font-medium hover:text-primary',
+                    href: '/status/' + status.id,
+                  },
+                  'Details'
+                )
               ),
             ])
           )

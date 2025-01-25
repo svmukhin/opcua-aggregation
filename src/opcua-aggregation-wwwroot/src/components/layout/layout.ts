@@ -10,5 +10,6 @@ export const Layout = {
     m.mount(header, Header);
     m.mount(footer, Footer);
   },
-  view: (vnode) => m('div', { class: 'container mt-5' }, vnode.children),
+  view: (vnode) =>
+    m('div', { class: 'w-full max-w-screen-xl' }, vnode.children),
 };

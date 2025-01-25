@@ -1,3 +1,5 @@
+import './styles.css';
+
 import m from 'mithril';
 import { Layout } from './components/layout/layout';
 import { StatusPage } from './components/pages/status.page';

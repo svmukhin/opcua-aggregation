@@ -5,19 +5,19 @@ import { MonitoredItem } from '../../models/monitored-item.model';
 export const MonitoredItemComponent = {
   view: (vnode: { attrs: { item: MonitoredItem } }) =>
     m(
-      'div',
-      { class: 'list-group-item' },
-      m('div', { class: 'd-flex w-100' }, [
-        m('h6', { class: 'p-2 w-50' }, vnode.attrs.item.tagId),
-        m('h6', { class: 'p-2 w-25' }, vnode.attrs.item.aggregationTag.value),
+      'li',
+      { class: 'flex items-center py-1.5 px-2.5 rounded-md' },
+      m('div', { class: 'w-full flex flex-row justify-between' }, [
+        m('div', { class: 'text-xl' }, vnode.attrs.item.tagId),
+        m('div', { class: 'text-xl' }, vnode.attrs.item.aggregationTag.value),
         m(
-          'h6',
-          { class: 'p-2' },
+          'div',
+          { class: 'text-xl' },
           utils.formatTimestamp(vnode.attrs.item.aggregationTag.timestamp)
         ),
         m(
-          'h6',
-          { class: 'p-2' },
+          'div',
+          { class: 'text-xl' },
           utils.formatStatusCode(vnode.attrs.item.aggregationTag.statusCode)
         ),
       ])

@@ -4,11 +4,11 @@ export const Footer = {
   view: () =>
     m(
       'footer',
-      { class: 'footer mt-auto py-3 bg-body-tertiary fixed-bottom' },
+      { class: 'w-full' },
       m(
-        'div',
-        { class: 'container' },
-        m('span', { class: 'text-muted' }, 'OPC UA Aggregation Client')
+        'p',
+        { class: 'font-sans antialiased text-base text-current text-center' },
+        'OPC UA Aggregation Client'
       )
     ),
 };
