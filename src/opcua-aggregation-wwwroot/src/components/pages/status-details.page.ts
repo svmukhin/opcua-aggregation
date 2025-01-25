@@ -1,6 +1,8 @@
 import m from 'mithril';
 import { StatusPageModel } from '../../models/ua-client.model';
 import { MonitoredItemTableComponent } from '../common/monitored-item-table.component';
+import { ClientStatusDetailsInfoComponent } from '../common/client-status-details-info.component';
+import { CardComponent } from '../shared/card.component';
 
 export const StatusDetailsPage = {
   oninit: async (vnode: {
@@ -9,35 +11,14 @@ export const StatusDetailsPage = {
 
   view: (vnode: { attrs: { statusModel: StatusPageModel; id: number } }) =>
     m('div', [
-      m('div', { class: 'overflow-hidden rounded-lg border border-gray-400' }, [
-        m('div', { class: 'text-2xl' }, 'UaClient: '),
-        m(
-          'div',
-          { class: 'text-xl' },
-          'Session ID: ' + vnode.attrs.statusModel.current?.id
-        ),
-        m(
-          'div',
-          { class: 'text-xl' },
-          'Session Name: ' + vnode.attrs.statusModel.current?.sessionName
-        ),
-        m(
-          'div',
-          { class: 'text-xl' },
-          'Server URI: ' + vnode.attrs.statusModel.current?.serverUri
-        ),
-        m(
-          'div',
-          { class: 'text-xl' },
-          'Connect Error: ' + vnode.attrs.statusModel.current?.connectError
-        ),
-      ]),
       m(
-        'div',
-        {
-          class:
-            'mt-3 w-full overflow-hidden rounded-lg border border-gray-400',
-        },
+        CardComponent,
+        m(ClientStatusDetailsInfoComponent, {
+          status: vnode.attrs.statusModel.current,
+        })
+      ),
+      m(
+        CardComponent,
         m(MonitoredItemTableComponent, {
           items: vnode.attrs.statusModel.current?.monitoredItems,
         })

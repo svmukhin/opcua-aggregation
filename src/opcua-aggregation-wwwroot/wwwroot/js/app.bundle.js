@@ -2300,22 +2300,44 @@
 	    },
 	};
 
+	const ClientStatusDetailsInfoComponent = {
+	    view: (vnode) => {
+	        var _a, _b, _c, _d;
+	        return m('dl', { class: 'max-w-md divide-y divide-gray-400' }, [
+	            m('div', { class: 'flex flex-col pb-3' }, [
+	                m('dt', { class: 'mb-1 text-lg text-gray-400' }, 'Session ID: '),
+	                m('dd', { class: 'text-lg font-semibold' }, (_a = vnode.attrs.status) === null || _a === undefined ? undefined : _a.id),
+	            ]),
+	            m('div', { class: 'flex flex-col pb-3' }, [
+	                m('dt', { class: 'mb-1 text-lg text-gray-400' }, 'Session Name: '),
+	                m('dd', { class: 'text-lg font-semibold' }, (_b = vnode.attrs.status) === null || _b === undefined ? undefined : _b.sessionName),
+	            ]),
+	            m('div', { class: 'flex flex-col pb-3' }, [
+	                m('dt', { class: 'mb-1 text-lg text-gray-400' }, 'Session URI: '),
+	                m('dd', { class: 'text-lg font-semibold' }, (_c = vnode.attrs.status) === null || _c === undefined ? undefined : _c.serverUri),
+	            ]),
+	            m('div', { class: 'flex flex-col pb-3' }, [
+	                m('dt', { class: 'mb-1 text-lg text-gray-400' }, 'onnect Error: '),
+	                m('dd', { class: 'text-lg font-semibold' }, (_d = vnode.attrs.status) === null || _d === undefined ? undefined : _d.connectError),
+	            ]),
+	        ]);
+	    },
+	};
+
+	const CardComponent = {
+	    view: (vnode) => m('div', { class: 'm-2 p-2 overflow-hidden rounded-lg border border-gray-400' }, vnode.children),
+	};
+
 	const StatusDetailsPage = {
 	    oninit: (vnode) => __awaiter(undefined, undefined, undefined, function* () { return yield vnode.attrs.statusModel.load(vnode.attrs.id); }),
 	    view: (vnode) => {
-	        var _a, _b, _c, _d, _e;
+	        var _a;
 	        return m('div', [
-	            m('div', { class: 'overflow-hidden rounded-lg border border-gray-400' }, [
-	                m('div', { class: 'text-2xl' }, 'UaClient: '),
-	                m('div', { class: 'text-xl' }, 'Session ID: ' + ((_a = vnode.attrs.statusModel.current) === null || _a === undefined ? undefined : _a.id)),
-	                m('div', { class: 'text-xl' }, 'Session Name: ' + ((_b = vnode.attrs.statusModel.current) === null || _b === undefined ? undefined : _b.sessionName)),
-	                m('div', { class: 'text-xl' }, 'Server URI: ' + ((_c = vnode.attrs.statusModel.current) === null || _c === undefined ? undefined : _c.serverUri)),
-	                m('div', { class: 'text-xl' }, 'Connect Error: ' + ((_d = vnode.attrs.statusModel.current) === null || _d === undefined ? undefined : _d.connectError)),
-	            ]),
-	            m('div', {
-	                class: 'mt-3 w-full overflow-hidden rounded-lg border border-gray-400',
-	            }, m(MonitoredItemTableComponent, {
-	                items: (_e = vnode.attrs.statusModel.current) === null || _e === undefined ? undefined : _e.monitoredItems,
+	            m(CardComponent, m(ClientStatusDetailsInfoComponent, {
+	                status: vnode.attrs.statusModel.current,
+	            })),
+	            m(CardComponent, m(MonitoredItemTableComponent, {
+	                items: (_a = vnode.attrs.statusModel.current) === null || _a === undefined ? undefined : _a.monitoredItems,
 	            })),
 	        ]);
 	    },
