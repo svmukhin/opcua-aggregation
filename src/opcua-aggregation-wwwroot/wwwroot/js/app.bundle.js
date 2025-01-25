@@ -2273,31 +2273,50 @@
 	    formatStatusCode: (statusCode) => statusCode === 0 ? 'Good' : 'Bad',
 	};
 
-	const MonitoredItemComponent = {
-	    view: (vnode) => m('li', { class: 'flex items-center py-1.5 px-2.5 rounded-md' }, m('div', { class: 'w-full flex flex-row justify-between' }, [
-	        m('div', { class: 'text-xl' }, vnode.attrs.item.tagId),
-	        m('div', { class: 'text-xl' }, vnode.attrs.item.aggregationTag.value),
-	        m('div', { class: 'text-xl' }, utils.formatTimestamp(vnode.attrs.item.aggregationTag.timestamp)),
-	        m('div', { class: 'text-xl' }, utils.formatStatusCode(vnode.attrs.item.aggregationTag.statusCode)),
-	    ])),
+	const MonitoredItemRowComponent = {
+	    view: (vnode) => m('tr', { class: 'border-b border-gray-400 last:border-0' }, [
+	        m('td', { class: 'p-3' }, vnode.attrs.item.tagId),
+	        m('td', { class: 'p-3' }, vnode.attrs.item.aggregationTag.value),
+	        m('td', { class: 'p-3' }, utils.formatTimestamp(vnode.attrs.item.aggregationTag.timestamp)),
+	        m('td', { class: 'p-3' }, utils.formatStatusCode(vnode.attrs.item.aggregationTag.statusCode)),
+	    ]),
+	};
+	const MonitoredItemTableComponent = {
+	    view: (vnode) => {
+	        var _a;
+	        return m('table', { class: 'w-full' }, [
+	            m('thead', {
+	                class: 'border-b border-gray-400 bg-gray-400 text-gray-900 text-sm font-medium',
+	            }, m('tr', [
+	                m('th', { class: 'px-2.5 py-2 text-start font-medium' }, 'Node Id'),
+	                m('th', { class: 'px-2.5 py-2 text-start font-medium' }, 'Value'),
+	                m('th', { class: 'px-2.5 py-2 text-start font-medium' }, 'Timestamp'),
+	                m('th', { class: 'px-2.5 py-2 text-start font-medium' }, 'Quality'),
+	            ])),
+	            m('tbody', { class: 'group text-sm' }, (_a = vnode.attrs.items) === null || _a === undefined ? undefined : _a.map((item) => {
+	                return m(MonitoredItemRowComponent, { item });
+	            })),
+	        ]);
+	    },
 	};
 
 	const StatusDetailsPage = {
 	    oninit: (vnode) => __awaiter(undefined, undefined, undefined, function* () { return yield vnode.attrs.statusModel.load(vnode.attrs.id); }),
 	    view: (vnode) => {
-	        var _a, _b, _c, _d, _e, _f;
-	        return m('div', { class: 'w-full overflow-hidden rounded-lg border border-gray-400' }, [
-	            m('div', { class: 'text-2xl' }, 'UaClient: '),
-	            m('div', { class: 'text-xl' }, 'Session ID: ' + ((_a = vnode.attrs.statusModel.current) === null || _a === undefined ? undefined : _a.id)),
-	            m('div', { class: 'text-xl' }, 'Session Name: ' + ((_b = vnode.attrs.statusModel.current) === null || _b === undefined ? undefined : _b.sessionName)),
-	            m('div', { class: 'text-xl' }, 'Server URI: ' + ((_c = vnode.attrs.statusModel.current) === null || _c === undefined ? undefined : _c.serverUri)),
-	            m('div', { class: 'text-xl' }, 'Connect Error: ' + ((_d = vnode.attrs.statusModel.current) === null || _d === undefined ? undefined : _d.connectError)),
-	            m('div', [
-	                m('div', { class: 'text-xl' }, 'Monitored Items:'),
-	                m('ul', { class: 'flex flex-col gap-0.5 min-w-60' }, (_f = (_e = vnode.attrs.statusModel.current) === null || _e === undefined ? undefined : _e.monitoredItems) === null || _f === undefined ? undefined : _f.map((item) => {
-	                    return m(MonitoredItemComponent, { item });
-	                })),
+	        var _a, _b, _c, _d, _e;
+	        return m('div', [
+	            m('div', { class: 'overflow-hidden rounded-lg border border-gray-400' }, [
+	                m('div', { class: 'text-2xl' }, 'UaClient: '),
+	                m('div', { class: 'text-xl' }, 'Session ID: ' + ((_a = vnode.attrs.statusModel.current) === null || _a === undefined ? undefined : _a.id)),
+	                m('div', { class: 'text-xl' }, 'Session Name: ' + ((_b = vnode.attrs.statusModel.current) === null || _b === undefined ? undefined : _b.sessionName)),
+	                m('div', { class: 'text-xl' }, 'Server URI: ' + ((_c = vnode.attrs.statusModel.current) === null || _c === undefined ? undefined : _c.serverUri)),
+	                m('div', { class: 'text-xl' }, 'Connect Error: ' + ((_d = vnode.attrs.statusModel.current) === null || _d === undefined ? undefined : _d.connectError)),
 	            ]),
+	            m('div', {
+	                class: 'mt-3 w-full overflow-hidden rounded-lg border border-gray-400',
+	            }, m(MonitoredItemTableComponent, {
+	                items: (_e = vnode.attrs.statusModel.current) === null || _e === undefined ? undefined : _e.monitoredItems,
+	            })),
 	        ]);
 	    },
 	};

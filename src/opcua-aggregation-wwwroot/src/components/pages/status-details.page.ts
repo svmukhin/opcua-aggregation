@@ -1,6 +1,6 @@
 import m from 'mithril';
-import { MonitoredItemComponent } from '../common/monitored-item.component';
 import { StatusPageModel } from '../../models/ua-client.model';
+import { MonitoredItemTableComponent } from '../common/monitored-item-table.component';
 
 export const StatusDetailsPage = {
   oninit: async (vnode: {
@@ -8,10 +8,8 @@ export const StatusDetailsPage = {
   }) => await vnode.attrs.statusModel.load(vnode.attrs.id),
 
   view: (vnode: { attrs: { statusModel: StatusPageModel; id: number } }) =>
-    m(
-      'div',
-      { class: 'w-full overflow-hidden rounded-lg border border-gray-400' },
-      [
+    m('div', [
+      m('div', { class: 'overflow-hidden rounded-lg border border-gray-400' }, [
         m('div', { class: 'text-2xl' }, 'UaClient: '),
         m(
           'div',
@@ -33,16 +31,16 @@ export const StatusDetailsPage = {
           { class: 'text-xl' },
           'Connect Error: ' + vnode.attrs.statusModel.current?.connectError
         ),
-        m('div', [
-          m('div', { class: 'text-xl' }, 'Monitored Items:'),
-          m(
-            'ul',
-            { class: 'flex flex-col gap-0.5 min-w-60' },
-            vnode.attrs.statusModel.current?.monitoredItems?.map((item) => {
-              return m(MonitoredItemComponent, { item });
-            })
-          ),
-        ]),
-      ]
-    ),
+      ]),
+      m(
+        'div',
+        {
+          class:
+            'mt-3 w-full overflow-hidden rounded-lg border border-gray-400',
+        },
+        m(MonitoredItemTableComponent, {
+          items: vnode.attrs.statusModel.current?.monitoredItems,
+        })
+      ),
+    ]),
 };
