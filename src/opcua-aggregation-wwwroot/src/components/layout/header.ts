@@ -6,14 +6,14 @@ export const Header = {
       'nav',
       {
         class:
-          'rounded-lg border shadow-lg overflow-hidden p-2 bg-white border-stone-200 shadow-stone-950/5 mx-auto w-full max-w-screen-xl',
+          'rounded-lg border overflow-hidden p-2 border-gray-400 mx-auto w-full max-w-screen-xl',
       },
       m('div', { class: 'flex items-center' }, [
         m(
           m.route.Link,
           {
             class:
-              'font-sans antialiased text-sm text-current mx-2 block py-1 font-semibold',
+              'font-sans antialiased text-xl text-current mx-2 block py-1 font-semibold',
             href: '/status',
           },
           'UA Aggregation'
@@ -31,7 +31,7 @@ export const Header = {
                   m.route.Link,
                   {
                     class:
-                      'font-sans antialiased text-sm text-current p-1 hover:text-primary',
+                      'font-sans antialiased text-xl text-current p-1 hover:text-primary',
                     href: '/status',
                   },
                   'Status'
@@ -43,7 +43,7 @@ export const Header = {
                   m.route.Link,
                   {
                     class:
-                      'font-sans antialiased text-sm text-current p-1 hover:text-primary',
+                      'font-sans antialiased text-xl text-current p-1 hover:text-primary',
                     href: '/config/uaclient',
                   },
                   'Config'

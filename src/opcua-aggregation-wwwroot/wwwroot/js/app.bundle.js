@@ -2158,10 +2158,10 @@
 
 	const Header = {
 	    view: () => m('nav', {
-	        class: 'rounded-lg border shadow-lg overflow-hidden p-2 bg-white border-stone-200 shadow-stone-950/5 mx-auto w-full max-w-screen-xl',
+	        class: 'rounded-lg border overflow-hidden p-2 border-gray-400 mx-auto w-full max-w-screen-xl',
 	    }, m('div', { class: 'flex items-center' }, [
 	        m(m.route.Link, {
-	            class: 'font-sans antialiased text-sm text-current mx-2 block py-1 font-semibold',
+	            class: 'font-sans antialiased text-xl text-current mx-2 block py-1 font-semibold',
 	            href: '/status',
 	        }, 'UA Aggregation'),
 	        m('div', { class: 'ml-auto mr-2 block' }, [
@@ -2169,11 +2169,11 @@
 	                class: 'm-2 flex flex-row gap-x-3 gap-y-1 m-0 items-center',
 	            }, [
 	                m('li', m(m.route.Link, {
-	                    class: 'font-sans antialiased text-sm text-current p-1 hover:text-primary',
+	                    class: 'font-sans antialiased text-xl text-current p-1 hover:text-primary',
 	                    href: '/status',
 	                }, 'Status')),
 	                m('li', m(m.route.Link, {
-	                    class: 'font-sans antialiased text-sm text-current p-1 hover:text-primary',
+	                    class: 'font-sans antialiased text-xl text-current p-1 hover:text-primary',
 	                    href: '/config/uaclient',
 	                }, 'Config')),
 	            ]),
@@ -2183,7 +2183,7 @@
 
 	const Footer = {
 	    view: () => m('footer', {
-	        class: 'rounded-lg border shadow-lg overflow-hidden p-2 bg-white border-stone-200 shadow-stone-950/5 mx-auto w-full max-w-screen-xl',
+	        class: 'rounded-lg border overflow-hidden p-2 border-gray-400 mx-auto w-full max-w-screen-xl',
 	    }, m('p', { class: 'font-sans antialiased text-base text-current text-center' }, 'OPC UA Aggregation Client')),
 	};
 
@@ -2233,9 +2233,9 @@
 	    oninit: (vnode) => __awaiter(undefined, undefined, undefined, function* () { return yield vnode.attrs.statusModel.init(); }),
 	    view: (vnode) => {
 	        var _a;
-	        return m('div', { class: 'w-full overflow-hidden rounded-lg border border-stone-200' }, m('table', { class: 'w-full' }, [
+	        return m('div', { class: 'w-full overflow-hidden rounded-lg border border-gray-400' }, m('table', { class: 'w-full' }, [
 	            m('thead', {
-	                class: 'border-b border-stone-200 bg-stone-100 text-sm font-medium text-stone-600 dark:bg-surface-dark',
+	                class: 'border-b border-gray-400 bg-gray-400 text-gray-900 text-sm font-medium',
 	            }, [
 	                m('tr', [
 	                    m('th', { class: 'px-2.5 py-2 text-start font-medium' }, 'Name'),
@@ -2244,7 +2244,7 @@
 	                    m('th', { class: 'px-2.5 py-2 text-start font-medium' }, 'Monitored Items'),
 	                ]),
 	            ]),
-	            m('tbody', { class: 'group text-sm text-stone-800' }, (_a = vnode.attrs.statusModel.list) === null || _a === undefined ? undefined : _a.map((status) => m('tr', { class: 'border-b border-stone-200 last:border-0' }, [
+	            m('tbody', { class: 'group text-sm' }, (_a = vnode.attrs.statusModel.list) === null || _a === undefined ? undefined : _a.map((status) => m('tr', { class: 'border-b border-gray-400 last:border-0' }, [
 	                m('td', { class: 'p-3' }, status.sessionName),
 	                m('td', { class: 'p-3' }, status.serverUri),
 	                m('td', { class: 'p-3' }, status.connectError),
@@ -2286,7 +2286,7 @@
 	    oninit: (vnode) => __awaiter(undefined, undefined, undefined, function* () { return yield vnode.attrs.statusModel.load(vnode.attrs.id); }),
 	    view: (vnode) => {
 	        var _a, _b, _c, _d, _e, _f;
-	        return m('div', { class: 'w-full overflow-hidden rounded-lg border border-stone-200' }, [
+	        return m('div', { class: 'w-full overflow-hidden rounded-lg border border-gray-400' }, [
 	            m('div', { class: 'text-2xl' }, 'UaClient: '),
 	            m('div', { class: 'text-xl' }, 'Session ID: ' + ((_a = vnode.attrs.statusModel.current) === null || _a === undefined ? undefined : _a.id)),
 	            m('div', { class: 'text-xl' }, 'Session Name: ' + ((_b = vnode.attrs.statusModel.current) === null || _b === undefined ? undefined : _b.sessionName)),

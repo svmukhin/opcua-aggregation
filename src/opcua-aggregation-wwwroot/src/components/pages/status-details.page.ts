@@ -10,7 +10,7 @@ export const StatusDetailsPage = {
   view: (vnode: { attrs: { statusModel: StatusPageModel; id: number } }) =>
     m(
       'div',
-      { class: 'w-full overflow-hidden rounded-lg border border-stone-200' },
+      { class: 'w-full overflow-hidden rounded-lg border border-gray-400' },
       [
         m('div', { class: 'text-2xl' }, 'UaClient: '),
         m(

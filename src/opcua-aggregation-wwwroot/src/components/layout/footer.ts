@@ -6,7 +6,7 @@ export const Footer = {
       'footer',
       {
         class:
-          'rounded-lg border shadow-lg overflow-hidden p-2 bg-white border-stone-200 shadow-stone-950/5 mx-auto w-full max-w-screen-xl',
+          'rounded-lg border overflow-hidden p-2 border-gray-400 mx-auto w-full max-w-screen-xl',
       },
       m(
         'p',

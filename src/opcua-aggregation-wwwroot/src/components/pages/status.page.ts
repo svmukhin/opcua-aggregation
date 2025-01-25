@@ -8,13 +8,13 @@ export const StatusPage = {
   view: (vnode: { attrs: { statusModel: StatusPageModel } }) =>
     m(
       'div',
-      { class: 'w-full overflow-hidden rounded-lg border border-stone-200' },
+      { class: 'w-full overflow-hidden rounded-lg border border-gray-400' },
       m('table', { class: 'w-full' }, [
         m(
           'thead',
           {
             class:
-              'border-b border-stone-200 bg-stone-100 text-sm font-medium text-stone-600 dark:bg-surface-dark',
+              'border-b border-gray-400 bg-gray-400 text-gray-900 text-sm font-medium',
           },
           [
             m('tr', [
@@ -39,9 +39,9 @@ export const StatusPage = {
         ),
         m(
           'tbody',
-          { class: 'group text-sm text-stone-800' },
+          { class: 'group text-sm' },
           vnode.attrs.statusModel.list?.map((status) =>
-            m('tr', { class: 'border-b border-stone-200 last:border-0' }, [
+            m('tr', { class: 'border-b border-gray-400 last:border-0' }, [
               m('td', { class: 'p-3' }, status.sessionName),
               m('td', { class: 'p-3' }, status.serverUri),
               m('td', { class: 'p-3' }, status.connectError),
