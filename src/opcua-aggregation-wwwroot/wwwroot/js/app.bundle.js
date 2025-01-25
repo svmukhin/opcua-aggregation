@@ -2229,11 +2229,24 @@
 	    return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
 	};
 
-	const StatusPage = {
-	    oninit: (vnode) => __awaiter(undefined, undefined, undefined, function* () { return yield vnode.attrs.statusModel.init(); }),
+	const StatusTableRowComponent = {
+	    view: (vnode) => {
+	        var _a, _b, _c, _d;
+	        return m('tr', { class: 'border-b border-gray-400 last:border-0' }, [
+	            m('td', { class: 'p-3' }, (_a = vnode.attrs.status) === null || _a === undefined ? undefined : _a.sessionName),
+	            m('td', { class: 'p-3' }, (_b = vnode.attrs.status) === null || _b === undefined ? undefined : _b.serverUri),
+	            m('td', { class: 'p-3' }, (_c = vnode.attrs.status) === null || _c === undefined ? undefined : _c.connectError),
+	            m('td', { class: 'p-3' }, m(m.route.Link, {
+	                class: 'font-sans antialiased text-sm text-current font-medium hover:text-primary',
+	                href: '/status/' + ((_d = vnode.attrs.status) === null || _d === undefined ? undefined : _d.id),
+	            }, 'Details')),
+	        ]);
+	    },
+	};
+	const ClientStatusTableComponent = {
 	    view: (vnode) => {
 	        var _a;
-	        return m('div', { class: 'w-full overflow-hidden rounded-lg border border-gray-400' }, m('table', { class: 'w-full' }, [
+	        return m('table', { class: 'w-full' }, [
 	            m('thead', {
 	                class: 'border-b border-gray-400 bg-gray-400 text-gray-900 text-sm font-medium',
 	            }, [
@@ -2244,17 +2257,18 @@
 	                    m('th', { class: 'px-2.5 py-2 text-start font-medium' }, 'Monitored Items'),
 	                ]),
 	            ]),
-	            m('tbody', { class: 'group text-sm' }, (_a = vnode.attrs.statusModel.list) === null || _a === undefined ? undefined : _a.map((status) => m('tr', { class: 'border-b border-gray-400 last:border-0' }, [
-	                m('td', { class: 'p-3' }, status.sessionName),
-	                m('td', { class: 'p-3' }, status.serverUri),
-	                m('td', { class: 'p-3' }, status.connectError),
-	                m('td', { class: 'p-3' }, m(m.route.Link, {
-	                    class: 'font-sans antialiased text-sm text-current font-medium hover:text-primary',
-	                    href: '/status/' + status.id,
-	                }, 'Details')),
-	            ]))),
-	        ]));
+	            m('tbody', { class: 'group text-sm' }, (_a = vnode.attrs.statuses) === null || _a === undefined ? undefined : _a.map((status) => m(StatusTableRowComponent, { status }))),
+	        ]);
 	    },
+	};
+
+	const CardComponent = {
+	    view: (vnode) => m('div', { class: 'm-2 p-2 overflow-hidden rounded-lg border border-gray-400' }, vnode.children),
+	};
+
+	const StatusPage = {
+	    oninit: (vnode) => __awaiter(undefined, undefined, undefined, function* () { return yield vnode.attrs.statusModel.init(); }),
+	    view: (vnode) => m(CardComponent, m(ClientStatusTableComponent, { statuses: vnode.attrs.statusModel.list })),
 	};
 
 	const utils = {
@@ -2317,15 +2331,11 @@
 	                m('dd', { class: 'text-lg font-semibold' }, (_c = vnode.attrs.status) === null || _c === undefined ? undefined : _c.serverUri),
 	            ]),
 	            m('div', { class: 'flex flex-col pb-3' }, [
-	                m('dt', { class: 'mb-1 text-lg text-gray-400' }, 'onnect Error: '),
+	                m('dt', { class: 'mb-1 text-lg text-gray-400' }, 'Connect Error: '),
 	                m('dd', { class: 'text-lg font-semibold' }, (_d = vnode.attrs.status) === null || _d === undefined ? undefined : _d.connectError),
 	            ]),
 	        ]);
 	    },
-	};
-
-	const CardComponent = {
-	    view: (vnode) => m('div', { class: 'm-2 p-2 overflow-hidden rounded-lg border border-gray-400' }, vnode.children),
 	};
 
 	const StatusDetailsPage = {
