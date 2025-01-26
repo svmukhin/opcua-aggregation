@@ -2361,22 +2361,61 @@
 	    },
 	};
 
-	const UaClientListPage = {
-	    view: () => m('div', m('p', 'Page for list of UaClients')),
+	const ConfigTableRowComponent = {
+	    view: (vnode) => {
+	        var _a, _b, _c, _d, _e;
+	        return m('tr', { class: 'border-b border-gray-400 last:border-0' }, [
+	            m('td', { class: 'p-3' }, (_a = vnode.attrs.config) === null || _a === undefined ? undefined : _a.sessionName),
+	            m('td', { class: 'p-3' }, (_b = vnode.attrs.config) === null || _b === undefined ? undefined : _b.serverUri),
+	            m('td', { class: 'p-3' }, (_c = vnode.attrs.config) === null || _c === undefined ? undefined : _c.description),
+	            m('td', { class: 'p-3' }, ((_d = vnode.attrs.config) === null || _d === undefined ? undefined : _d.enabled) ? 'Enabled' : 'Disabled'),
+	            m('td', { class: 'p-3' }, m(m.route.Link, {
+	                class: 'font-sans antialiased text-sm text-current font-medium hover:text-primary',
+	                href: '/config/uaclient/' + ((_e = vnode.attrs.config) === null || _e === undefined ? undefined : _e.id),
+	            }, 'Details')),
+	        ]);
+	    },
 	};
-	const UaClientConfigPage = {
+	const ClientConfigTableComponent = {
+	    view: (vnode) => {
+	        var _a;
+	        return m('table', { class: 'w-full' }, [
+	            m('thead', {
+	                class: 'border-b border-gray-400 bg-gray-400 text-gray-900 text-sm font-medium',
+	            }, [
+	                m('tr', [
+	                    m('th', { class: 'px-2.5 py-2 text-start font-medium' }, 'Name'),
+	                    m('th', { class: 'px-2.5 py-2 text-start font-medium' }, 'Server Uri'),
+	                    m('th', { class: 'px-2.5 py-2 text-start font-medium' }, 'Description'),
+	                    m('th', { class: 'px-2.5 py-2 text-start font-medium' }, 'Enabled'),
+	                    m('th', { class: 'px-2.5 py-2 text-start font-medium' }, 'Details'),
+	                ]),
+	            ]),
+	            m('tbody', { class: 'group text-sm' }, (_a = vnode.attrs.configs) === null || _a === undefined ? undefined : _a.map((config) => m(ConfigTableRowComponent, { config }))),
+	        ]);
+	    },
+	};
+
+	const ConfigPage = {
+	    oninit: (vnode) => __awaiter(undefined, undefined, undefined, function* () { return yield vnode.attrs.configModel.init(); }),
+	    view: (vnode) => m('div', { class: 'flex flex-col' }, [
+	        m(CardComponent, m(ClientConfigTableComponent, { configs: vnode.attrs.configModel.list })),
+	    ]),
+	};
+
+	const ConfigDetailsPage = {
 	    view: (vnode) => m('div', m('p', 'Config page for clients with id ' + vnode.attrs.key)),
 	};
 
 	class ClientStatusService {
-	    constructor(_baseUrl = 'http://localhost:5000/') {
+	    constructor(_baseUrl = 'http://localhost:5000/api/aggregation/status') {
 	        this._baseUrl = _baseUrl;
 	    }
 	    getClientStatuses() {
 	        return __awaiter(this, undefined, undefined, function* () {
 	            return yield m.request({
 	                method: 'GET',
-	                url: this._baseUrl + 'api/aggregation/status',
+	                url: this._baseUrl,
 	                withCredentials: true,
 	            });
 	        });
@@ -2385,7 +2424,7 @@
 	        return __awaiter(this, undefined, undefined, function* () {
 	            return yield m.request({
 	                method: 'GET',
-	                url: this._baseUrl + 'api/aggregation/status',
+	                url: this._baseUrl,
 	                params: { sessionId: id },
 	                withCredentials: true,
 	            });
@@ -2409,9 +2448,74 @@
 	    }
 	}
 
+	class ClientConfigService {
+	    constructor(_baseUrl = 'http://localhost:5000/api/aggregation/config/') {
+	        this._baseUrl = _baseUrl;
+	    }
+	    getClientConfigs() {
+	        return __awaiter(this, undefined, undefined, function* () {
+	            return yield m.request({
+	                method: 'GET',
+	                url: this._baseUrl + 'client',
+	                withCredentials: true,
+	            });
+	        });
+	    }
+	    getClientConfig(id) {
+	        return __awaiter(this, undefined, undefined, function* () {
+	            return yield m.request({
+	                method: 'GET',
+	                url: this._baseUrl + 'client/' + id,
+	                withCredentials: true,
+	            });
+	        });
+	    }
+	    getClientChannels(clientId) {
+	        return __awaiter(this, undefined, undefined, function* () {
+	            return yield m.request({
+	                method: 'GET',
+	                url: this._baseUrl + 'client/' + clientId + '/channel',
+	            });
+	        });
+	    }
+	    getChannel(id) {
+	        return __awaiter(this, undefined, undefined, function* () {
+	            return yield m.request({
+	                method: 'GET',
+	                url: this._baseUrl + 'client/channel/' + id,
+	            });
+	        });
+	    }
+	}
+
+	class ConfigPageModel {
+	    constructor(_service) {
+	        this._service = _service;
+	    }
+	    init() {
+	        return __awaiter(this, undefined, undefined, function* () {
+	            this.list = yield this._service.getClientConfigs();
+	        });
+	    }
+	    load(id) {
+	        return __awaiter(this, undefined, undefined, function* () {
+	            this.current = yield this._service.getClientConfig(id);
+	        });
+	    }
+	    loadChannels() {
+	        return __awaiter(this, undefined, undefined, function* () {
+	            if (!this.current)
+	                return;
+	            this.current.channels = yield this._service.getClientChannels(this.current.id);
+	        });
+	    }
+	}
+
 	const content = document.getElementById('content');
-	const statusService = new ClientStatusService('http://192.168.122.114:5000/');
+	const statusService = new ClientStatusService('http://192.168.122.114:5000/api/aggregation/status');
 	const statusModel = new StatusPageModel(statusService);
+	const configService = new ClientConfigService('http://192.168.122.114:5000/api/aggregation/config/');
+	const configModel = new ConfigPageModel(configService);
 	const Routes = {
 	    '/status': {
 	        render: () => m(Layout, m(StatusPage, { statusModel })),
@@ -2423,10 +2527,10 @@
 	        })),
 	    },
 	    '/config/uaclient': {
-	        render: () => m(Layout, m(UaClientListPage)),
+	        render: () => m(Layout, m(ConfigPage, { configModel })),
 	    },
 	    '/config/uaclient/:key': {
-	        render: (vnode) => m(Layout, m(UaClientConfigPage, vnode.attrs)),
+	        render: (vnode) => m(Layout, m(ConfigDetailsPage, vnode.attrs)),
 	    },
 	};
 	m.route(content, '/status', Routes);

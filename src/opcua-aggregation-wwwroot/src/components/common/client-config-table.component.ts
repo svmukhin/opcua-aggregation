@@ -7,7 +7,11 @@ const ConfigTableRowComponent = {
       m('td', { class: 'p-3' }, vnode.attrs.config?.sessionName),
       m('td', { class: 'p-3' }, vnode.attrs.config?.serverUri),
       m('td', { class: 'p-3' }, vnode.attrs.config?.description),
-      m('td', { class: 'p-3' }, vnode.attrs.config?.enabled),
+      m(
+        'td',
+        { class: 'p-3' },
+        vnode.attrs.config?.enabled ? 'Enabled' : 'Disabled'
+      ),
       m(
         'td',
         { class: 'p-3' },
