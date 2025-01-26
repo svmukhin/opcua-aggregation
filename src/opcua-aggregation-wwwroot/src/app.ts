@@ -4,10 +4,8 @@ import m from 'mithril';
 import { Layout } from './components/layout/layout';
 import { StatusPage } from './components/pages/status.page';
 import { StatusDetailsPage } from './components/pages/status-details.page';
-import {
-  UaClientConfigPage,
-  UaClientListPage,
-} from './components/pages/config.page';
+import { ConfigPage } from './components/pages/config.page';
+import { ConfigDetailsPage } from './components/pages/UaClientConfigPage';
 import { ClientStatusService } from './services/client-status.service';
 import { StatusPageModel } from './models/ua-client.model';
 
@@ -31,10 +29,10 @@ const Routes = {
       ),
   },
   '/config/uaclient': {
-    render: () => m(Layout, m(UaClientListPage)),
+    render: () => m(Layout, m(ConfigPage)),
   },
   '/config/uaclient/:key': {
-    render: (vnode) => m(Layout, m(UaClientConfigPage, vnode.attrs)),
+    render: (vnode) => m(Layout, m(ConfigDetailsPage, vnode.attrs)),
   },
 };
 
