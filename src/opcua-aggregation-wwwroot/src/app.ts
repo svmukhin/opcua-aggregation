@@ -41,7 +41,8 @@ const Routes = {
     render: () => m(Layout, m(ConfigPage, { configModel })),
   },
   '/config/uaclient/:key': {
-    render: (vnode) => m(Layout, m(ConfigDetailsPage, vnode.attrs)),
+    render: (vnode) =>
+      m(Layout, m(ConfigDetailsPage, { configModel, id: vnode.attrs.key })),
   },
 };
 

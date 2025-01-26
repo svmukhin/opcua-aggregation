@@ -2403,8 +2403,43 @@
 	    ]),
 	};
 
+	const ClientConfigDetailsComponent = {
+	    view: (vnode) => {
+	        var _a, _b, _c, _d, _e;
+	        return m('dl', { class: 'max-w-md divide-y divide-gray-400' }, [
+	            m('div', { class: 'flex flex-col pb-3' }, [
+	                m('dt', { class: 'mb-1 text-lg text-gray-400' }, 'Session ID: '),
+	                m('dd', { class: 'text-lg font-semibold' }, (_a = vnode.attrs.config) === null || _a === undefined ? undefined : _a.id),
+	            ]),
+	            m('div', { class: 'flex flex-col pb-3' }, [
+	                m('dt', { class: 'mb-1 text-lg text-gray-400' }, 'Session Name: '),
+	                m('dd', { class: 'text-lg font-semibold' }, (_b = vnode.attrs.config) === null || _b === undefined ? undefined : _b.sessionName),
+	            ]),
+	            m('div', { class: 'flex flex-col pb-3' }, [
+	                m('dt', { class: 'mb-1 text-lg text-gray-400' }, 'Session URI: '),
+	                m('dd', { class: 'text-lg font-semibold' }, (_c = vnode.attrs.config) === null || _c === undefined ? undefined : _c.serverUri),
+	            ]),
+	            m('div', { class: 'flex flex-col pb-3' }, [
+	                m('dt', { class: 'mb-1 text-lg text-gray-400' }, 'Description: '),
+	                m('dd', { class: 'text-lg font-semibold' }, (_d = vnode.attrs.config) === null || _d === undefined ? undefined : _d.description),
+	            ]),
+	            m('div', { class: 'flex flex-col pb-3' }, [
+	                m('dt', { class: 'mb-1 text-lg text-gray-400' }, 'Enabled: '),
+	                m('dd', { class: 'text-lg font-semibold' }, ((_e = vnode.attrs.config) === null || _e === undefined ? undefined : _e.enabled) ? 'Enabledd' : 'Disabld'),
+	            ]),
+	        ]);
+	    },
+	};
+
 	const ConfigDetailsPage = {
-	    view: (vnode) => m('div', m('p', 'Config page for clients with id ' + vnode.attrs.key)),
+	    oninit: (vnode) => __awaiter(undefined, undefined, undefined, function* () { return yield vnode.attrs.configModel.load(vnode.attrs.id); }),
+	    view: (vnode) => m('div', [
+	        m('div', { class: 'flex flex-wrap' }, [
+	            m(CardComponent, m(ClientConfigDetailsComponent, {
+	                config: vnode.attrs.configModel.current,
+	            })),
+	        ]),
+	    ]),
 	};
 
 	class ClientStatusService {
@@ -2530,7 +2565,7 @@
 	        render: () => m(Layout, m(ConfigPage, { configModel })),
 	    },
 	    '/config/uaclient/:key': {
-	        render: (vnode) => m(Layout, m(ConfigDetailsPage, vnode.attrs)),
+	        render: (vnode) => m(Layout, m(ConfigDetailsPage, { configModel, id: vnode.attrs.key })),
 	    },
 	};
 	m.route(content, '/status', Routes);

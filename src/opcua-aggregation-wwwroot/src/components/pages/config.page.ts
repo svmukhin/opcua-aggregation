@@ -1,7 +1,7 @@
 import m from 'mithril';
 import { ConfigPageModel } from '../../models/config/config-page.model';
-import { ClientConfigTableComponent } from '../common/client-config-table.component';
 import { CardComponent } from '../shared/card.component';
+import { ClientConfigTableComponent } from '../common/config/client-config-table.component';
 
 export const ConfigPage = {
   oninit: async (vnode: { attrs: { configModel: ConfigPageModel } }) =>

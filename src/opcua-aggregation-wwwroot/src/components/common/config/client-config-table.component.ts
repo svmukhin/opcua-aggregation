@@ -1,5 +1,5 @@
 import m from 'mithril';
-import { UaClientConfig } from '../../models/config/ua-client-config.model';
+import { UaClientConfig } from '../../../models/config/ua-client-config.model';
 
 const ConfigTableRowComponent = {
   view: (vnode: { attrs: { config: UaClientConfig } }) =>
