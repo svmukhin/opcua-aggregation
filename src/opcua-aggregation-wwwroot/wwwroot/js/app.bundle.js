@@ -2268,7 +2268,11 @@
 
 	const StatusPage = {
 	    oninit: (vnode) => __awaiter(undefined, undefined, undefined, function* () { return yield vnode.attrs.statusModel.init(); }),
-	    view: (vnode) => m(CardComponent, m(ClientStatusTableComponent, { statuses: vnode.attrs.statusModel.list })),
+	    view: (vnode) => m('div', { class: 'flex flex-col' }, [
+	        m(CardComponent, m(ClientStatusTableComponent, {
+	            statuses: vnode.attrs.statusModel.list,
+	        })),
+	    ]),
 	};
 
 	const utils = {
@@ -2343,12 +2347,16 @@
 	    view: (vnode) => {
 	        var _a;
 	        return m('div', [
-	            m(CardComponent, m(ClientStatusDetailsInfoComponent, {
-	                status: vnode.attrs.statusModel.current,
-	            })),
-	            m(CardComponent, m(MonitoredItemTableComponent, {
-	                items: (_a = vnode.attrs.statusModel.current) === null || _a === undefined ? undefined : _a.monitoredItems,
-	            })),
+	            m('div', { class: 'flex flex-wrap' }, [
+	                m(CardComponent, m(ClientStatusDetailsInfoComponent, {
+	                    status: vnode.attrs.statusModel.current,
+	                })),
+	            ]),
+	            m('div', { class: 'flex flex-col' }, [
+	                m(CardComponent, m(MonitoredItemTableComponent, {
+	                    items: (_a = vnode.attrs.statusModel.current) === null || _a === undefined ? undefined : _a.monitoredItems,
+	                })),
+	            ]),
 	        ]);
 	    },
 	};

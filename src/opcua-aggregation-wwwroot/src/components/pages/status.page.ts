@@ -8,8 +8,12 @@ export const StatusPage = {
     await vnode.attrs.statusModel.init(),
 
   view: (vnode: { attrs: { statusModel: StatusPageModel } }) =>
-    m(
-      CardComponent,
-      m(ClientStatusTableComponent, { statuses: vnode.attrs.statusModel.list })
-    ),
+    m('div', { class: 'flex flex-col' }, [
+      m(
+        CardComponent,
+        m(ClientStatusTableComponent, {
+          statuses: vnode.attrs.statusModel.list,
+        })
+      ),
+    ]),
 };
