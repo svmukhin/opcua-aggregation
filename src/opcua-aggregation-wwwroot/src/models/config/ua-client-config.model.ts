@@ -8,6 +8,6 @@ export class UaClientConfig {
   reconnectPeriod: number;
   sessionLifetime: number;
   description: string | undefined;
-  enable: boolean;
+  enabled: boolean;
   channels: UaClientChannelConfig[] | undefined;
 }
