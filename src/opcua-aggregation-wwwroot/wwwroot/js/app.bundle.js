@@ -2158,7 +2158,7 @@
 
 	const Header = {
 	    view: () => m('nav', {
-	        class: 'rounded-lg border overflow-hidden p-2 border-gray-400 mx-auto w-full max-w-screen-xl',
+	        class: 'sticky top-0 border-b overflow-hidden p-2 border-gray-400 mx-auto w-full max-w-screen-xl',
 	    }, m('div', { class: 'flex items-center' }, [
 	        m(m.route.Link, {
 	            class: 'font-sans antialiased text-xl text-current mx-2 block py-1 font-semibold',
@@ -2183,7 +2183,7 @@
 
 	const Footer = {
 	    view: () => m('footer', {
-	        class: 'rounded-lg border overflow-hidden p-2 border-gray-400 mx-auto w-full max-w-screen-xl',
+	        class: 'border-t overflow-hidden p-2 border-gray-400 mx-auto w-full max-w-screen-xl',
 	    }, m('p', { class: 'font-sans antialiased text-base text-current text-center' }, 'OPC UA Aggregation Client')),
 	};
 
@@ -2321,7 +2321,7 @@
 	const ClientStatusDetailsInfoComponent = {
 	    view: (vnode) => {
 	        var _a, _b, _c, _d;
-	        return m('dl', { class: 'max-w-md divide-y divide-gray-400' }, [
+	        return m('dl', { class: 'w-sm divide-y divide-gray-400' }, [
 	            m('div', { class: 'flex flex-col pb-3' }, [
 	                m('dt', { class: 'mb-1 text-lg text-gray-400' }, 'Session ID: '),
 	                m('dd', { class: 'text-lg font-semibold' }, (_a = vnode.attrs.status) === null || _a === undefined ? undefined : _a.id),
@@ -2406,7 +2406,7 @@
 	const ClientConfigDetailsComponent = {
 	    view: (vnode) => {
 	        var _a, _b, _c, _d, _e;
-	        return m('dl', { class: 'max-w-md divide-y divide-gray-400' }, [
+	        return m('dl', { class: 'w-sm divide-y divide-gray-400' }, [
 	            m('div', { class: 'flex flex-col pb-3' }, [
 	                m('dt', { class: 'mb-1 text-lg text-gray-400' }, 'Session ID: '),
 	                m('dd', { class: 'text-lg font-semibold' }, (_a = vnode.attrs.config) === null || _a === undefined ? undefined : _a.id),
@@ -2434,7 +2434,7 @@
 	const ClientSubscriptionDetailsComponent = {
 	    view: (vnode) => {
 	        var _a, _b, _c;
-	        return m('dl', { class: 'max-w-md divide-y divide-gray-400' }, [
+	        return m('dl', { class: 'w-sm divide-y divide-gray-400' }, [
 	            m('div', { class: 'flex flex-col pb-3' }, [
 	                m('dt', { class: 'mb-1 text-lg text-gray-400' }, 'Keep Alive Interval: '),
 	                m('dd', { class: 'text-lg font-semibold' }, (_a = vnode.attrs.config) === null || _a === undefined ? undefined : _a.keepAliveInterval),

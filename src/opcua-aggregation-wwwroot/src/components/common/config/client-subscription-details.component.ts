@@ -3,7 +3,7 @@ import { UaClientConfig } from '../../../models/config/ua-client-config.model';
 
 export const ClientSubscriptionDetailsComponent = {
   view: (vnode: { attrs: { config: UaClientConfig } }) =>
-    m('dl', { class: 'max-w-md divide-y divide-gray-400' }, [
+    m('dl', { class: 'w-sm divide-y divide-gray-400' }, [
       m('div', { class: 'flex flex-col pb-3' }, [
         m(
           'dt',

@@ -6,7 +6,7 @@ export const Header = {
       'nav',
       {
         class:
-          'rounded-lg border overflow-hidden p-2 border-gray-400 mx-auto w-full max-w-screen-xl',
+          'border-b overflow-hidden p-2 border-gray-400 mx-auto w-full max-w-screen-xl',
       },
       m('div', { class: 'flex items-center' }, [
         m(
