@@ -2,12 +2,14 @@ import m from 'mithril';
 import { UaClientStatus } from '../models/ua-client.model';
 
 export class ClientStatusService {
-  constructor(private _baseUrl: string = 'http://localhost:5000/') {}
+  constructor(
+    private _baseUrl: string = 'http://localhost:5000/api/aggregation/status'
+  ) {}
 
   async getClientStatuses(): Promise<UaClientStatus[]> {
     return await m.request<UaClientStatus[]>({
       method: 'GET',
-      url: this._baseUrl + 'api/aggregation/status',
+      url: this._baseUrl,
       withCredentials: true,
     });
   }
@@ -15,7 +17,7 @@ export class ClientStatusService {
   async getClientStatus(id: number): Promise<UaClientStatus> {
     return await m.request<UaClientStatus>({
       method: 'GET',
-      url: this._baseUrl + 'api/aggregation/status',
+      url: this._baseUrl,
       params: { sessionId: id },
       withCredentials: true,
     });
