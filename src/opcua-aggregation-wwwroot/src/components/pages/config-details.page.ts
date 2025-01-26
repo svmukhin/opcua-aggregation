@@ -2,6 +2,7 @@ import m from 'mithril';
 import { ConfigPageModel } from '../../models/config/config-page.model';
 import { CardComponent } from '../shared/card.component';
 import { ClientConfigDetailsComponent } from '../common/config/client-config-details.component';
+import { ClientSubscriptionDetailsComponent } from '../common/config/client-subscription-details.component';
 
 export const ConfigDetailsPage = {
   oninit: async (vnode: {
@@ -14,6 +15,12 @@ export const ConfigDetailsPage = {
         m(
           CardComponent,
           m(ClientConfigDetailsComponent, {
+            config: vnode.attrs.configModel.current,
+          })
+        ),
+        m(
+          CardComponent,
+          m(ClientSubscriptionDetailsComponent, {
             config: vnode.attrs.configModel.current,
           })
         ),

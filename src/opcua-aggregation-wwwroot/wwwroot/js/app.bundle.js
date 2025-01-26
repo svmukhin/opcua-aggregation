@@ -2431,11 +2431,34 @@
 	    },
 	};
 
+	const ClientSubscriptionDetailsComponent = {
+	    view: (vnode) => {
+	        var _a, _b, _c;
+	        return m('dl', { class: 'max-w-md divide-y divide-gray-400' }, [
+	            m('div', { class: 'flex flex-col pb-3' }, [
+	                m('dt', { class: 'mb-1 text-lg text-gray-400' }, 'Keep Alive Interval: '),
+	                m('dd', { class: 'text-lg font-semibold' }, (_a = vnode.attrs.config) === null || _a === undefined ? undefined : _a.keepAliveInterval),
+	            ]),
+	            m('div', { class: 'flex flex-col pb-3' }, [
+	                m('dt', { class: 'mb-1 text-lg text-gray-400' }, 'Reconnect Period: '),
+	                m('dd', { class: 'text-lg font-semibold' }, (_b = vnode.attrs.config) === null || _b === undefined ? undefined : _b.reconnectPeriod),
+	            ]),
+	            m('div', { class: 'flex flex-col pb-3' }, [
+	                m('dt', { class: 'mb-1 text-lg text-gray-400' }, 'Session Lifetime: '),
+	                m('dd', { class: 'text-lg font-semibold' }, (_c = vnode.attrs.config) === null || _c === undefined ? undefined : _c.sessionLifetime),
+	            ]),
+	        ]);
+	    },
+	};
+
 	const ConfigDetailsPage = {
 	    oninit: (vnode) => __awaiter(undefined, undefined, undefined, function* () { return yield vnode.attrs.configModel.load(vnode.attrs.id); }),
 	    view: (vnode) => m('div', [
 	        m('div', { class: 'flex flex-wrap' }, [
 	            m(CardComponent, m(ClientConfigDetailsComponent, {
+	                config: vnode.attrs.configModel.current,
+	            })),
+	            m(CardComponent, m(ClientSubscriptionDetailsComponent, {
 	                config: vnode.attrs.configModel.current,
 	            })),
 	        ]),
