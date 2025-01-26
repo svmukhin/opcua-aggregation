@@ -2451,18 +2451,54 @@
 	    },
 	};
 
-	const ConfigDetailsPage = {
-	    oninit: (vnode) => __awaiter(undefined, undefined, undefined, function* () { return yield vnode.attrs.configModel.load(vnode.attrs.id); }),
-	    view: (vnode) => m('div', [
-	        m('div', { class: 'flex flex-wrap' }, [
-	            m(CardComponent, m(ClientConfigDetailsComponent, {
-	                config: vnode.attrs.configModel.current,
-	            })),
-	            m(CardComponent, m(ClientSubscriptionDetailsComponent, {
-	                config: vnode.attrs.configModel.current,
-	            })),
-	        ]),
+	const ClientChannelsRowComponent = {
+	    view: (vnode) => m('tr', { class: 'border-b border-gray-400 last:border-0' }, [
+	        m('td', { class: 'p-3' }, vnode.attrs.channel.nodeId),
+	        m('td', { class: 'p-3' }, vnode.attrs.channel.name),
+	        m('td', { class: 'p-3' }, vnode.attrs.channel.description),
+	        m('td', { class: 'p-3' }, vnode.attrs.channel.id),
 	    ]),
+	};
+	const ClientChannelsTableComponent = {
+	    view: (vnode) => {
+	        var _a;
+	        return m('table', { class: 'w-full' }, [
+	            m('thead', {
+	                class: 'border-b border-gray-400 bg-gray-400 text-gray-900 text-sm font-medium',
+	            }, m('tr', [
+	                m('th', { class: 'px-2.5 py-2 text-start font-medium' }, 'Node Id'),
+	                m('th', { class: 'px-2.5 py-2 text-start font-medium' }, 'Name'),
+	                m('th', { class: 'px-2.5 py-2 text-start font-medium' }, 'Description'),
+	                m('th', { class: 'px-2.5 py-2 text-start font-medium' }, ''),
+	            ])),
+	            m('tbody', { class: 'text-sm' }, (_a = vnode.attrs.channels) === null || _a === undefined ? undefined : _a.map((channel) => m(ClientChannelsRowComponent, { channel }))),
+	        ]);
+	    },
+	};
+
+	const ConfigDetailsPage = {
+	    oninit: (vnode) => __awaiter(undefined, undefined, undefined, function* () {
+	        yield vnode.attrs.configModel.load(vnode.attrs.id);
+	        yield vnode.attrs.configModel.loadChannels();
+	    }),
+	    view: (vnode) => {
+	        var _a;
+	        return m('div', [
+	            m('div', { class: 'flex flex-wrap' }, [
+	                m(CardComponent, m(ClientConfigDetailsComponent, {
+	                    config: vnode.attrs.configModel.current,
+	                })),
+	                m(CardComponent, m(ClientSubscriptionDetailsComponent, {
+	                    config: vnode.attrs.configModel.current,
+	                })),
+	            ]),
+	            m('div', { class: 'flex flex-col' }, [
+	                m(CardComponent, m(ClientChannelsTableComponent, {
+	                    channels: (_a = vnode.attrs.configModel.current) === null || _a === undefined ? undefined : _a.channels,
+	                })),
+	            ]),
+	        ]);
+	    },
 	};
 
 	class ClientStatusService {
