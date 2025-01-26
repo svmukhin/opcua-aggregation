@@ -1,4 +1,6 @@
 import m from 'mithril';
+import { UaClientConfig } from '../models/config/ua-client-config.model';
+import { UaClientChannelConfig } from '../models/config/ua-client-channel-config.model';
 
 export class ClientConfigService {
   constructor(
@@ -6,7 +8,7 @@ export class ClientConfigService {
   ) {}
 
   async getClientConfigs() {
-    return await m.request({
+    return await m.request<UaClientConfig[]>({
       method: 'GET',
       url: this._baseUrl + 'client',
       withCredentials: true,
@@ -14,22 +16,22 @@ export class ClientConfigService {
   }
 
   async getClientConfig(id: number) {
-    return await m.request({
+    return await m.request<UaClientConfig>({
       method: 'GET',
       url: this._baseUrl + 'client/' + id,
       withCredentials: true,
     });
   }
 
-  async getClientChanneld(clientId: number) {
-    return await m.request({
+  async getClientChannels(clientId: number) {
+    return await m.request<UaClientChannelConfig[]>({
       method: 'GET',
       url: this._baseUrl + 'client/' + clientId + '/channel',
     });
   }
 
   async getChannel(id: number) {
-    return await m.request({
+    return await m.request<UaClientChannelConfig>({
       method: 'GET',
       url: this._baseUrl + 'client/channel/' + id,
     });
