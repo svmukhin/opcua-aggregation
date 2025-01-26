@@ -32,7 +32,7 @@ public class UaClientConfigurationController(
         return new JsonResult(channels);
     }
 
-    [HttpGet("client/{clientId:int}/channel/{id:int}")]
+    [HttpGet("client/channel/{id:int}")]
     public async Task<IActionResult> GetClientConfigurationChannelById(int id, CancellationToken ct)
     {
         var channel = await _store.GetUaClientChannelConfigurationByIdAsync(id, ct);
