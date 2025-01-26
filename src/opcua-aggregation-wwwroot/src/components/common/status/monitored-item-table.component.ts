@@ -1,6 +1,6 @@
 import m from 'mithril';
-import { utils } from '../../utils/utils';
-import { MonitoredItem } from '../../models/status/monitored-item.model';
+import { utils } from '../../../utils/utils';
+import { MonitoredItem } from '../../../models/status/monitored-item.model';
 
 const MonitoredItemRowComponent = {
   view: (vnode: { attrs: { item: MonitoredItem } }) =>

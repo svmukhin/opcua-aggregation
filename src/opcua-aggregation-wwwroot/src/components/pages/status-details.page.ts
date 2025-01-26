@@ -1,7 +1,7 @@
 import m from 'mithril';
 import { StatusPageModel } from '../../models/status/status-page.model';
-import { MonitoredItemTableComponent } from '../common/monitored-item-table.component';
-import { ClientStatusDetailsInfoComponent } from '../common/client-status-details-info.component';
+import { MonitoredItemTableComponent } from '../common/status/monitored-item-table.component';
+import { ClientStatusDetailsInfoComponent } from '../common/status/client-status-details-info.component';
 import { CardComponent } from '../shared/card.component';
 
 export const StatusDetailsPage = {

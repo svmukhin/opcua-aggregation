@@ -1,6 +1,6 @@
 import m from 'mithril';
 import { StatusPageModel } from '../../models/status/status-page.model';
-import { ClientStatusTableComponent } from '../common/client-status-table.component';
+import { ClientStatusTableComponent } from '../common/status/client-status-table.component';
 import { CardComponent } from '../shared/card.component';
 
 export const StatusPage = {
