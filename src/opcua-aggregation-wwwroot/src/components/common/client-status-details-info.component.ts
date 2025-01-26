@@ -1,5 +1,5 @@
 import m from 'mithril';
-import { UaClientStatus } from '../../models/ua-client.model';
+import { UaClientStatus } from '../../models/status/ua-client-status.model';
 
 export const ClientStatusDetailsInfoComponent = {
   view: (vnode: { attrs: { status: UaClientStatus } }) =>

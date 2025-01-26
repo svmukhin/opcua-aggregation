@@ -1,13 +1,5 @@
-import { ClientStatusService } from '../services/client-status.service';
-import { MonitoredItem } from './monitored-item.model';
-
-export type UaClientStatus = {
-  id: string;
-  serverUri: string;
-  sessionName: string;
-  connectError: number;
-  monitoredItems: MonitoredItem[];
-};
+import { ClientStatusService } from '../../services/client-status.service';
+import { UaClientStatus } from './ua-client-status.model';
 
 export class StatusPageModel {
   current: UaClientStatus | undefined;

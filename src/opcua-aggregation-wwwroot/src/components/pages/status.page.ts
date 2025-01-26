@@ -1,5 +1,5 @@
 import m from 'mithril';
-import { StatusPageModel } from '../../models/ua-client.model';
+import { StatusPageModel } from '../../models/status/status-page.model';
 import { ClientStatusTableComponent } from '../common/client-status-table.component';
 import { CardComponent } from '../shared/card.component';
 

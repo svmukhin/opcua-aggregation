@@ -5,9 +5,9 @@ import { Layout } from './components/layout/layout';
 import { StatusPage } from './components/pages/status.page';
 import { StatusDetailsPage } from './components/pages/status-details.page';
 import { ConfigPage } from './components/pages/config.page';
-import { ConfigDetailsPage } from './components/pages/UaClientConfigPage';
+import { ConfigDetailsPage } from './components/pages/config-details.page';
 import { ClientStatusService } from './services/client-status.service';
-import { StatusPageModel } from './models/ua-client.model';
+import { StatusPageModel } from './models/status/status-page.model';
 
 const content = document.getElementById('content');
 
