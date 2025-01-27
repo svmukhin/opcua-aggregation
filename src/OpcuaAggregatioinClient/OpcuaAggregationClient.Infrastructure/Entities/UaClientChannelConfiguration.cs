@@ -6,4 +6,5 @@ public class UaClientChannelConfiguration
     public required string NodeId { get; set; }
     public string? Name { get; set; }
     public string? Description { get; set; }
+    public required int ClientId { get; set; }
 }
