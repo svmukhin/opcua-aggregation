@@ -16,15 +16,15 @@ public class UaClientManager(
 
     public async Task StartUaClientAsync(UaClientConfiguration config, CancellationToken cancellationToken = default)
     {
-        if(config.Id is null)
+        if (config.Id is null)
         {
             _logger.LogError("Client configuration {config} does not have an Id", config);
             return;
         }
-        
+
         var client = _clientFactory.GetInstance(config);
         var connected = await client.ConnectAsync(config.ServerUri, false);
-        if(!connected)
+        if (!connected)
         {
             _logger.LogError("Failed to connect to {serverUri}", config.ServerUri);
             return;
@@ -36,11 +36,25 @@ public class UaClientManager(
         await client.AddSubscription(channels, config.SessionName);
     }
 
+    public async Task StopUaClientAsync(int configId)
+    {
+        var client = _clients.FirstOrDefault(c => c.ClientId == configId);
+        if (client is null)
+        {
+            _logger.LogError("Client with id {configId} not found", configId);
+            return;
+        }
+
+        await client.Disconnect();
+        _clients.Remove(client);
+        client.Dispose();
+    }
+
     public bool ClientExists(int configId) => _clients.FindIndex(c => c.ClientId == configId) != -1;
 
     public async Task DisposeClientsAsync()
     {
-        if(_clients.Count > 0)
+        if (_clients.Count > 0)
         {
             var tasks = new List<Task>();
 
