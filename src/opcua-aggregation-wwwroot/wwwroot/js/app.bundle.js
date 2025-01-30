@@ -2158,7 +2158,7 @@
 
 	const Header = {
 	    view: () => m('nav', {
-	        class: 'sticky top-0 border-b overflow-hidden p-2 border-gray-400 mx-auto w-full max-w-screen-xl',
+	        class: 'border-b overflow-hidden p-2 border-gray-400 mx-auto w-full max-w-screen-xl',
 	    }, m('div', { class: 'flex items-center' }, [
 	        m(m.route.Link, {
 	            class: 'font-sans antialiased text-xl text-current mx-2 block py-1 font-semibold',
@@ -2524,6 +2524,7 @@
 	            });
 	        });
 	    }
+	    static get [Symbol.for("___CTOR_ARGS___")]() { return [`string`]; }
 	}
 
 	class StatusPageModel {
@@ -2540,6 +2541,7 @@
 	            this.current = yield this._service.getClientStatus(id);
 	        });
 	    }
+	    static get [Symbol.for("___CTOR_ARGS___")]() { return [`ClientStatusService`]; }
 	}
 
 	class ClientConfigService {
@@ -2580,6 +2582,7 @@
 	            });
 	        });
 	    }
+	    static get [Symbol.for("___CTOR_ARGS___")]() { return [undefined]; }
 	}
 
 	class ConfigPageModel {
@@ -2603,6 +2606,7 @@
 	            this.current.channels = yield this._service.getClientChannels(this.current.id);
 	        });
 	    }
+	    static get [Symbol.for("___CTOR_ARGS___")]() { return [`ClientConfigService`]; }
 	}
 
 	const content = document.getElementById('content');

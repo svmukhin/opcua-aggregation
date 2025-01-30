@@ -4,6 +4,7 @@ import typeScript from '@rollup/plugin-typescript';
 import postcss from 'rollup-plugin-postcss';
 import mv from 'rollup-plugin-mv';
 import tailwindcss from '@tailwindcss/postcss';
+import { di } from '@wessberg/di-compiler';
 
 export default {
   input: './src/app.ts',
@@ -14,8 +15,11 @@ export default {
   plugins: [
     nodeResolve(),
     commonJs(),
-    typeScript(),
-    postcss({ extract: 'styles.css', plugins: [tailwindcss()] }),
+    typeScript({ transformers: (program) => di({ program }) }),
+    postcss({
+      extract: 'styles.css',
+      plugins: [tailwindcss()],
+    }),
     mv([
       {
         src: 'wwwroot/js/styles.css',

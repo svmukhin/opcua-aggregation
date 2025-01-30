@@ -524,12 +524,6 @@
   .static {
     position: static;
   }
-  .sticky {
-    position: sticky;
-  }
-  .top-0 {
-    top: calc(var(--spacing) * 0);
-  }
   .m-0 {
     margin: calc(var(--spacing) * 0);
   }
