@@ -2,6 +2,13 @@ import m from 'mithril';
 import { UaClientConfig } from '../models/config/ua-client-config.model';
 import { UaClientChannelConfig } from '../models/config/ua-client-channel-config.model';
 
+export interface IClientConfigService {
+  getClientConfigs(): Promise<UaClientConfig[]>;
+  getClientConfig(id: number): Promise<UaClientConfig>;
+  getClientChannels(clientId: number): Promise<UaClientChannelConfig[]>;
+  getChannel(id: number): Promise<UaClientChannelConfig>;
+}
+
 export class ClientConfigService {
   constructor(
     private _baseUrl = 'http://localhost:5000/api/aggregation/config/'

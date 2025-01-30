@@ -1,15 +1,15 @@
 import m from 'mithril';
-import { StatusPageModel } from '../../models/status/status-page.model';
+import { IStatusPageModel } from '../../models/status/status-page.model';
 import { MonitoredItemTableComponent } from '../common/status/monitored-item-table.component';
 import { ClientStatusDetailsInfoComponent } from '../common/status/client-status-details-info.component';
 import { CardComponent } from '../shared/card.component';
 
 export const StatusDetailsPage = {
   oninit: async (vnode: {
-    attrs: { statusModel: StatusPageModel; id: number };
+    attrs: { statusModel: IStatusPageModel; id: number };
   }) => await vnode.attrs.statusModel.load(vnode.attrs.id),
 
-  view: (vnode: { attrs: { statusModel: StatusPageModel; id: number } }) =>
+  view: (vnode: { attrs: { statusModel: IStatusPageModel; id: number } }) =>
     m('div', [
       m('div', { class: 'flex flex-wrap' }, [
         m(

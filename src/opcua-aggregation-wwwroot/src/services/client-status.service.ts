@@ -1,7 +1,12 @@
 import m from 'mithril';
 import { UaClientStatus } from '../models/status/ua-client-status.model';
 
-export class ClientStatusService {
+export interface IClientStatusService {
+  getClientStatuses(): Promise<UaClientStatus[]>;
+  getClientStatus(id: number): Promise<UaClientStatus>;
+}
+
+export class ClientStatusService implements IClientStatusService {
   constructor(
     private _baseUrl: string = 'http://localhost:5000/api/aggregation/status'
   ) {}

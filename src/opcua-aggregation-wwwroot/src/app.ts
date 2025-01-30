@@ -6,22 +6,45 @@ import { StatusPage } from './components/pages/status.page';
 import { StatusDetailsPage } from './components/pages/status-details.page';
 import { ConfigPage } from './components/pages/config.page';
 import { ConfigDetailsPage } from './components/pages/config-details.page';
-import { ClientStatusService } from './services/client-status.service';
-import { StatusPageModel } from './models/status/status-page.model';
-import { ClientConfigService } from './services/client-config.service';
-import { ConfigPageModel } from './models/config/config-page.model';
+import {
+  ClientStatusService,
+  IClientStatusService,
+} from './services/client-status.service';
+import {
+  IStatusPageModel,
+  StatusPageModel,
+} from './models/status/status-page.model';
+import {
+  ClientConfigService,
+  IClientConfigService,
+} from './services/client-config.service';
+import {
+  ConfigPageModel,
+  IConfigPageModel,
+} from './models/config/config-page.model';
+import { DIContainer } from '@wessberg/di';
 
 const content = document.getElementById('content');
 
-const statusService = new ClientStatusService(
-  'http://192.168.122.114:5000/api/aggregation/status'
-);
-const statusModel = new StatusPageModel(statusService);
+const container = new DIContainer();
 
-const configService = new ClientConfigService(
-  'http://192.168.122.114:5000/api/aggregation/config/'
+container.registerSingleton<IClientStatusService>(
+  () =>
+    new ClientStatusService(
+      'http://192.168.122.114:5000/api/aggregation/status'
+    )
 );
-const configModel = new ConfigPageModel(configService);
+container.registerSingleton<IClientConfigService>(
+  () =>
+    new ClientConfigService(
+      'http://192.168.122.114:5000/api/aggregation/config/'
+    )
+);
+container.registerSingleton<IStatusPageModel, StatusPageModel>();
+container.registerSingleton<IConfigPageModel, ConfigPageModel>();
+
+const statusModel = container.get<IStatusPageModel>();
+const configModel = container.get<IConfigPageModel>();
 
 const Routes = {
   '/status': {
