@@ -3,15 +3,24 @@ import { IConfigPageModel } from '../../models/config/config-page.model';
 import { CardComponent } from '../shared/card.component';
 import { ClientConfigTableComponent } from '../common/config/client-config-table.component';
 
-export const ConfigPage = {
-  oninit: async (vnode: { attrs: { configModel: IConfigPageModel } }) =>
-    await vnode.attrs.configModel.init(),
+export interface IConfigPage {
+  oninit(): Promise<void>;
+  view();
+}
 
-  view: (vnode: { attrs: { configModel: IConfigPageModel } }) =>
-    m('div', { class: 'flex flex-col' }, [
+export class ConfigPage {
+  constructor(private configModel: IConfigPageModel) {}
+
+  async oninit() {
+    await this.configModel.init();
+  }
+
+  view() {
+    return m('div', { class: 'flex flex-col' }, [
       m(
         CardComponent,
-        m(ClientConfigTableComponent, { configs: vnode.attrs.configModel.list })
+        m(ClientConfigTableComponent, { configs: this.configModel.list })
       ),
-    ]),
-};
+    ]);
+  }
+}

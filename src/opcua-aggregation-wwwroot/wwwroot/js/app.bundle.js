@@ -2379,47 +2379,6 @@
         static get [Symbol.for("___CTOR_ARGS___")]() { return [`IStatusPageModel`]; }
     }
 
-    const Header = {
-        view: () => m('nav', {
-            class: 'border-b overflow-hidden p-2 border-gray-400 mx-auto w-full max-w-screen-xl',
-        }, m('div', { class: 'flex items-center' }, [
-            m(m.route.Link, {
-                class: 'font-sans antialiased text-xl text-current mx-2 block py-1 font-semibold',
-                href: '/status',
-            }, 'UA Aggregation'),
-            m('div', { class: 'ml-auto mr-2 block' }, [
-                m('ul', {
-                    class: 'm-2 flex flex-row gap-x-3 gap-y-1 m-0 items-center',
-                }, [
-                    m('li', m(m.route.Link, {
-                        class: 'font-sans antialiased text-xl text-current p-1 hover:text-primary',
-                        href: '/status',
-                    }, 'Status')),
-                    m('li', m(m.route.Link, {
-                        class: 'font-sans antialiased text-xl text-current p-1 hover:text-primary',
-                        href: '/config/uaclient',
-                    }, 'Config')),
-                ]),
-            ]),
-        ])),
-    };
-
-    const Footer = {
-        view: () => m('footer', {
-            class: 'border-t overflow-hidden p-2 border-gray-400 mx-auto w-full max-w-screen-xl',
-        }, m('p', { class: 'font-sans antialiased text-base text-current text-center' }, 'OPC UA Aggregation Client')),
-    };
-
-    const header = document.getElementById('header');
-    const footer = document.getElementById('footer');
-    const Layout = {
-        oninit: () => {
-            m.mount(header, Header);
-            m.mount(footer, Footer);
-        },
-        view: (vnode) => m('div', { class: 'w-full max-w-screen-xl' }, vnode.children),
-    };
-
     const ConfigTableRowComponent = {
         view: (vnode) => {
             var _a, _b, _c, _d, _e;
@@ -2455,12 +2414,22 @@
         },
     };
 
-    const ConfigPage = {
-        oninit: (vnode) => __awaiter(undefined, undefined, undefined, function* () { return yield vnode.attrs.configModel.init(); }),
-        view: (vnode) => m('div', { class: 'flex flex-col' }, [
-            m(CardComponent, m(ClientConfigTableComponent, { configs: vnode.attrs.configModel.list })),
-        ]),
-    };
+    class ConfigPage {
+        constructor(configModel) {
+            this.configModel = configModel;
+        }
+        oninit() {
+            return __awaiter(this, undefined, undefined, function* () {
+                yield this.configModel.init();
+            });
+        }
+        view() {
+            return m('div', { class: 'flex flex-col' }, [
+                m(CardComponent, m(ClientConfigTableComponent, { configs: this.configModel.list })),
+            ]);
+        }
+        static get [Symbol.for("___CTOR_ARGS___")]() { return [`IConfigPageModel`]; }
+    }
 
     const ClientConfigDetailsComponent = {
         view: (vnode) => {
@@ -2535,29 +2504,76 @@
         },
     };
 
-    const ConfigDetailsPage = {
-        oninit: (vnode) => __awaiter(undefined, undefined, undefined, function* () {
-            yield vnode.attrs.configModel.load(vnode.attrs.id);
-            yield vnode.attrs.configModel.loadChannels();
-        }),
-        view: (vnode) => {
+    class ConfigDetailsPage {
+        constructor(configModel) {
+            this.configModel = configModel;
+        }
+        oninit(vnode) {
+            return __awaiter(this, undefined, undefined, function* () {
+                yield this.configModel.load(vnode.attrs.id);
+                yield this.configModel.loadChannels();
+            });
+        }
+        view() {
             var _a;
             return m('div', [
                 m('div', { class: 'flex flex-wrap' }, [
                     m(CardComponent, m(ClientConfigDetailsComponent, {
-                        config: vnode.attrs.configModel.current,
+                        config: this.configModel.current,
                     })),
                     m(CardComponent, m(ClientSubscriptionDetailsComponent, {
-                        config: vnode.attrs.configModel.current,
+                        config: this.configModel.current,
                     })),
                 ]),
                 m('div', { class: 'flex flex-col' }, [
                     m(CardComponent, m(ClientChannelsTableComponent, {
-                        channels: (_a = vnode.attrs.configModel.current) === null || _a === undefined ? undefined : _a.channels,
+                        channels: (_a = this.configModel.current) === null || _a === undefined ? undefined : _a.channels,
                     })),
                 ]),
             ]);
+        }
+        static get [Symbol.for("___CTOR_ARGS___")]() { return [`IConfigPageModel`]; }
+    }
+
+    const Header = {
+        view: () => m('nav', {
+            class: 'border-b overflow-hidden p-2 border-gray-400 mx-auto w-full max-w-screen-xl',
+        }, m('div', { class: 'flex items-center' }, [
+            m(m.route.Link, {
+                class: 'font-sans antialiased text-xl text-current mx-2 block py-1 font-semibold',
+                href: '/status',
+            }, 'UA Aggregation'),
+            m('div', { class: 'ml-auto mr-2 block' }, [
+                m('ul', {
+                    class: 'm-2 flex flex-row gap-x-3 gap-y-1 m-0 items-center',
+                }, [
+                    m('li', m(m.route.Link, {
+                        class: 'font-sans antialiased text-xl text-current p-1 hover:text-primary',
+                        href: '/status',
+                    }, 'Status')),
+                    m('li', m(m.route.Link, {
+                        class: 'font-sans antialiased text-xl text-current p-1 hover:text-primary',
+                        href: '/config/uaclient',
+                    }, 'Config')),
+                ]),
+            ]),
+        ])),
+    };
+
+    const Footer = {
+        view: () => m('footer', {
+            class: 'border-t overflow-hidden p-2 border-gray-400 mx-auto w-full max-w-screen-xl',
+        }, m('p', { class: 'font-sans antialiased text-base text-current text-center' }, 'OPC UA Aggregation Client')),
+    };
+
+    const header = document.getElementById('header');
+    const footer = document.getElementById('footer');
+    const Layout = {
+        oninit: () => {
+            m.mount(header, Header);
+            m.mount(footer, Footer);
         },
+        view: (vnode) => m('div', { class: 'w-full max-w-screen-xl' }, vnode.children),
     };
 
     class ClientStatusService {
@@ -2838,8 +2854,9 @@
     container.registerSingleton(undefined, { identifier: `IStatusPageModel`, implementation: StatusPageModel });
     container.registerSingleton(undefined, { identifier: `IConfigPageModel`, implementation: ConfigPageModel });
     container.registerSingleton(undefined, { identifier: `IStatusPage`, implementation: StatusPage });
-    container.registerTransient(undefined, { identifier: `IStatusDetailsPage`, implementation: StatusDetailsPage });
-    const configModel = container.get({ identifier: "IConfigPageModel" });
+    container.registerSingleton(undefined, { identifier: `IStatusDetailsPage`, implementation: StatusDetailsPage });
+    container.registerSingleton(undefined, { identifier: `IConfigPage`, implementation: ConfigPage });
+    container.registerSingleton(undefined, { identifier: `IConfigDetailsPage`, implementation: ConfigDetailsPage });
     const Routes = {
         '/status': {
             render: () => m(Layout, m(container.get({ identifier: "IStatusPage" }))),
@@ -2850,10 +2867,10 @@
             })),
         },
         '/config/uaclient': {
-            render: () => m(Layout, m(ConfigPage, { configModel })),
+            render: () => m(Layout, m(container.get({ identifier: "IConfigPage" }))),
         },
         '/config/uaclient/:key': {
-            render: (vnode) => m(Layout, m(ConfigDetailsPage, { configModel, id: vnode.attrs.key })),
+            render: (vnode) => m(Layout, m(container.get({ identifier: "IConfigDetailsPage" }), { id: vnode.attrs.key })),
         },
     };
     m.route(content, '/status', Routes);

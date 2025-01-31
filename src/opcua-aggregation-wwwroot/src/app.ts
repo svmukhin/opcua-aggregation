@@ -7,8 +7,11 @@ import {
   IStatusDetailsPage,
   StatusDetailsPage,
 } from './components/pages/status-details.page';
-import { ConfigPage } from './components/pages/config.page';
-import { ConfigDetailsPage } from './components/pages/config-details.page';
+import { ConfigPage, IConfigPage } from './components/pages/config.page';
+import {
+  ConfigDetailsPage,
+  IConfigDetailsPage,
+} from './components/pages/config-details.page';
 import {
   ClientStatusService,
   IClientStatusService,
@@ -47,9 +50,10 @@ container.registerSingleton<IStatusPageModel, StatusPageModel>();
 container.registerSingleton<IConfigPageModel, ConfigPageModel>();
 
 container.registerSingleton<IStatusPage, StatusPage>();
-container.registerTransient<IStatusDetailsPage, StatusDetailsPage>();
+container.registerSingleton<IStatusDetailsPage, StatusDetailsPage>();
 
-const configModel = container.get<IConfigPageModel>();
+container.registerSingleton<IConfigPage, ConfigPage>();
+container.registerSingleton<IConfigDetailsPage, ConfigDetailsPage>();
 
 const Routes = {
   '/status': {
@@ -65,11 +69,14 @@ const Routes = {
       ),
   },
   '/config/uaclient': {
-    render: () => m(Layout, m(ConfigPage, { configModel })),
+    render: () => m(Layout, m(container.get<IConfigPage>())),
   },
   '/config/uaclient/:key': {
     render: (vnode) =>
-      m(Layout, m(ConfigDetailsPage, { configModel, id: vnode.attrs.key })),
+      m(
+        Layout,
+        m(container.get<IConfigDetailsPage>(), { id: vnode.attrs.key })
+      ),
   },
 };
 

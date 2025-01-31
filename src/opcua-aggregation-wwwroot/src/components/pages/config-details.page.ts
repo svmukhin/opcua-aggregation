@@ -5,27 +5,32 @@ import { ClientConfigDetailsComponent } from '../common/config/client-config-det
 import { ClientSubscriptionDetailsComponent } from '../common/config/client-subscription-details.component';
 import { ClientChannelsTableComponent } from '../common/config/client-channels-table.component';
 
-export const ConfigDetailsPage = {
-  oninit: async (vnode: {
-    attrs: { configModel: IConfigPageModel; id: number };
-  }) => {
-    await vnode.attrs.configModel.load(vnode.attrs.id);
-    await vnode.attrs.configModel.loadChannels();
-  },
+export interface IConfigDetailsPage {
+  oninit(vnode: { attrs: { id: number } }): Promise<void>;
+  view();
+}
 
-  view: (vnode: { attrs: { configModel: IConfigPageModel; id: number } }) =>
-    m('div', [
+export class ConfigDetailsPage {
+  constructor(private configModel: IConfigPageModel) {}
+
+  async oninit(vnode: { attrs: { id: number } }) {
+    await this.configModel.load(vnode.attrs.id);
+    await this.configModel.loadChannels();
+  }
+
+  view() {
+    return m('div', [
       m('div', { class: 'flex flex-wrap' }, [
         m(
           CardComponent,
           m(ClientConfigDetailsComponent, {
-            config: vnode.attrs.configModel.current,
+            config: this.configModel.current,
           })
         ),
         m(
           CardComponent,
           m(ClientSubscriptionDetailsComponent, {
-            config: vnode.attrs.configModel.current,
+            config: this.configModel.current,
           })
         ),
       ]),
@@ -33,9 +38,10 @@ export const ConfigDetailsPage = {
         m(
           CardComponent,
           m(ClientChannelsTableComponent, {
-            channels: vnode.attrs.configModel.current?.channels,
+            channels: this.configModel.current?.channels,
           })
         ),
       ]),
-    ]),
-};
+    ]);
+  }
+}
