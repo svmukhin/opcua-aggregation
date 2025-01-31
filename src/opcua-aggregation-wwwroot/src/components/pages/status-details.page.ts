@@ -4,18 +4,25 @@ import { MonitoredItemTableComponent } from '../common/status/monitored-item-tab
 import { ClientStatusDetailsInfoComponent } from '../common/status/client-status-details-info.component';
 import { CardComponent } from '../shared/card.component';
 
-export const StatusDetailsPage = {
-  oninit: async (vnode: {
-    attrs: { statusModel: IStatusPageModel; id: number };
-  }) => await vnode.attrs.statusModel.load(vnode.attrs.id),
+export interface IStatusDetailsPage {
+  oninit(vnode: { attrs: { id: number } }): Promise<void>;
+  view(vnode: { attrs: { id: number } });
+}
 
-  view: (vnode: { attrs: { statusModel: IStatusPageModel; id: number } }) =>
-    m('div', [
+export class StatusDetailsPage {
+  constructor(private statusModel: IStatusPageModel) {}
+
+  async oninit(vnode: { attrs: { id: number } }) {
+    await this.statusModel.load(vnode.attrs.id);
+  }
+
+  view(vnode: { attrs: { id: number } }) {
+    return m('div', [
       m('div', { class: 'flex flex-wrap' }, [
         m(
           CardComponent,
           m(ClientStatusDetailsInfoComponent, {
-            status: vnode.attrs.statusModel.current,
+            status: this.statusModel.current,
           })
         ),
       ]),
@@ -23,9 +30,10 @@ export const StatusDetailsPage = {
         m(
           CardComponent,
           m(MonitoredItemTableComponent, {
-            items: vnode.attrs.statusModel.current?.monitoredItems,
+            items: this.statusModel.current?.monitoredItems,
           })
         ),
       ]),
-    ]),
-};
+    ]);
+  }
+}

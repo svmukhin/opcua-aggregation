@@ -2,8 +2,11 @@ import './styles.css';
 
 import m from 'mithril';
 import { Layout } from './components/layout/layout';
-import { StatusPage } from './components/pages/status.page';
-import { StatusDetailsPage } from './components/pages/status-details.page';
+import { IStatusPage, StatusPage } from './components/pages/status.page';
+import {
+  IStatusDetailsPage,
+  StatusDetailsPage,
+} from './components/pages/status-details.page';
 import { ConfigPage } from './components/pages/config.page';
 import { ConfigDetailsPage } from './components/pages/config-details.page';
 import {
@@ -43,19 +46,20 @@ container.registerSingleton<IClientConfigService>(
 container.registerSingleton<IStatusPageModel, StatusPageModel>();
 container.registerSingleton<IConfigPageModel, ConfigPageModel>();
 
-const statusModel = container.get<IStatusPageModel>();
+container.registerSingleton<IStatusPage, StatusPage>();
+container.registerTransient<IStatusDetailsPage, StatusDetailsPage>();
+
 const configModel = container.get<IConfigPageModel>();
 
 const Routes = {
   '/status': {
-    render: () => m(Layout, m(StatusPage, { statusModel })),
+    render: () => m(Layout, m(container.get<IStatusPage>())),
   },
   '/status/:key': {
     render: (vnode) =>
       m(
         Layout,
-        m(StatusDetailsPage, {
-          statusModel,
+        m(container.get<IStatusDetailsPage>(), {
           id: vnode.attrs.key,
         })
       ),

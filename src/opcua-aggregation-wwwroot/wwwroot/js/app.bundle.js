@@ -2229,47 +2229,6 @@
     var mithrilExports = requireMithril();
     var m = /*@__PURE__*/getDefaultExportFromCjs(mithrilExports);
 
-    const Header = {
-        view: () => m('nav', {
-            class: 'border-b overflow-hidden p-2 border-gray-400 mx-auto w-full max-w-screen-xl',
-        }, m('div', { class: 'flex items-center' }, [
-            m(m.route.Link, {
-                class: 'font-sans antialiased text-xl text-current mx-2 block py-1 font-semibold',
-                href: '/status',
-            }, 'UA Aggregation'),
-            m('div', { class: 'ml-auto mr-2 block' }, [
-                m('ul', {
-                    class: 'm-2 flex flex-row gap-x-3 gap-y-1 m-0 items-center',
-                }, [
-                    m('li', m(m.route.Link, {
-                        class: 'font-sans antialiased text-xl text-current p-1 hover:text-primary',
-                        href: '/status',
-                    }, 'Status')),
-                    m('li', m(m.route.Link, {
-                        class: 'font-sans antialiased text-xl text-current p-1 hover:text-primary',
-                        href: '/config/uaclient',
-                    }, 'Config')),
-                ]),
-            ]),
-        ])),
-    };
-
-    const Footer = {
-        view: () => m('footer', {
-            class: 'border-t overflow-hidden p-2 border-gray-400 mx-auto w-full max-w-screen-xl',
-        }, m('p', { class: 'font-sans antialiased text-base text-current text-center' }, 'OPC UA Aggregation Client')),
-    };
-
-    const header = document.getElementById('header');
-    const footer = document.getElementById('footer');
-    const Layout = {
-        oninit: () => {
-            m.mount(header, Header);
-            m.mount(footer, Footer);
-        },
-        view: (vnode) => m('div', { class: 'w-full max-w-screen-xl' }, vnode.children),
-    };
-
     const StatusTableRowComponent = {
         view: (vnode) => {
             var _a, _b, _c, _d;
@@ -2307,14 +2266,24 @@
         view: (vnode) => m('div', { class: 'm-2 p-2 overflow-hidden rounded-lg border border-gray-400' }, vnode.children),
     };
 
-    const StatusPage = {
-        oninit: (vnode) => __awaiter(undefined, undefined, undefined, function* () { return yield vnode.attrs.statusModel.init(); }),
-        view: (vnode) => m('div', { class: 'flex flex-col' }, [
-            m(CardComponent, m(ClientStatusTableComponent, {
-                statuses: vnode.attrs.statusModel.list,
-            })),
-        ]),
-    };
+    class StatusPage {
+        constructor(statusModel) {
+            this.statusModel = statusModel;
+        }
+        oninit() {
+            return __awaiter(this, undefined, undefined, function* () {
+                yield this.statusModel.init();
+            });
+        }
+        view() {
+            return m('div', { class: 'flex flex-col' }, [
+                m(CardComponent, m(ClientStatusTableComponent, {
+                    statuses: this.statusModel.list,
+                })),
+            ]);
+        }
+        static get [Symbol.for("___CTOR_ARGS___")]() { return [`IStatusPageModel`]; }
+    }
 
     const utils = {
         formatTimestamp: (timestamp) => {
@@ -2383,23 +2352,72 @@
         },
     };
 
-    const StatusDetailsPage = {
-        oninit: (vnode) => __awaiter(undefined, undefined, undefined, function* () { return yield vnode.attrs.statusModel.load(vnode.attrs.id); }),
-        view: (vnode) => {
+    class StatusDetailsPage {
+        constructor(statusModel) {
+            this.statusModel = statusModel;
+        }
+        oninit(vnode) {
+            return __awaiter(this, undefined, undefined, function* () {
+                yield this.statusModel.load(vnode.attrs.id);
+            });
+        }
+        view(vnode) {
             var _a;
             return m('div', [
                 m('div', { class: 'flex flex-wrap' }, [
                     m(CardComponent, m(ClientStatusDetailsInfoComponent, {
-                        status: vnode.attrs.statusModel.current,
+                        status: this.statusModel.current,
                     })),
                 ]),
                 m('div', { class: 'flex flex-col' }, [
                     m(CardComponent, m(MonitoredItemTableComponent, {
-                        items: (_a = vnode.attrs.statusModel.current) === null || _a === undefined ? undefined : _a.monitoredItems,
+                        items: (_a = this.statusModel.current) === null || _a === undefined ? undefined : _a.monitoredItems,
                     })),
                 ]),
             ]);
+        }
+        static get [Symbol.for("___CTOR_ARGS___")]() { return [`IStatusPageModel`]; }
+    }
+
+    const Header = {
+        view: () => m('nav', {
+            class: 'border-b overflow-hidden p-2 border-gray-400 mx-auto w-full max-w-screen-xl',
+        }, m('div', { class: 'flex items-center' }, [
+            m(m.route.Link, {
+                class: 'font-sans antialiased text-xl text-current mx-2 block py-1 font-semibold',
+                href: '/status',
+            }, 'UA Aggregation'),
+            m('div', { class: 'ml-auto mr-2 block' }, [
+                m('ul', {
+                    class: 'm-2 flex flex-row gap-x-3 gap-y-1 m-0 items-center',
+                }, [
+                    m('li', m(m.route.Link, {
+                        class: 'font-sans antialiased text-xl text-current p-1 hover:text-primary',
+                        href: '/status',
+                    }, 'Status')),
+                    m('li', m(m.route.Link, {
+                        class: 'font-sans antialiased text-xl text-current p-1 hover:text-primary',
+                        href: '/config/uaclient',
+                    }, 'Config')),
+                ]),
+            ]),
+        ])),
+    };
+
+    const Footer = {
+        view: () => m('footer', {
+            class: 'border-t overflow-hidden p-2 border-gray-400 mx-auto w-full max-w-screen-xl',
+        }, m('p', { class: 'font-sans antialiased text-base text-current text-center' }, 'OPC UA Aggregation Client')),
+    };
+
+    const header = document.getElementById('header');
+    const footer = document.getElementById('footer');
+    const Layout = {
+        oninit: () => {
+            m.mount(header, Header);
+            m.mount(footer, Footer);
         },
+        view: (vnode) => m('div', { class: 'w-full max-w-screen-xl' }, vnode.children),
     };
 
     const ConfigTableRowComponent = {
@@ -2819,15 +2837,15 @@
     container.registerSingleton(() => new ClientConfigService('http://192.168.122.114:5000/api/aggregation/config/'), { identifier: `IClientConfigService` });
     container.registerSingleton(undefined, { identifier: `IStatusPageModel`, implementation: StatusPageModel });
     container.registerSingleton(undefined, { identifier: `IConfigPageModel`, implementation: ConfigPageModel });
-    const statusModel = container.get({ identifier: "IStatusPageModel" });
+    container.registerSingleton(undefined, { identifier: `IStatusPage`, implementation: StatusPage });
+    container.registerTransient(undefined, { identifier: `IStatusDetailsPage`, implementation: StatusDetailsPage });
     const configModel = container.get({ identifier: "IConfigPageModel" });
     const Routes = {
         '/status': {
-            render: () => m(Layout, m(StatusPage, { statusModel })),
+            render: () => m(Layout, m(container.get({ identifier: "IStatusPage" }))),
         },
         '/status/:key': {
-            render: (vnode) => m(Layout, m(StatusDetailsPage, {
-                statusModel,
+            render: (vnode) => m(Layout, m(container.get({ identifier: "IStatusDetailsPage" }), {
                 id: vnode.attrs.key,
             })),
         },
