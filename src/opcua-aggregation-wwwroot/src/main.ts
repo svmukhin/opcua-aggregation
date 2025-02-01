@@ -35,19 +35,14 @@ import { App, IApp } from './app';
 
 const content = document.getElementById('content');
 
+const API_BASE_URL = 'http://192.168.122.114:5000/api/aggregation';
 const container = new DIContainer();
 
 container.registerSingleton<IClientStatusService>(
-  () =>
-    new ClientStatusService(
-      'http://192.168.122.114:5000/api/aggregation/status'
-    )
+  () => new ClientStatusService(API_BASE_URL + '/status')
 );
 container.registerSingleton<IClientConfigService>(
-  () =>
-    new ClientConfigService(
-      'http://192.168.122.114:5000/api/aggregation/config/'
-    )
+  () => new ClientConfigService(API_BASE_URL + '/config/')
 );
 container.registerSingleton<IStatusPageModel, StatusPageModel>();
 container.registerSingleton<IConfigPageModel, ConfigPageModel>();
