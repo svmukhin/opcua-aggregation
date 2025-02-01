@@ -53,10 +53,10 @@ container.registerSingleton<IStatusPageModel, StatusPageModel>();
 container.registerSingleton<IConfigPageModel, ConfigPageModel>();
 
 container.registerSingleton<IStatusPage, StatusPage>();
-container.registerSingleton<IStatusDetailsPage, StatusDetailsPage>();
+container.registerTransient<IStatusDetailsPage, StatusDetailsPage>();
 
 container.registerSingleton<IConfigPage, ConfigPage>();
-container.registerSingleton<IConfigDetailsPage, ConfigDetailsPage>();
+container.registerTransient<IConfigDetailsPage, ConfigDetailsPage>();
 
 container.registerSingleton<IHeader, Header>();
 container.registerSingleton<IFooter, Footer>();

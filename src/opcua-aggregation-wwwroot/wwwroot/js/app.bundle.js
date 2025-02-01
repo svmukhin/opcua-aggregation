@@ -2892,9 +2892,9 @@
     container.registerSingleton(undefined, { identifier: `IStatusPageModel`, implementation: StatusPageModel });
     container.registerSingleton(undefined, { identifier: `IConfigPageModel`, implementation: ConfigPageModel });
     container.registerSingleton(undefined, { identifier: `IStatusPage`, implementation: StatusPage });
-    container.registerSingleton(undefined, { identifier: `IStatusDetailsPage`, implementation: StatusDetailsPage });
+    container.registerTransient(undefined, { identifier: `IStatusDetailsPage`, implementation: StatusDetailsPage });
     container.registerSingleton(undefined, { identifier: `IConfigPage`, implementation: ConfigPage });
-    container.registerSingleton(undefined, { identifier: `IConfigDetailsPage`, implementation: ConfigDetailsPage });
+    container.registerTransient(undefined, { identifier: `IConfigDetailsPage`, implementation: ConfigDetailsPage });
     container.registerSingleton(undefined, { identifier: `IHeader`, implementation: Header });
     container.registerSingleton(undefined, { identifier: `IFooter`, implementation: Footer });
     container.registerSingleton(undefined, { identifier: `ILayout`, implementation: Layout });
