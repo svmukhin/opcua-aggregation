@@ -2905,9 +2905,9 @@
     container.registerSingleton(() => new ClientStatusService(API_BASE_URL + '/status'), { identifier: `IClientStatusService` });
     container.registerSingleton(() => new ClientConfigService(API_BASE_URL + '/config/'), { identifier: `IClientConfigService` });
     container.registerSingleton(undefined, { identifier: `IStatusPageModel`, implementation: StatusPageModel });
-    container.registerSingleton(undefined, { identifier: `IStatusDetailsPageModel`, implementation: StatusDetailsPageModel });
+    container.registerTransient(undefined, { identifier: `IStatusDetailsPageModel`, implementation: StatusDetailsPageModel });
     container.registerSingleton(undefined, { identifier: `IConfigPageModel`, implementation: ConfigPageModel });
-    container.registerSingleton(undefined, { identifier: `IConfigDetailsPageModel`, implementation: ConfigDetailsPageModel });
+    container.registerTransient(undefined, { identifier: `IConfigDetailsPageModel`, implementation: ConfigDetailsPageModel });
     container.registerSingleton(undefined, { identifier: `IStatusPage`, implementation: StatusPage });
     container.registerTransient(undefined, { identifier: `IStatusDetailsPage`, implementation: StatusDetailsPage });
     container.registerSingleton(undefined, { identifier: `IConfigPage`, implementation: ConfigPage });

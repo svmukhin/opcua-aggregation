@@ -53,9 +53,9 @@ container.registerSingleton<IClientConfigService>(
   () => new ClientConfigService(API_BASE_URL + '/config/')
 );
 container.registerSingleton<IStatusPageModel, StatusPageModel>();
-container.registerSingleton<IStatusDetailsPageModel, StatusDetailsPageModel>();
+container.registerTransient<IStatusDetailsPageModel, StatusDetailsPageModel>();
 container.registerSingleton<IConfigPageModel, ConfigPageModel>();
-container.registerSingleton<IConfigDetailsPageModel, ConfigDetailsPageModel>();
+container.registerTransient<IConfigDetailsPageModel, ConfigDetailsPageModel>();
 
 container.registerSingleton<IStatusPage, StatusPage>();
 container.registerTransient<IStatusDetailsPage, StatusDetailsPage>();
