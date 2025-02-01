@@ -36,6 +36,10 @@ import {
   IStatusDetailsPageModel,
   StatusDetailsPageModel,
 } from './models/status/status-details-page.model';
+import {
+  IConfigDetailsPageModel,
+  ConfigDetailsPageModel,
+} from './models/config/config-details-page.model';
 
 const content = document.getElementById('content');
 
@@ -51,6 +55,7 @@ container.registerSingleton<IClientConfigService>(
 container.registerSingleton<IStatusPageModel, StatusPageModel>();
 container.registerSingleton<IStatusDetailsPageModel, StatusDetailsPageModel>();
 container.registerSingleton<IConfigPageModel, ConfigPageModel>();
+container.registerSingleton<IConfigDetailsPageModel, ConfigDetailsPageModel>();
 
 container.registerSingleton<IStatusPage, StatusPage>();
 container.registerTransient<IStatusDetailsPage, StatusDetailsPage>();

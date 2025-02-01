@@ -1,9 +1,9 @@
 import m from 'mithril';
-import { IConfigPageModel } from '../../models/config/config-page.model';
 import { CardComponent } from '../shared/card.component';
 import { ClientConfigDetailsComponent } from '../common/config/client-config-details.component';
 import { ClientSubscriptionDetailsComponent } from '../common/config/client-subscription-details.component';
 import { ClientChannelsTableComponent } from '../common/config/client-channels-table.component';
+import { IConfigDetailsPageModel } from '../../models/config/config-details-page.model';
 
 export interface IConfigDetailsPage {
   oninit(vnode: { attrs: { id: number } }): Promise<void>;
@@ -11,7 +11,7 @@ export interface IConfigDetailsPage {
 }
 
 export class ConfigDetailsPage {
-  constructor(private configModel: IConfigPageModel) {}
+  constructor(private configModel: IConfigDetailsPageModel) {}
 
   async oninit(vnode: { attrs: { id: number } }) {
     await this.configModel.load(vnode.attrs.id);

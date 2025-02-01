@@ -12,7 +12,7 @@ export class ConfigPage {
   constructor(private configModel: IConfigPageModel) {}
 
   async oninit() {
-    await this.configModel.init();
+    await this.configModel.load();
   }
 
   view() {

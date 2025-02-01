@@ -61,10 +61,17 @@
         constructor(_service) {
             this._service = _service;
         }
-        init() {
+        load() {
             return __awaiter(this, undefined, undefined, function* () {
                 this.list = yield this._service.getClientConfigs();
             });
+        }
+        static get [Symbol.for("___CTOR_ARGS___")]() { return [`IClientConfigService`]; }
+    }
+
+    class ConfigDetailsPageModel {
+        constructor(_service) {
+            this._service = _service;
         }
         load(id) {
             return __awaiter(this, undefined, undefined, function* () {
@@ -2427,7 +2434,7 @@
         }
         oninit() {
             return __awaiter(this, undefined, undefined, function* () {
-                yield this.configModel.init();
+                yield this.configModel.load();
             });
         }
         view() {
@@ -2539,7 +2546,7 @@
                 ]),
             ]);
         }
-        static get [Symbol.for("___CTOR_ARGS___")]() { return [`IConfigPageModel`]; }
+        static get [Symbol.for("___CTOR_ARGS___")]() { return [`IConfigDetailsPageModel`]; }
     }
 
     class Header {
@@ -2900,6 +2907,7 @@
     container.registerSingleton(undefined, { identifier: `IStatusPageModel`, implementation: StatusPageModel });
     container.registerSingleton(undefined, { identifier: `IStatusDetailsPageModel`, implementation: StatusDetailsPageModel });
     container.registerSingleton(undefined, { identifier: `IConfigPageModel`, implementation: ConfigPageModel });
+    container.registerSingleton(undefined, { identifier: `IConfigDetailsPageModel`, implementation: ConfigDetailsPageModel });
     container.registerSingleton(undefined, { identifier: `IStatusPage`, implementation: StatusPage });
     container.registerTransient(undefined, { identifier: `IStatusDetailsPage`, implementation: StatusDetailsPage });
     container.registerSingleton(undefined, { identifier: `IConfigPage`, implementation: ConfigPage });
