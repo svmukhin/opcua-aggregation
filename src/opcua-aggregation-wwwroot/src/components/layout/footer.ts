@@ -1,8 +1,12 @@
 import m from 'mithril';
 
-export const Footer = {
-  view: () =>
-    m(
+export interface IFooter {
+  view(): m.Children;
+}
+
+export class Footer implements IFooter {
+  view() {
+    return m(
       'footer',
       {
         class:
@@ -13,5 +17,6 @@ export const Footer = {
         { class: 'font-sans antialiased text-base text-current text-center' },
         'OPC UA Aggregation Client'
       )
-    ),
-};
+    );
+  }
+}

@@ -1,7 +1,7 @@
 import './styles.css';
 
 import m from 'mithril';
-import { Layout } from './components/layout/layout';
+import { ILayout, Layout } from './components/layout/layout';
 import { IStatusPage, StatusPage } from './components/pages/status.page';
 import {
   IStatusDetailsPage,
@@ -29,6 +29,8 @@ import {
   IConfigPageModel,
 } from './models/config/config-page.model';
 import { DIContainer } from '@wessberg/di';
+import { Header, IHeader } from './components/layout/header';
+import { Footer, IFooter } from './components/layout/footer';
 
 const content = document.getElementById('content');
 
@@ -55,26 +57,30 @@ container.registerSingleton<IStatusDetailsPage, StatusDetailsPage>();
 container.registerSingleton<IConfigPage, ConfigPage>();
 container.registerSingleton<IConfigDetailsPage, ConfigDetailsPage>();
 
+container.registerSingleton<IHeader, Header>();
+container.registerSingleton<IFooter, Footer>();
+container.registerSingleton<ILayout, Layout>();
+
 const Routes = {
   '/status': {
-    render: () => m(Layout, m(container.get<IStatusPage>())),
+    render: () => m(container.get<ILayout>(), m(container.get<IStatusPage>())),
   },
   '/status/:key': {
     render: (vnode) =>
       m(
-        Layout,
+        container.get<ILayout>(),
         m(container.get<IStatusDetailsPage>(), {
           id: vnode.attrs.key,
         })
       ),
   },
   '/config/uaclient': {
-    render: () => m(Layout, m(container.get<IConfigPage>())),
+    render: () => m(container.get<ILayout>(), m(container.get<IConfigPage>())),
   },
   '/config/uaclient/:key': {
     render: (vnode) =>
       m(
-        Layout,
+        container.get<ILayout>(),
         m(container.get<IConfigDetailsPage>(), { id: vnode.attrs.key })
       ),
   },

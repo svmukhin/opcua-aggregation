@@ -1,8 +1,12 @@
 import m from 'mithril';
 
-export const Header = {
-  view: () =>
-    m(
+export interface IHeader {
+  view(): m.Children;
+}
+
+export class Header implements IHeader {
+  view() {
+    return m(
       'nav',
       {
         class:
@@ -53,5 +57,6 @@ export const Header = {
           ),
         ]),
       ])
-    ),
-};
+    );
+  }
+}

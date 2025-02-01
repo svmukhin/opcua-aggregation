@@ -2535,46 +2535,57 @@
         static get [Symbol.for("___CTOR_ARGS___")]() { return [`IConfigPageModel`]; }
     }
 
-    const Header = {
-        view: () => m('nav', {
-            class: 'border-b overflow-hidden p-2 border-gray-400 mx-auto w-full max-w-screen-xl',
-        }, m('div', { class: 'flex items-center' }, [
-            m(m.route.Link, {
-                class: 'font-sans antialiased text-xl text-current mx-2 block py-1 font-semibold',
-                href: '/status',
-            }, 'UA Aggregation'),
-            m('div', { class: 'ml-auto mr-2 block' }, [
-                m('ul', {
-                    class: 'm-2 flex flex-row gap-x-3 gap-y-1 m-0 items-center',
-                }, [
-                    m('li', m(m.route.Link, {
-                        class: 'font-sans antialiased text-xl text-current p-1 hover:text-primary',
-                        href: '/status',
-                    }, 'Status')),
-                    m('li', m(m.route.Link, {
-                        class: 'font-sans antialiased text-xl text-current p-1 hover:text-primary',
-                        href: '/config/uaclient',
-                    }, 'Config')),
+    class Header {
+        view() {
+            return m('nav', {
+                class: 'border-b overflow-hidden p-2 border-gray-400 mx-auto w-full max-w-screen-xl',
+            }, m('div', { class: 'flex items-center' }, [
+                m(m.route.Link, {
+                    class: 'font-sans antialiased text-xl text-current mx-2 block py-1 font-semibold',
+                    href: '/status',
+                }, 'UA Aggregation'),
+                m('div', { class: 'ml-auto mr-2 block' }, [
+                    m('ul', {
+                        class: 'm-2 flex flex-row gap-x-3 gap-y-1 m-0 items-center',
+                    }, [
+                        m('li', m(m.route.Link, {
+                            class: 'font-sans antialiased text-xl text-current p-1 hover:text-primary',
+                            href: '/status',
+                        }, 'Status')),
+                        m('li', m(m.route.Link, {
+                            class: 'font-sans antialiased text-xl text-current p-1 hover:text-primary',
+                            href: '/config/uaclient',
+                        }, 'Config')),
+                    ]),
                 ]),
-            ]),
-        ])),
-    };
+            ]));
+        }
+    }
 
-    const Footer = {
-        view: () => m('footer', {
-            class: 'border-t overflow-hidden p-2 border-gray-400 mx-auto w-full max-w-screen-xl',
-        }, m('p', { class: 'font-sans antialiased text-base text-current text-center' }, 'OPC UA Aggregation Client')),
-    };
+    class Footer {
+        view() {
+            return m('footer', {
+                class: 'border-t overflow-hidden p-2 border-gray-400 mx-auto w-full max-w-screen-xl',
+            }, m('p', { class: 'font-sans antialiased text-base text-current text-center' }, 'OPC UA Aggregation Client'));
+        }
+    }
 
-    const header = document.getElementById('header');
-    const footer = document.getElementById('footer');
-    const Layout = {
-        oninit: () => {
-            m.mount(header, Header);
-            m.mount(footer, Footer);
-        },
-        view: (vnode) => m('div', { class: 'w-full max-w-screen-xl' }, vnode.children),
-    };
+    const headerContainer = document.getElementById('header');
+    const footerContainer = document.getElementById('footer');
+    class Layout {
+        constructor(_header, _footer) {
+            this._header = _header;
+            this._footer = _footer;
+        }
+        oninit() {
+            m.mount(headerContainer, this._header);
+            m.mount(footerContainer, this._footer);
+        }
+        view(vnode) {
+            return m('div', { class: 'w-full max-w-screen-xl' }, vnode.children);
+        }
+        static get [Symbol.for("___CTOR_ARGS___")]() { return [`IHeader`, `IFooter`]; }
+    }
 
     class ClientStatusService {
         constructor(_baseUrl = 'http://localhost:5000/api/aggregation/status') {
@@ -2857,20 +2868,23 @@
     container.registerSingleton(undefined, { identifier: `IStatusDetailsPage`, implementation: StatusDetailsPage });
     container.registerSingleton(undefined, { identifier: `IConfigPage`, implementation: ConfigPage });
     container.registerSingleton(undefined, { identifier: `IConfigDetailsPage`, implementation: ConfigDetailsPage });
+    container.registerSingleton(undefined, { identifier: `IHeader`, implementation: Header });
+    container.registerSingleton(undefined, { identifier: `IFooter`, implementation: Footer });
+    container.registerSingleton(undefined, { identifier: `ILayout`, implementation: Layout });
     const Routes = {
         '/status': {
-            render: () => m(Layout, m(container.get({ identifier: "IStatusPage" }))),
+            render: () => m(container.get({ identifier: "ILayout" }), m(container.get({ identifier: "IStatusPage" }))),
         },
         '/status/:key': {
-            render: (vnode) => m(Layout, m(container.get({ identifier: "IStatusDetailsPage" }), {
+            render: (vnode) => m(container.get({ identifier: "ILayout" }), m(container.get({ identifier: "IStatusDetailsPage" }), {
                 id: vnode.attrs.key,
             })),
         },
         '/config/uaclient': {
-            render: () => m(Layout, m(container.get({ identifier: "IConfigPage" }))),
+            render: () => m(container.get({ identifier: "ILayout" }), m(container.get({ identifier: "IConfigPage" }))),
         },
         '/config/uaclient/:key': {
-            render: (vnode) => m(Layout, m(container.get({ identifier: "IConfigDetailsPage" }), { id: vnode.attrs.key })),
+            render: (vnode) => m(container.get({ identifier: "ILayout" }), m(container.get({ identifier: "IConfigDetailsPage" }), { id: vnode.attrs.key })),
         },
     };
     m.route(content, '/status', Routes);
