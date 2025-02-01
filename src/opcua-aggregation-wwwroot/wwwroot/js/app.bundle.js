@@ -2587,6 +2587,33 @@
         static get [Symbol.for("___CTOR_ARGS___")]() { return [`IHeader`, `IFooter`]; }
     }
 
+    class App {
+        constructor(_layout, _statusPage, _statusDetailsPage, _configPage, _configDetailsPage) {
+            this._layout = _layout;
+            this._statusPage = _statusPage;
+            this._statusDetailsPage = _statusDetailsPage;
+            this._configPage = _configPage;
+            this._configDetailsPage = _configDetailsPage;
+            this.Routes = {
+                '/status': {
+                    render: () => m(this._layout, m(this._statusPage)),
+                },
+                '/status/:key': {
+                    render: (vnode) => m(this._layout, m(this._statusDetailsPage, {
+                        id: vnode.attrs.key,
+                    })),
+                },
+                '/config/uaclient': {
+                    render: () => m(this._layout, m(this._configPage)),
+                },
+                '/config/uaclient/:key': {
+                    render: (vnode) => m(this._layout, m(this._configDetailsPage, { id: vnode.attrs.key })),
+                },
+            };
+        }
+        static get [Symbol.for("___CTOR_ARGS___")]() { return [`ILayout`, `IStatusPage`, `IStatusDetailsPage`, `IConfigPage`, `IConfigDetailsPage`]; }
+    }
+
     class ClientStatusService {
         constructor(_baseUrl = 'http://localhost:5000/api/aggregation/status') {
             this._baseUrl = _baseUrl;
@@ -2871,22 +2898,8 @@
     container.registerSingleton(undefined, { identifier: `IHeader`, implementation: Header });
     container.registerSingleton(undefined, { identifier: `IFooter`, implementation: Footer });
     container.registerSingleton(undefined, { identifier: `ILayout`, implementation: Layout });
-    const Routes = {
-        '/status': {
-            render: () => m(container.get({ identifier: "ILayout" }), m(container.get({ identifier: "IStatusPage" }))),
-        },
-        '/status/:key': {
-            render: (vnode) => m(container.get({ identifier: "ILayout" }), m(container.get({ identifier: "IStatusDetailsPage" }), {
-                id: vnode.attrs.key,
-            })),
-        },
-        '/config/uaclient': {
-            render: () => m(container.get({ identifier: "ILayout" }), m(container.get({ identifier: "IConfigPage" }))),
-        },
-        '/config/uaclient/:key': {
-            render: (vnode) => m(container.get({ identifier: "ILayout" }), m(container.get({ identifier: "IConfigDetailsPage" }), { id: vnode.attrs.key })),
-        },
-    };
-    m.route(content, '/status', Routes);
+    container.registerSingleton(undefined, { identifier: `IApp`, implementation: App });
+    const app = container.get({ identifier: "IApp" });
+    m.route(content, '/status', app.Routes);
 
 })();

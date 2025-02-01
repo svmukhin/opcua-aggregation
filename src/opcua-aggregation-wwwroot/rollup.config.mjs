@@ -7,7 +7,7 @@ import tailwindcss from '@tailwindcss/postcss';
 import { di } from '@wessberg/di-compiler';
 
 export default {
-  input: './src/app.ts',
+  input: './src/main.ts',
   output: {
     file: './wwwroot/js/app.bundle.js',
     format: 'iife',
