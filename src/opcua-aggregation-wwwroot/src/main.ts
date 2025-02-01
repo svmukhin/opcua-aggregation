@@ -32,6 +32,10 @@ import { DIContainer } from '@wessberg/di';
 import { Header, IHeader } from './components/layout/header';
 import { Footer, IFooter } from './components/layout/footer';
 import { App, IApp } from './app';
+import {
+  IStatusDetailsPageModel,
+  StatusDetailsPageModel,
+} from './models/status/status-details-page.model';
 
 const content = document.getElementById('content');
 
@@ -45,6 +49,7 @@ container.registerSingleton<IClientConfigService>(
   () => new ClientConfigService(API_BASE_URL + '/config/')
 );
 container.registerSingleton<IStatusPageModel, StatusPageModel>();
+container.registerSingleton<IStatusDetailsPageModel, StatusDetailsPageModel>();
 container.registerSingleton<IConfigPageModel, ConfigPageModel>();
 
 container.registerSingleton<IStatusPage, StatusPage>();

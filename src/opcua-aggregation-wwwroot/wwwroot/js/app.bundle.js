@@ -37,10 +37,17 @@
         constructor(_service) {
             this._service = _service;
         }
-        init() {
+        load() {
             return __awaiter(this, undefined, undefined, function* () {
                 this.list = yield this._service.getClientStatuses();
             });
+        }
+        static get [Symbol.for("___CTOR_ARGS___")]() { return [`IClientStatusService`]; }
+    }
+
+    class StatusDetailsPageModel {
+        constructor(_service) {
+            this._service = _service;
         }
         load(id) {
             return __awaiter(this, undefined, undefined, function* () {
@@ -2272,7 +2279,7 @@
         }
         oninit() {
             return __awaiter(this, undefined, undefined, function* () {
-                yield this.statusModel.init();
+                yield this.statusModel.load();
             });
         }
         view() {
@@ -2353,12 +2360,12 @@
     };
 
     class StatusDetailsPage {
-        constructor(statusModel) {
-            this.statusModel = statusModel;
+        constructor(_statusDetailsModel) {
+            this._statusDetailsModel = _statusDetailsModel;
         }
         oninit(vnode) {
             return __awaiter(this, undefined, undefined, function* () {
-                yield this.statusModel.load(vnode.attrs.id);
+                yield this._statusDetailsModel.load(vnode.attrs.id);
             });
         }
         view(vnode) {
@@ -2366,17 +2373,17 @@
             return m('div', [
                 m('div', { class: 'flex flex-wrap' }, [
                     m(CardComponent, m(ClientStatusDetailsInfoComponent, {
-                        status: this.statusModel.current,
+                        status: this._statusDetailsModel.current,
                     })),
                 ]),
                 m('div', { class: 'flex flex-col' }, [
                     m(CardComponent, m(MonitoredItemTableComponent, {
-                        items: (_a = this.statusModel.current) === null || _a === undefined ? undefined : _a.monitoredItems,
+                        items: (_a = this._statusDetailsModel.current) === null || _a === undefined ? undefined : _a.monitoredItems,
                     })),
                 ]),
             ]);
         }
-        static get [Symbol.for("___CTOR_ARGS___")]() { return [`IStatusPageModel`]; }
+        static get [Symbol.for("___CTOR_ARGS___")]() { return [`IStatusDetailsPageModel`]; }
     }
 
     const ConfigTableRowComponent = {
@@ -2886,10 +2893,12 @@
     };
 
     const content = document.getElementById('content');
+    const API_BASE_URL = 'http://192.168.122.114:5000/api/aggregation';
     const container = new DIContainer();
-    container.registerSingleton(() => new ClientStatusService('http://192.168.122.114:5000/api/aggregation/status'), { identifier: `IClientStatusService` });
-    container.registerSingleton(() => new ClientConfigService('http://192.168.122.114:5000/api/aggregation/config/'), { identifier: `IClientConfigService` });
+    container.registerSingleton(() => new ClientStatusService(API_BASE_URL + '/status'), { identifier: `IClientStatusService` });
+    container.registerSingleton(() => new ClientConfigService(API_BASE_URL + '/config/'), { identifier: `IClientConfigService` });
     container.registerSingleton(undefined, { identifier: `IStatusPageModel`, implementation: StatusPageModel });
+    container.registerSingleton(undefined, { identifier: `IStatusDetailsPageModel`, implementation: StatusDetailsPageModel });
     container.registerSingleton(undefined, { identifier: `IConfigPageModel`, implementation: ConfigPageModel });
     container.registerSingleton(undefined, { identifier: `IStatusPage`, implementation: StatusPage });
     container.registerTransient(undefined, { identifier: `IStatusDetailsPage`, implementation: StatusDetailsPage });

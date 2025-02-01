@@ -1,8 +1,8 @@
 import m from 'mithril';
-import { IStatusPageModel } from '../../models/status/status-page.model';
 import { MonitoredItemTableComponent } from '../common/status/monitored-item-table.component';
 import { ClientStatusDetailsInfoComponent } from '../common/status/client-status-details-info.component';
 import { CardComponent } from '../shared/card.component';
+import { IStatusDetailsPageModel } from '../../models/status/status-details-page.model';
 
 export interface IStatusDetailsPage {
   oninit(vnode: { attrs: { id: number } }): Promise<void>;
@@ -10,10 +10,10 @@ export interface IStatusDetailsPage {
 }
 
 export class StatusDetailsPage {
-  constructor(private statusModel: IStatusPageModel) {}
+  constructor(private _statusDetailsModel: IStatusDetailsPageModel) {}
 
   async oninit(vnode: { attrs: { id: number } }) {
-    await this.statusModel.load(vnode.attrs.id);
+    await this._statusDetailsModel.load(vnode.attrs.id);
   }
 
   view(vnode: { attrs: { id: number } }) {
@@ -22,7 +22,7 @@ export class StatusDetailsPage {
         m(
           CardComponent,
           m(ClientStatusDetailsInfoComponent, {
-            status: this.statusModel.current,
+            status: this._statusDetailsModel.current,
           })
         ),
       ]),
@@ -30,7 +30,7 @@ export class StatusDetailsPage {
         m(
           CardComponent,
           m(MonitoredItemTableComponent, {
-            items: this.statusModel.current?.monitoredItems,
+            items: this._statusDetailsModel.current?.monitoredItems,
           })
         ),
       ]),

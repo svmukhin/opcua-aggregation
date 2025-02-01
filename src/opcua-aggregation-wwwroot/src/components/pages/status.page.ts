@@ -12,7 +12,7 @@ export class StatusPage implements IStatusPage {
   constructor(private statusModel: IStatusPageModel) {}
 
   async oninit() {
-    await this.statusModel.init();
+    await this.statusModel.load();
   }
 
   view() {
