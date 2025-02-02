@@ -1,17 +1,11 @@
 import './styles.css';
 
 import m from 'mithril';
-import { ILayout, Layout } from './components/layout/layout';
-import { IStatusPage, StatusPage } from './components/pages/status.page';
-import {
-  IStatusDetailsPage,
-  StatusDetailsPage,
-} from './components/pages/status-details.page';
-import { ConfigPage, IConfigPage } from './components/pages/config.page';
-import {
-  ConfigDetailsPage,
-  IConfigDetailsPage,
-} from './components/pages/config-details.page';
+import { Layout } from './components/layout/layout';
+import { StatusPage } from './components/pages/status.page';
+import { StatusDetailsPage } from './components/pages/status-details.page';
+import { ConfigPage } from './components/pages/config.page';
+import { ConfigDetailsPage } from './components/pages/config-details.page';
 import {
   ClientStatusService,
   IClientStatusService,
@@ -29,8 +23,8 @@ import {
   IConfigPageModel,
 } from './models/config/config-page.model';
 import { DIContainer } from '@wessberg/di';
-import { Header, IHeader } from './components/layout/header';
-import { Footer, IFooter } from './components/layout/footer';
+import { Header } from './components/layout/header';
+import { Footer } from './components/layout/footer';
 import { App, IApp } from './app';
 import {
   IStatusDetailsPageModel,
@@ -57,15 +51,15 @@ container.registerTransient<IStatusDetailsPageModel, StatusDetailsPageModel>();
 container.registerSingleton<IConfigPageModel, ConfigPageModel>();
 container.registerTransient<IConfigDetailsPageModel, ConfigDetailsPageModel>();
 
-container.registerSingleton<IStatusPage, StatusPage>();
-container.registerTransient<IStatusDetailsPage, StatusDetailsPage>();
+container.registerSingleton<StatusPage, StatusPage>();
+container.registerTransient<StatusDetailsPage, StatusDetailsPage>();
 
-container.registerSingleton<IConfigPage, ConfigPage>();
-container.registerTransient<IConfigDetailsPage, ConfigDetailsPage>();
+container.registerSingleton<ConfigPage, ConfigPage>();
+container.registerTransient<ConfigDetailsPage, ConfigDetailsPage>();
 
-container.registerSingleton<IHeader, Header>();
-container.registerSingleton<IFooter, Footer>();
-container.registerSingleton<ILayout, Layout>();
+container.registerSingleton<Header, Header>();
+container.registerSingleton<Footer, Footer>();
+container.registerSingleton<Layout, Layout>();
 
 container.registerSingleton<IApp, App>();
 

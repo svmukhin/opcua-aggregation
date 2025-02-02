@@ -1,10 +1,6 @@
 import m from 'mithril';
 
-export interface IHeader {
-  view(): m.Children;
-}
-
-export class Header implements IHeader {
+export class Header implements m.ClassComponent {
   view() {
     return m(
       'nav',

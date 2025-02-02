@@ -1,17 +1,12 @@
 import m from 'mithril';
-import { Header, IHeader } from './header';
-import { Footer, IFooter } from './footer';
+import { Header } from './header';
+import { Footer } from './footer';
 
 const headerContainer = document.getElementById('header');
 const footerContainer = document.getElementById('footer');
 
-export interface ILayout {
-  oninit(): void;
-  view(vnode: m.Vnode): m.Children;
-}
-
-export class Layout implements ILayout {
-  constructor(private _header: IHeader, private _footer: IFooter) {}
+export class Layout implements m.ClassComponent {
+  constructor(private _header: Header, private _footer: Footer) {}
 
   oninit() {
     m.mount(headerContainer, this._header);

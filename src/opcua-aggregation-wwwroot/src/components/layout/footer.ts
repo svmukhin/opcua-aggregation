@@ -1,10 +1,6 @@
 import m from 'mithril';
 
-export interface IFooter {
-  view(): m.Children;
-}
-
-export class Footer implements IFooter {
+export class Footer implements m.ClassComponent {
   view() {
     return m(
       'footer',

@@ -2528,7 +2528,7 @@
                 yield this.configModel.loadChannels();
             });
         }
-        view() {
+        view(vnode) {
             var _a;
             return m('div', [
                 m('div', { class: 'flex flex-wrap' }, [
@@ -2598,7 +2598,7 @@
         view(vnode) {
             return m('div', { class: 'w-full max-w-screen-xl' }, vnode.children);
         }
-        static get [Symbol.for("___CTOR_ARGS___")]() { return [`IHeader`, `IFooter`]; }
+        static get [Symbol.for("___CTOR_ARGS___")]() { return [`Header`, `Footer`]; }
     }
 
     class App {
@@ -2625,7 +2625,7 @@
                 },
             };
         }
-        static get [Symbol.for("___CTOR_ARGS___")]() { return [`ILayout`, `IStatusPage`, `IStatusDetailsPage`, `IConfigPage`, `IConfigDetailsPage`]; }
+        static get [Symbol.for("___CTOR_ARGS___")]() { return [`Layout`, `StatusPage`, `StatusDetailsPage`, `ConfigPage`, `ConfigDetailsPage`]; }
     }
 
     class ClientStatusService {
@@ -2908,13 +2908,13 @@
     container.registerTransient(undefined, { identifier: `IStatusDetailsPageModel`, implementation: StatusDetailsPageModel });
     container.registerSingleton(undefined, { identifier: `IConfigPageModel`, implementation: ConfigPageModel });
     container.registerTransient(undefined, { identifier: `IConfigDetailsPageModel`, implementation: ConfigDetailsPageModel });
-    container.registerSingleton(undefined, { identifier: `IStatusPage`, implementation: StatusPage });
-    container.registerTransient(undefined, { identifier: `IStatusDetailsPage`, implementation: StatusDetailsPage });
-    container.registerSingleton(undefined, { identifier: `IConfigPage`, implementation: ConfigPage });
-    container.registerTransient(undefined, { identifier: `IConfigDetailsPage`, implementation: ConfigDetailsPage });
-    container.registerSingleton(undefined, { identifier: `IHeader`, implementation: Header });
-    container.registerSingleton(undefined, { identifier: `IFooter`, implementation: Footer });
-    container.registerSingleton(undefined, { identifier: `ILayout`, implementation: Layout });
+    container.registerSingleton(undefined, { identifier: `StatusPage`, implementation: StatusPage });
+    container.registerTransient(undefined, { identifier: `StatusDetailsPage`, implementation: StatusDetailsPage });
+    container.registerSingleton(undefined, { identifier: `ConfigPage`, implementation: ConfigPage });
+    container.registerTransient(undefined, { identifier: `ConfigDetailsPage`, implementation: ConfigDetailsPage });
+    container.registerSingleton(undefined, { identifier: `Header`, implementation: Header });
+    container.registerSingleton(undefined, { identifier: `Footer`, implementation: Footer });
+    container.registerSingleton(undefined, { identifier: `Layout`, implementation: Layout });
     container.registerSingleton(undefined, { identifier: `IApp`, implementation: App });
     const app = container.get({ identifier: "IApp" });
     m.route(content, '/status', app.Routes);

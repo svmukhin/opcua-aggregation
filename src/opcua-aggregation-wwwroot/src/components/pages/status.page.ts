@@ -3,12 +3,7 @@ import { IStatusPageModel } from '../../models/status/status-page.model';
 import { ClientStatusTableComponent } from '../common/status/client-status-table.component';
 import { CardComponent } from '../shared/card.component';
 
-export interface IStatusPage {
-  oninit(): Promise<void>;
-  view();
-}
-
-export class StatusPage implements IStatusPage {
+export class StatusPage implements m.ClassComponent {
   constructor(private statusModel: IStatusPageModel) {}
 
   async oninit() {

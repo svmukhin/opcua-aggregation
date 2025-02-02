@@ -1,9 +1,9 @@
 import m from 'mithril';
-import { ILayout } from './components/layout/layout';
-import { IConfigDetailsPage } from './components/pages/config-details.page';
-import { IConfigPage } from './components/pages/config.page';
-import { IStatusDetailsPage } from './components/pages/status-details.page';
-import { IStatusPage } from './components/pages/status.page';
+import { Layout } from './components/layout/layout';
+import { ConfigDetailsPage } from './components/pages/config-details.page';
+import { ConfigPage } from './components/pages/config.page';
+import { StatusDetailsPage } from './components/pages/status-details.page';
+import { StatusPage } from './components/pages/status.page';
 
 export interface IApp {
   Routes: {
@@ -15,11 +15,11 @@ export interface IApp {
 
 export class App implements IApp {
   constructor(
-    private _layout: ILayout,
-    private _statusPage: IStatusPage,
-    private _statusDetailsPage: IStatusDetailsPage,
-    private _configPage: IConfigPage,
-    private _configDetailsPage: IConfigDetailsPage
+    private _layout: Layout,
+    private _statusPage: StatusPage,
+    private _statusDetailsPage: StatusDetailsPage,
+    private _configPage: ConfigPage,
+    private _configDetailsPage: ConfigDetailsPage
   ) {}
 
   Routes = {

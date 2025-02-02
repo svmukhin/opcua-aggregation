@@ -3,12 +3,7 @@ import { IConfigPageModel } from '../../models/config/config-page.model';
 import { CardComponent } from '../shared/card.component';
 import { ClientConfigTableComponent } from '../common/config/client-config-table.component';
 
-export interface IConfigPage {
-  oninit(): Promise<void>;
-  view();
-}
-
-export class ConfigPage {
+export class ConfigPage implements m.ClassComponent {
   constructor(private configModel: IConfigPageModel) {}
 
   async oninit() {
