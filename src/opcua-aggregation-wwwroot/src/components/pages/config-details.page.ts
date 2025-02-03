@@ -5,19 +5,19 @@ import { ClientSubscriptionDetailsComponent } from '../common/config/client-subs
 import { ClientChannelsTableComponent } from '../common/config/client-channels-table.component';
 import { IConfigDetailsPageModel } from '../../models/config/config-details-page.model';
 
-interface IConfigDetailsPageAttrs {
+interface ConfigDetailsPageAttrs {
   id: number;
 }
 
-export class ConfigDetailsPage implements m.Component<IConfigDetailsPageAttrs> {
+export class ConfigDetailsPage implements m.Component<ConfigDetailsPageAttrs> {
   constructor(private configModel: IConfigDetailsPageModel) {}
 
-  async oninit(vnode: m.Vnode<IConfigDetailsPageAttrs>) {
+  async oninit(vnode: m.Vnode<ConfigDetailsPageAttrs>) {
     await this.configModel.load(vnode.attrs.id);
     await this.configModel.loadChannels();
   }
 
-  view(vnode: m.Vnode<IConfigDetailsPageAttrs>) {
+  view(vnode: m.Vnode<ConfigDetailsPageAttrs>) {
     return m('div', [
       m('div', { class: 'flex flex-wrap' }, [
         m(

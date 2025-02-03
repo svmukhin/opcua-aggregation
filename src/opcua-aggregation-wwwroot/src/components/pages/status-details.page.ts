@@ -4,20 +4,20 @@ import { ClientStatusDetailsInfoComponent } from '../common/status/client-status
 import { CardComponent } from '../shared/card.component';
 import { IStatusDetailsPageModel } from '../../models/status/status-details-page.model';
 
-interface IStatusDetailsPageAttrs {
+interface StatusDetailsPageAttrs {
   id: number;
 }
 
 export class StatusDetailsPage
-  implements m.ClassComponent<IStatusDetailsPageAttrs>
+  implements m.ClassComponent<StatusDetailsPageAttrs>
 {
   constructor(private _statusDetailsModel: IStatusDetailsPageModel) {}
 
-  async oninit(vnode: m.Vnode<IStatusDetailsPageAttrs>) {
+  async oninit(vnode: m.Vnode<StatusDetailsPageAttrs>) {
     await this._statusDetailsModel.load(vnode.attrs.id);
   }
 
-  view(vnode: m.Vnode<IStatusDetailsPageAttrs>) {
+  view(vnode: m.Vnode<StatusDetailsPageAttrs>) {
     return m('div', [
       m('div', { class: 'flex flex-wrap' }, [
         m(

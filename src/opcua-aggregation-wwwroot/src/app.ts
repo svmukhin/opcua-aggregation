@@ -6,11 +6,7 @@ import { StatusDetailsPage } from './components/pages/status-details.page';
 import { StatusPage } from './components/pages/status.page';
 
 export interface IApp {
-  Routes: {
-    [key: string]: {
-      render: (vnode: m.CVnode) => m.Children;
-    };
-  };
+  Routes: m.RouteDefs;
 }
 
 export class App implements IApp {
@@ -22,7 +18,7 @@ export class App implements IApp {
     private _configDetailsPage: ConfigDetailsPage
   ) {}
 
-  Routes = {
+  Routes: m.RouteDefs = {
     '/status': {
       render: () => m(this._layout, m(this._statusPage)),
     },

@@ -1,8 +1,16 @@
 import m from 'mithril';
 import { UaClientStatus } from '../../../models/status/ua-client-status.model';
 
-const StatusTableRowComponent = {
-  view: (vnode: { attrs: { status: UaClientStatus } }) =>
+interface StatusTableRowAttrs {
+  status: UaClientStatus;
+}
+
+interface ClientStatusTableAttrs {
+  statuses: UaClientStatus[];
+}
+
+const StatusTableRowComponent: m.Component<StatusTableRowAttrs> = {
+  view: (vnode: m.Vnode<StatusTableRowAttrs>) =>
     m('tr', { class: 'border-b border-gray-400 last:border-0' }, [
       m('td', { class: 'p-3' }, vnode.attrs.status?.sessionName),
       m('td', { class: 'p-3' }, vnode.attrs.status?.serverUri),
@@ -23,8 +31,8 @@ const StatusTableRowComponent = {
     ]),
 };
 
-export const ClientStatusTableComponent = {
-  view: (vnode: { attrs: { statuses: UaClientStatus[] } }) =>
+export const ClientStatusTableComponent: m.Component<ClientStatusTableAttrs> = {
+  view: (vnode: m.Vnode<ClientStatusTableAttrs>) =>
     m('table', { class: 'w-full' }, [
       m(
         'thead',
