@@ -2428,6 +2428,32 @@
         },
     };
 
+    class ButtonComponent {
+        constructor() {
+            this.variants = {
+                default: 'border-gray-200 text-gray-200 hover:text-gray-900 hover:bg-gray-400 focus:ring-gray-600',
+                green: 'border-green-400 text-green-400 hover:text-gray-900 hover:bg-green-400 focus:ring-green-600',
+                red: 'border-red-400 text-red-400 hover:text-gray-900 hover:bg-red-400 focus:ring-red-600',
+                yellow: 'border-yellow-400 text-yellow-400 hover:text-gray-900 hover:bg-yellow-400 focus:ring-yellow-600',
+            };
+        }
+        view(vnode) {
+            var _a;
+            return m('button', {
+                class: 'border px-5 py-2 mr-2 text-sm rounded-lg focus:ring-4 font-medium text-center focus:outline-none' +
+                    ' ' +
+                    this.variants[(_a = vnode.attrs.variant) !== null && _a !== undefined ? _a : 'default'],
+                onclick: vnode.attrs.onclick,
+            }, vnode.children);
+        }
+    }
+
+    class ButtonGroupComponent {
+        view(vnode) {
+            return m('div', { class: 'm-2 p-2 flex flex-row justify-end items-center' }, vnode.children);
+        }
+    }
+
     class ConfigPage {
         constructor(configModel) {
             this.configModel = configModel;
@@ -2439,6 +2465,9 @@
         }
         view() {
             return m('div', { class: 'flex flex-col' }, [
+                m(ButtonGroupComponent, [
+                    m(ButtonComponent, { onclick: () => alert('clicked') }, 'Add client'),
+                ]),
                 m(CardComponent, m(ClientConfigTableComponent, { configs: this.configModel.list })),
             ]);
         }
