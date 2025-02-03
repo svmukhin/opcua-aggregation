@@ -4,6 +4,7 @@ import typeScript from '@rollup/plugin-typescript';
 import postcss from 'rollup-plugin-postcss';
 import mv from 'rollup-plugin-mv';
 import tailwindcss from '@tailwindcss/postcss';
+import terser from '@rollup/plugin-terser';
 import { di } from '@wessberg/di-compiler';
 
 export default {
@@ -20,6 +21,7 @@ export default {
       extract: 'styles.css',
       plugins: [tailwindcss()],
     }),
+    terser(),
     mv([
       {
         src: 'wwwroot/js/styles.css',
