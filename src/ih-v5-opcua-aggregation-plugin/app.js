@@ -4,11 +4,12 @@ const axios = require("axios");
 module.exports = async function (plugin) {
   let toSend = [];
   let groupChannels;
+  let channels = await plugin.channels.get();
 
   sendNext();
-  main(plugin.channels.data);
+  main();
 
-  function main(channels) {
+  function main() {
     groupChannels = groupByUniq(channels, "sessionname");
     monitor();
   }
