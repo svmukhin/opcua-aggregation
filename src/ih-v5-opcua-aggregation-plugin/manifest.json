@@ -3,6 +3,7 @@
   "single": 1,
   "nochannels": 0,
   "innerId": 1,
+  "linkChstatus": 1,
   "share_node_folder_fields": ["sessionname"],
   "channel_folder_popup": {
     "add": [
