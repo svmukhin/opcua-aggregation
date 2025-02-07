@@ -1,8 +1,10 @@
 import m from 'mithril';
 
 export interface ButtonAttrs {
-  variant?: string;
-  onclick: () => void;
+  label: string;
+  variant?: 'default' | 'green' | 'red' | 'yellow';
+  onclick?: (e: Event) => void;
+  type?: 'button' | 'submit' | 'reset';
 }
 
 export class ButtonComponent implements m.ClassComponent<ButtonAttrs> {
@@ -25,8 +27,9 @@ export class ButtonComponent implements m.ClassComponent<ButtonAttrs> {
           ' ' +
           this.variants[vnode.attrs.variant ?? 'default'],
         onclick: vnode.attrs.onclick,
+        type: vnode.attrs.type ?? 'button',
       },
-      vnode.children
+      vnode.attrs.label
     );
   }
 }

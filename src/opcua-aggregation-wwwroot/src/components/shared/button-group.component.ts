@@ -4,7 +4,7 @@ export class ButtonGroupComponent implements m.ClassComponent {
   view(vnode: m.Vnode) {
     return m(
       'div',
-      { class: 'm-2 p-2 flex flex-row justify-end items-center' },
+      { class: 'm-1 p-1 flex flex-row justify-end items-center' },
       vnode.children
     );
   }

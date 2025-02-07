@@ -22,7 +22,7 @@ export class ModalComponent implements m.Component<ModalAttrs> {
       m(
         'div',
         {
-          class: 'bg-gray-800 p-6 rounded-lg max-w-md w-full',
+          class: 'bg-gray-800 p-2 rounded-lg max-w-md w-full',
           onclick: (e: Event) => e.stopPropagation(),
         },
         vnode.children
