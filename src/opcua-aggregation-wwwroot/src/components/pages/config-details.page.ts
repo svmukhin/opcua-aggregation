@@ -3,14 +3,20 @@ import { CardComponent } from '../shared/card.component';
 import { ClientConfigDetailsComponent } from '../common/config/client-config-details.component';
 import { ClientSubscriptionDetailsComponent } from '../common/config/client-subscription-details.component';
 import { ClientChannelsTableComponent } from '../common/config/client-channels-table.component';
-import { IConfigDetailsPageModel } from '../../models/config/config-details-page.model';
+import { ConfigDetailsPageModel } from '../../models/config/config-details-page.model';
+import { container } from '../../utils/di-container';
 
 interface ConfigDetailsPageAttrs {
   id: number;
 }
 
 export class ConfigDetailsPage implements m.Component<ConfigDetailsPageAttrs> {
-  constructor(private configModel: IConfigDetailsPageModel) {}
+  private configModel: ConfigDetailsPageModel;
+  constructor() {
+    this.configModel = container.resolve<ConfigDetailsPageModel>(
+      'ConfigDetailsPageModel'
+    );
+  }
 
   async oninit(vnode: m.Vnode<ConfigDetailsPageAttrs>) {
     await this.configModel.load(vnode.attrs.id);

@@ -5,7 +5,6 @@ import postcss from 'rollup-plugin-postcss';
 import mv from 'rollup-plugin-mv';
 import tailwindcss from '@tailwindcss/postcss';
 import terser from '@rollup/plugin-terser';
-import { di } from '@wessberg/di-compiler';
 
 export default {
   input: './src/main.ts',
@@ -16,7 +15,7 @@ export default {
   plugins: [
     nodeResolve(),
     commonJs(),
-    typeScript({ transformers: (program) => di({ program }) }),
+    typeScript(),
     postcss({
       extract: 'styles.css',
       plugins: [tailwindcss()],

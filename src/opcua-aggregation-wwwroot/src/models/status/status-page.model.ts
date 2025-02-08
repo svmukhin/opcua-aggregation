@@ -1,17 +1,18 @@
 import { IClientStatusService } from '../../services/client-status.service';
+import { container } from '../../utils/di-container';
 import { UaClientStatus } from './ua-client-status.model';
 
-export interface IStatusPageModel {
-  list: UaClientStatus[] | undefined;
-  load(): Promise<void>;
-}
-
-export class StatusPageModel implements IStatusPageModel {
+export class StatusPageModel {
+  private _service: IClientStatusService;
   list: UaClientStatus[] | undefined;
 
-  constructor(private _service: IClientStatusService) {}
+  constructor() {
+    this._service = container.resolve<IClientStatusService>(
+      'IClientStatusService'
+    );
+  }
 
   async load() {
-    this.list = await this._service.getClientStatuses();
+    this.list = await this._service?.getClientStatuses();
   }
 }

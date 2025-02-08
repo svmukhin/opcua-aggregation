@@ -2,7 +2,8 @@ import m from 'mithril';
 import { MonitoredItemTableComponent } from '../common/status/monitored-item-table.component';
 import { ClientStatusDetailsInfoComponent } from '../common/status/client-status-details-info.component';
 import { CardComponent } from '../shared/card.component';
-import { IStatusDetailsPageModel } from '../../models/status/status-details-page.model';
+import { StatusDetailsPageModel } from '../../models/status/status-details-page.model';
+import { container } from '../../utils/di-container';
 
 interface StatusDetailsPageAttrs {
   id: number;
@@ -11,7 +12,12 @@ interface StatusDetailsPageAttrs {
 export class StatusDetailsPage
   implements m.ClassComponent<StatusDetailsPageAttrs>
 {
-  constructor(private _statusDetailsModel: IStatusDetailsPageModel) {}
+  private _statusDetailsModel: StatusDetailsPageModel;
+  constructor() {
+    this._statusDetailsModel = container.resolve<StatusDetailsPageModel>(
+      'StatusDetailsPageModel'
+    );
+  }
 
   async oninit(vnode: m.Vnode<StatusDetailsPageAttrs>) {
     await this._statusDetailsModel.load(vnode.attrs.id);

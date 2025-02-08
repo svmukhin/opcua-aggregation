@@ -1,12 +1,14 @@
 import m from 'mithril';
-import { IStatusPageModel } from '../../models/status/status-page.model';
+import { StatusPageModel } from '../../models/status/status-page.model';
 import { ClientStatusTableComponent } from '../common/status/client-status-table.component';
 import { CardComponent } from '../shared/card.component';
+import { container } from '../../utils/di-container';
 
 export class StatusPage implements m.ClassComponent {
-  constructor(private statusModel: IStatusPageModel) {}
+  statusModel: StatusPageModel;
 
   async oninit() {
+    this.statusModel = container.resolve('StatusPageModel');
     await this.statusModel.load();
   }
 

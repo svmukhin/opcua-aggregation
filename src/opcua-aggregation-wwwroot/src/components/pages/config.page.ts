@@ -1,5 +1,5 @@
 import m from 'mithril';
-import { IConfigPageModel } from '../../models/config/config-page.model';
+import { ConfigPageModel } from '../../models/config/config-page.model';
 import { CardComponent } from '../shared/card.component';
 import { ClientConfigTableComponent } from '../common/config/client-config-table.component';
 import { ButtonGroupComponent } from '../shared/button-group.component';
@@ -7,6 +7,7 @@ import { ButtonComponent } from '../shared/button.component';
 import { ModalComponent } from '../shared/modal.component';
 import { FormComponent } from '../shared/form/form.component';
 import { FormFieldConfig } from '../shared/form/form.model';
+import { container } from '../../utils/di-container';
 
 const formFiledConfigs: FormFieldConfig[] = [
   {
@@ -42,9 +43,10 @@ const formFiledConfigs: FormFieldConfig[] = [
 export class ConfigPage implements m.ClassComponent {
   isModalOpen = false;
 
-  constructor(private configModel: IConfigPageModel) {}
+  configModel: ConfigPageModel;
 
   async oninit() {
+    this.configModel = container.resolve('ConfigPageModel');
     await this.configModel.load();
   }
 

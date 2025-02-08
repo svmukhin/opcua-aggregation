@@ -22,7 +22,6 @@
     "@rollup/plugin-typescript": "^12.1.2",
     "@tailwindcss/postcss": "^4.0.0",
     "@types/mithril": "^2.2.7",
-    "@wessberg/di-compiler": "^4.0.2",
     "postcss": "^8.5.1",
     "rollup": "^4.30.1",
     "rollup-plugin-mv": "^0.0.2",
