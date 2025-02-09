@@ -44,7 +44,7 @@ export class Header implements m.ClassComponent {
                   {
                     class:
                       'font-sans antialiased text-xl text-current p-1 hover:text-primary',
-                    href: '/config/uaclient',
+                    href: '/config',
                   },
                   'Config'
                 )

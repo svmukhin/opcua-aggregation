@@ -18,19 +18,19 @@ const content = document.getElementById('content');
 
 const API_BASE_URL = 'http://192.168.122.114:5000/api/aggregation';
 
-container.register(
+container.registerSingleton(
   'IClientStatusService',
   () => new ClientStatusService(API_BASE_URL + '/status')
 );
-container.register(
+container.registerSingleton(
   'IClientConfigService',
   () => new ClientConfigService(API_BASE_URL + '/config/')
 );
 
-container.register('StatusPageModel', StatusPageModel);
-container.register('StatusDetailsPageModel', StatusDetailsPageModel);
-container.register('ConfigPageModel', ConfigPageModel);
-container.register('ConfigDetailsPageModel', ConfigDetailsPageModel);
+container.registerTransient('StatusPageModel', StatusPageModel);
+container.registerTransient('StatusDetailsPageModel', StatusDetailsPageModel);
+container.registerTransient('ConfigPageModel', ConfigPageModel);
+container.registerTransient('ConfigDetailsPageModel', ConfigDetailsPageModel);
 
 const Routes: m.RouteDefs = {
   '/status': {
@@ -45,10 +45,10 @@ const Routes: m.RouteDefs = {
         })
       ),
   },
-  '/config/uaclient': {
+  '/config': {
     render: () => m(Layout, m(ConfigPage)),
   },
-  '/config/uaclient/:key': {
+  '/config/:key': {
     render: (vnode) => m(Layout, m(ConfigDetailsPage, { id: vnode.attrs.key })),
   },
 };

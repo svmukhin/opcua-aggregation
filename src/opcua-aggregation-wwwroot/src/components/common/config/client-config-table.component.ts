@@ -28,7 +28,7 @@ const ConfigTableRowComponent: m.Component<ConfigTableRowComponentAttrs> = {
           {
             class:
               'font-sans antialiased text-sm text-current font-medium hover:text-primary',
-            href: '/config/uaclient/' + vnode.attrs.config?.id,
+            href: '/config/' + vnode.attrs.config?.id,
           },
           'Details'
         )

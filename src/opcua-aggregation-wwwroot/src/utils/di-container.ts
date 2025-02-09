@@ -1,8 +1,19 @@
 import 'reflect-metadata';
 
+enum Scope {
+  Singleton,
+  Transient,
+}
+
+interface ServiceEntry {
+  service: any;
+  scope: Scope;
+  instance?: any;
+}
+
 class DiContainer {
   private static instance: DiContainer;
-  private services: Map<string, any> = new Map<string, any>();
+  private services: Map<string, ServiceEntry> = new Map<string, ServiceEntry>();
 
   private constructor() {}
 
@@ -13,16 +24,31 @@ class DiContainer {
     return DiContainer.instance;
   }
 
-  register(name: string, service: any) {
-    this.services.set(name, service);
+  registerSingleton(name: string, service: any) {
+    this.services.set(name, { service, scope: Scope.Singleton });
+  }
+
+  registerTransient(name: string, service: any) {
+    this.services.set(name, { service, scope: Scope.Transient });
   }
 
   resolve<T>(key: string): T {
-    const service = this.services.get(key);
-    if (!service) {
+    const entry = this.services.get(key);
+    if (!entry) {
       throw new Error(`Service ${key} not found`);
     }
 
+    if (entry.scope === Scope.Singleton) {
+      if (!entry.instance) {
+        entry.instance = this.createInstance(entry.service);
+      }
+      return entry.instance;
+    }
+
+    return this.createInstance(entry.service);
+  }
+
+  private createInstance(service: any): any {
     if (typeof service === 'function' && !service.prototype) {
       return service();
     }
