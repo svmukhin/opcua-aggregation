@@ -9,7 +9,7 @@ export class ClientSubscriptionDetailsComponent
   implements m.ClassComponent<ClientSubscriptionDetailsComponentAttrs>
 {
   view(vnode: m.Vnode<ClientSubscriptionDetailsComponentAttrs>) {
-    m('dl', { class: 'w-sm divide-y divide-gray-400' }, [
+    return m('dl', { class: 'w-sm divide-y divide-gray-400' }, [
       m('div', { class: 'flex flex-col pb-3' }, [
         m(
           'dt',

@@ -23,9 +23,11 @@ export class ConfigDetailsPage implements m.Component<ConfigDetailsPageAttrs> {
 
   async oninit(vnode: m.Vnode<ConfigDetailsPageAttrs>) {
     this.config = await this._service.getClientConfig(vnode.attrs.id);
-    this.config.channels = await this._service.getClientChannels(
-      this.config.id!
-    );
+    if (this.config.id !== undefined) {
+      this.config.channels = await this._service.getClientChannels(
+        this.config.id
+      );
+    }
   }
 
   view(vnode: m.Vnode<ConfigDetailsPageAttrs>) {
