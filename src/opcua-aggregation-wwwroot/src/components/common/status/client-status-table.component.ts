@@ -6,12 +6,12 @@ interface StatusTableRowAttrs {
 }
 
 interface ClientStatusTableAttrs {
-  statuses: UaClientStatus[];
+  statuses: UaClientStatus[] | undefined;
 }
 
-const StatusTableRowComponent: m.Component<StatusTableRowAttrs> = {
-  view: (vnode: m.Vnode<StatusTableRowAttrs>) =>
-    m('tr', { class: 'border-b border-gray-400 last:border-0' }, [
+class StatusTableRowComponent implements m.ClassComponent<StatusTableRowAttrs> {
+  view(vnode: m.Vnode<StatusTableRowAttrs>) {
+    return m('tr', { class: 'border-b border-gray-400 last:border-0' }, [
       m('td', { class: 'p-3' }, vnode.attrs.status?.sessionName),
       m('td', { class: 'p-3' }, vnode.attrs.status?.serverUri),
       m('td', { class: 'p-3' }, vnode.attrs.status?.connectError),
@@ -28,12 +28,15 @@ const StatusTableRowComponent: m.Component<StatusTableRowAttrs> = {
           'Details'
         )
       ),
-    ]),
-};
+    ]);
+  }
+}
 
-export const ClientStatusTableComponent: m.Component<ClientStatusTableAttrs> = {
-  view: (vnode: m.Vnode<ClientStatusTableAttrs>) =>
-    m('table', { class: 'w-full' }, [
+export class ClientStatusTableComponent
+  implements m.ClassComponent<ClientStatusTableAttrs>
+{
+  view(vnode: m.Vnode<ClientStatusTableAttrs>) {
+    return m('table', { class: 'w-full' }, [
       m(
         'thead',
         {
@@ -68,5 +71,6 @@ export const ClientStatusTableComponent: m.Component<ClientStatusTableAttrs> = {
           m(StatusTableRowComponent, { status })
         )
       ),
-    ]),
-};
+    ]);
+  }
+}

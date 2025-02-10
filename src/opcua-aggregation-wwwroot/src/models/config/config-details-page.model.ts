@@ -20,7 +20,7 @@ export class ConfigDetailsPageModel {
     if (!this.current) return;
 
     this.current.channels = await this._service.getClientChannels(
-      this.current.id
+      this.current.id!
     );
   }
 }

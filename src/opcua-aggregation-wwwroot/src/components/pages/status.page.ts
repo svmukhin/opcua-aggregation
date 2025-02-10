@@ -7,8 +7,11 @@ import { container } from '../../utils/di-container';
 export class StatusPage implements m.ClassComponent {
   statusModel: StatusPageModel;
 
-  async oninit() {
+  constructor() {
     this.statusModel = container.resolve('StatusPageModel');
+  }
+
+  async oninit() {
     await this.statusModel.load();
   }
 

@@ -7,10 +7,10 @@ const footerContainer = document.getElementById('footer');
 
 export class Layout implements m.ClassComponent {
   oninit() {
-    m.mount(headerContainer, Header);
-    m.mount(footerContainer, Footer);
+    m.mount(headerContainer!, Header);
+    m.mount(footerContainer!, Footer);
   }
-  view(vnode) {
+  view(vnode: m.Vnode) {
     return m('div', { class: 'w-full max-w-screen-xl' }, vnode.children);
   }
 }

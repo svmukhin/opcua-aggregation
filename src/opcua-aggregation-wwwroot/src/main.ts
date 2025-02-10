@@ -51,4 +51,4 @@ const Routes: m.RouteDefs = {
   },
 };
 
-m.route(content, '/status', Routes);
+m.route(content!, '/status', Routes);

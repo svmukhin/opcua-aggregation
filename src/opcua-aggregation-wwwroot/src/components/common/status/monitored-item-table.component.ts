@@ -7,7 +7,7 @@ interface MonitoredItemRowAttrs {
 }
 
 interface MonitoredItemTableAttrs {
-  items: MonitoredItem[];
+  items: MonitoredItem[] | undefined;
 }
 
 const MonitoredItemRowComponent: m.Component<MonitoredItemRowAttrs> = {
@@ -28,33 +28,31 @@ const MonitoredItemRowComponent: m.Component<MonitoredItemRowAttrs> = {
     ]),
 };
 
-export const MonitoredItemTableComponent: m.Component<MonitoredItemTableAttrs> =
-  {
-    view: (vnode: m.Vnode<MonitoredItemTableAttrs>) =>
-      m('table', { class: 'w-full' }, [
-        m(
-          'thead',
-          {
-            class:
-              'border-b border-gray-400 bg-gray-400 text-gray-900 text-sm font-medium',
-          },
-          m('tr', [
-            m('th', { class: 'px-2.5 py-2 text-start font-medium' }, 'Node Id'),
-            m('th', { class: 'px-2.5 py-2 text-start font-medium' }, 'Value'),
-            m(
-              'th',
-              { class: 'px-2.5 py-2 text-start font-medium' },
-              'Timestamp'
-            ),
-            m('th', { class: 'px-2.5 py-2 text-start font-medium' }, 'Quality'),
-          ])
-        ),
-        m(
-          'tbody',
-          { class: 'group text-sm' },
-          vnode.attrs.items?.map((item) => {
-            return m(MonitoredItemRowComponent, { item });
-          })
-        ),
-      ]),
-  };
+export class MonitoredItemTableComponent
+  implements m.ClassComponent<MonitoredItemTableAttrs>
+{
+  view(vnode: m.Vnode<MonitoredItemTableAttrs>) {
+    return m('table', { class: 'w-full' }, [
+      m(
+        'thead',
+        {
+          class:
+            'border-b border-gray-400 bg-gray-400 text-gray-900 text-sm font-medium',
+        },
+        m('tr', [
+          m('th', { class: 'px-2.5 py-2 text-start font-medium' }, 'Node Id'),
+          m('th', { class: 'px-2.5 py-2 text-start font-medium' }, 'Value'),
+          m('th', { class: 'px-2.5 py-2 text-start font-medium' }, 'Timestamp'),
+          m('th', { class: 'px-2.5 py-2 text-start font-medium' }, 'Quality'),
+        ])
+      ),
+      m(
+        'tbody',
+        { class: 'group text-sm' },
+        vnode.attrs.items?.map((item) => {
+          return m(MonitoredItemRowComponent, { item });
+        })
+      ),
+    ]);
+  }
+}

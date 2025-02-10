@@ -61,7 +61,7 @@ export class ConfigPage implements m.ClassComponent {
       serverUri: formData.serverUri,
       description: formData.description,
     });
-    this.clientConfigs.push(client);
+    this.clientConfigs?.push(client);
     this.toggleModal();
   };
 
