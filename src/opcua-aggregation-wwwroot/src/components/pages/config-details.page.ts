@@ -3,24 +3,29 @@ import { CardComponent } from '../shared/card.component';
 import { ClientConfigDetailsComponent } from '../common/config/client-config-details.component';
 import { ClientSubscriptionDetailsComponent } from '../common/config/client-subscription-details.component';
 import { ClientChannelsTableComponent } from '../common/config/client-channels-table.component';
-import { ConfigDetailsPageModel } from '../../models/config/config-details-page.model';
 import { container } from '../../utils/di-container';
+import { UaClientConfig } from '../../models/config/ua-client-config.model';
+import { IClientConfigService } from '../../services/client-config.service';
 
 interface ConfigDetailsPageAttrs {
   id: number;
 }
 
 export class ConfigDetailsPage implements m.Component<ConfigDetailsPageAttrs> {
-  private configModel: ConfigDetailsPageModel;
+  private _service: IClientConfigService;
+  config: UaClientConfig | undefined;
+
   constructor() {
-    this.configModel = container.resolve<ConfigDetailsPageModel>(
-      'ConfigDetailsPageModel'
+    this._service = container.resolve<IClientConfigService>(
+      'IClientConfigService'
     );
   }
 
   async oninit(vnode: m.Vnode<ConfigDetailsPageAttrs>) {
-    await this.configModel.load(vnode.attrs.id);
-    await this.configModel.loadChannels();
+    this.config = await this._service.getClientConfig(vnode.attrs.id);
+    this.config.channels = await this._service.getClientChannels(
+      this.config.id!
+    );
   }
 
   view(vnode: m.Vnode<ConfigDetailsPageAttrs>) {
@@ -29,13 +34,13 @@ export class ConfigDetailsPage implements m.Component<ConfigDetailsPageAttrs> {
         m(
           CardComponent,
           m(ClientConfigDetailsComponent, {
-            config: this.configModel.current,
+            config: this.config,
           })
         ),
         m(
           CardComponent,
           m(ClientSubscriptionDetailsComponent, {
-            config: this.configModel.current,
+            config: this.config,
           })
         ),
       ]),
@@ -43,7 +48,7 @@ export class ConfigDetailsPage implements m.Component<ConfigDetailsPageAttrs> {
         m(
           CardComponent,
           m(ClientChannelsTableComponent, {
-            channels: this.configModel.current?.channels,
+            channels: this.config?.channels,
           })
         ),
       ]),

@@ -9,8 +9,6 @@ import { ConfigPage } from './components/pages/config.page';
 import { StatusDetailsPage } from './components/pages/status-details.page';
 import { StatusPage } from './components/pages/status.page';
 import { container } from './utils/di-container';
-import { StatusDetailsPageModel } from './models/status/status-details-page.model';
-import { ConfigDetailsPageModel } from './models/config/config-details-page.model';
 
 const content = document.getElementById('content');
 
@@ -24,9 +22,6 @@ container.registerSingleton(
   'IClientConfigService',
   () => new ClientConfigService(API_BASE_URL + '/config/')
 );
-
-container.registerTransient('StatusDetailsPageModel', StatusDetailsPageModel);
-container.registerTransient('ConfigDetailsPageModel', ConfigDetailsPageModel);
 
 const Routes: m.RouteDefs = {
   '/status': {

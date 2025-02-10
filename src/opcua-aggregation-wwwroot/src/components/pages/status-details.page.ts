@@ -2,8 +2,9 @@ import m from 'mithril';
 import { MonitoredItemTableComponent } from '../common/status/monitored-item-table.component';
 import { ClientStatusDetailsInfoComponent } from '../common/status/client-status-details-info.component';
 import { CardComponent } from '../shared/card.component';
-import { StatusDetailsPageModel } from '../../models/status/status-details-page.model';
 import { container } from '../../utils/di-container';
+import { IClientStatusService } from '../../services/client-status.service';
+import { UaClientStatus } from '../../models/status/ua-client-status.model';
 
 interface StatusDetailsPageAttrs {
   id: number;
@@ -12,15 +13,17 @@ interface StatusDetailsPageAttrs {
 export class StatusDetailsPage
   implements m.ClassComponent<StatusDetailsPageAttrs>
 {
-  private _statusDetailsModel: StatusDetailsPageModel;
+  private _service: IClientStatusService;
+  status: UaClientStatus | undefined;
+
   constructor() {
-    this._statusDetailsModel = container.resolve<StatusDetailsPageModel>(
-      'StatusDetailsPageModel'
+    this._service = container.resolve<IClientStatusService>(
+      'IClientStatusService'
     );
   }
 
   async oninit(vnode: m.Vnode<StatusDetailsPageAttrs>) {
-    await this._statusDetailsModel.load(vnode.attrs.id);
+    this.status = await this._service.getClientStatus(vnode.attrs.id);
   }
 
   view(vnode: m.Vnode<StatusDetailsPageAttrs>) {
@@ -29,7 +32,7 @@ export class StatusDetailsPage
         m(
           CardComponent,
           m(ClientStatusDetailsInfoComponent, {
-            status: this._statusDetailsModel.current,
+            status: this.status,
           })
         ),
       ]),
@@ -37,7 +40,7 @@ export class StatusDetailsPage
         m(
           CardComponent,
           m(MonitoredItemTableComponent, {
-            items: this._statusDetailsModel.current?.monitoredItems,
+            items: this.status?.monitoredItems,
           })
         ),
       ]),
