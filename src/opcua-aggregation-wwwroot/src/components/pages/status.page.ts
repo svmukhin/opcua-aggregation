@@ -1,18 +1,22 @@
 import m from 'mithril';
-import { StatusPageModel } from '../../models/status/status-page.model';
 import { ClientStatusTableComponent } from '../common/status/client-status-table.component';
 import { CardComponent } from '../shared/card.component';
 import { container } from '../../utils/di-container';
+import { IClientStatusService } from '../../services/client-status.service';
+import { UaClientStatus } from '../../models/status/ua-client-status.model';
 
 export class StatusPage implements m.ClassComponent {
-  statusModel: StatusPageModel;
+  private _service: IClientStatusService;
+  statusesList: UaClientStatus[] | undefined;
 
   constructor() {
-    this.statusModel = container.resolve('StatusPageModel');
+    this._service = container.resolve<IClientStatusService>(
+      'IClientStatusService'
+    );
   }
 
   async oninit() {
-    await this.statusModel.load();
+    this.statusesList = await this._service.getClientStatuses();
   }
 
   view() {
@@ -20,7 +24,7 @@ export class StatusPage implements m.ClassComponent {
       m(
         CardComponent,
         m(ClientStatusTableComponent, {
-          statuses: this.statusModel.list,
+          statuses: this.statusesList,
         })
       ),
     ]);

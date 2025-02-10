@@ -9,7 +9,6 @@ import { ConfigPage } from './components/pages/config.page';
 import { StatusDetailsPage } from './components/pages/status-details.page';
 import { StatusPage } from './components/pages/status.page';
 import { container } from './utils/di-container';
-import { StatusPageModel } from './models/status/status-page.model';
 import { StatusDetailsPageModel } from './models/status/status-details-page.model';
 import { ConfigDetailsPageModel } from './models/config/config-details-page.model';
 
@@ -26,7 +25,6 @@ container.registerSingleton(
   () => new ClientConfigService(API_BASE_URL + '/config/')
 );
 
-container.registerTransient('StatusPageModel', StatusPageModel);
 container.registerTransient('StatusDetailsPageModel', StatusDetailsPageModel);
 container.registerTransient('ConfigDetailsPageModel', ConfigDetailsPageModel);
 
