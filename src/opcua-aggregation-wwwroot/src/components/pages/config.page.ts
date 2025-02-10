@@ -56,7 +56,12 @@ export class ConfigPage implements m.ClassComponent {
   };
 
   addClient = async (formData: Record<string, string>) => {
-    alert('Add client');
+    const client = await this._service.addClient({
+      sessionName: formData.sessionName,
+      serverUri: formData.serverUri,
+      description: formData.description,
+    });
+    this.clientConfigs.push(client);
     this.toggleModal();
   };
 

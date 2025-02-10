@@ -7,6 +7,7 @@ export interface IClientConfigService {
   getClientConfig(id: number): Promise<UaClientConfig>;
   getClientChannels(clientId: number): Promise<UaClientChannelConfig[]>;
   getChannel(id: number): Promise<UaClientChannelConfig>;
+  addClient(client: UaClientConfig): Promise<UaClientConfig>;
 }
 
 export class ClientConfigService {
