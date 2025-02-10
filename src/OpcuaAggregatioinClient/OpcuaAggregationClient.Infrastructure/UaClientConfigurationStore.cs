@@ -46,7 +46,7 @@ public class UaClientConfigurationStore(
         ct.ThrowIfCancellationRequested();
 
         var query = """
-        insert into session ("sessionName, "serverUri", "sessionLifetime", "keepAliveInterval", "reconnectPeriod", description, enabled)
+        insert into session ("sessionName", "serverUri", "sessionLifetime", "keepAliveInterval", "reconnectPeriod", description, enabled)
         values (@SessionName, @ServerUri, @SessionLifetime, @KeepAliveInterval, @ReconnectPeriod, @Description, @Enabled)
         returning id
         """;
@@ -73,7 +73,7 @@ public class UaClientConfigurationStore(
         var query = """
         update session
         set 
-            "sessionName = @SessionName, 
+            "sessionName" = @SessionName, 
             "serverUri" = @ServerUri, 
             "sessionLifetime" = @SessionLifetime, 
             "keepAliveInterval" = @KeepAliveInterval, 
@@ -149,7 +149,7 @@ public class UaClientConfigurationStore(
         ct.ThrowIfCancellationRequested();
 
         var query = """
-        insert into channel (name, nodeId, description, id_session)
+        insert into channel (name, "nodeId", description, id_session)
         values (@Name, @NodeId, @Description, @ClientId)
         returning id
         """;
@@ -174,7 +174,7 @@ public class UaClientConfigurationStore(
         update channel
         set 
             name = @Name, 
-            nodeId = @NodeId, 
+            "nodeId" = @NodeId, 
             description = @Description, 
             id_session = @ClientId
         where id = @Id
