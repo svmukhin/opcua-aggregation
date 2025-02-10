@@ -1,5 +1,4 @@
 import m from 'mithril';
-import { ConfigPageModel } from '../../models/config/config-page.model';
 import { CardComponent } from '../shared/card.component';
 import { ClientConfigTableComponent } from '../common/config/client-config-table.component';
 import { ButtonGroupComponent } from '../shared/button-group.component';
@@ -8,6 +7,8 @@ import { ModalComponent } from '../shared/modal.component';
 import { FormComponent } from '../shared/form/form.component';
 import { FormFieldConfig } from '../shared/form/form.model';
 import { container } from '../../utils/di-container';
+import { IClientConfigService } from '../../services/client-config.service';
+import { UaClientConfig } from '../../models/config/ua-client-config.model';
 
 const formFiledConfigs: FormFieldConfig[] = [
   {
@@ -18,10 +19,10 @@ const formFiledConfigs: FormFieldConfig[] = [
     required: true,
   },
   {
-    name: 'sessionUri',
-    label: 'Session URI',
+    name: 'serverUri',
+    label: 'Server URI',
     type: 'text',
-    placeholder: 'Session URI',
+    placeholder: 'Server URI',
     required: true,
   },
   {
@@ -31,23 +32,22 @@ const formFiledConfigs: FormFieldConfig[] = [
     placeholder: 'Description',
     required: true,
   },
-  {
-    name: 'keepAliveInterval',
-    label: 'Keep Alive Interval',
-    type: 'number',
-    placeholder: 'Keep Alive Interval',
-    required: true,
-  },
 ];
 
 export class ConfigPage implements m.ClassComponent {
   isModalOpen = false;
 
-  configModel: ConfigPageModel;
+  private _service: IClientConfigService;
+  clientConfigs: UaClientConfig[] | undefined;
+
+  constructor() {
+    this._service = container.resolve<IClientConfigService>(
+      'IClientConfigService'
+    );
+  }
 
   async oninit() {
-    this.configModel = container.resolve('ConfigPageModel');
-    await this.configModel.load();
+    this.clientConfigs = await this._service.getClientConfigs();
   }
 
   toggleModal = () => {
@@ -67,7 +67,7 @@ export class ConfigPage implements m.ClassComponent {
       ]),
       m(
         CardComponent,
-        m(ClientConfigTableComponent, { configs: this.configModel.list })
+        m(ClientConfigTableComponent, { configs: this.clientConfigs })
       ),
       m(
         ModalComponent,

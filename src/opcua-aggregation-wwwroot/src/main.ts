@@ -11,7 +11,6 @@ import { StatusPage } from './components/pages/status.page';
 import { container } from './utils/di-container';
 import { StatusPageModel } from './models/status/status-page.model';
 import { StatusDetailsPageModel } from './models/status/status-details-page.model';
-import { ConfigPageModel } from './models/config/config-page.model';
 import { ConfigDetailsPageModel } from './models/config/config-details-page.model';
 
 const content = document.getElementById('content');
@@ -29,7 +28,6 @@ container.registerSingleton(
 
 container.registerTransient('StatusPageModel', StatusPageModel);
 container.registerTransient('StatusDetailsPageModel', StatusDetailsPageModel);
-container.registerTransient('ConfigPageModel', ConfigPageModel);
 container.registerTransient('ConfigDetailsPageModel', ConfigDetailsPageModel);
 
 const Routes: m.RouteDefs = {

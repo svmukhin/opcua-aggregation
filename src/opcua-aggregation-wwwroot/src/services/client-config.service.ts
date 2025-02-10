@@ -30,6 +30,15 @@ export class ClientConfigService {
     });
   }
 
+  async addClient(client: UaClientConfig) {
+    return await m.request<UaClientConfig>({
+      method: 'POST',
+      url: this._baseUrl + 'client',
+      body: client,
+      withCredentials: true,
+    });
+  }
+
   async getClientChannels(clientId: number) {
     return await m.request<UaClientChannelConfig[]>({
       method: 'GET',
