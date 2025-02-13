@@ -43,7 +43,7 @@ export class ClientConfigDetailsComponent
         m(
           'dd',
           { class: 'text-lg font-semibold' },
-          vnode.attrs.config?.enabled ? 'Enabledd' : 'Disabld'
+          vnode.attrs.config?.enabled ? 'Enabled' : 'Disabld'
         ),
       ]),
     ]);
