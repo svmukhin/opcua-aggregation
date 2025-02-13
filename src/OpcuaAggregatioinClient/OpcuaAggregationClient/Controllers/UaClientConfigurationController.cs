@@ -90,7 +90,7 @@ public class UaClientConfigurationController(
         return new JsonResult(new { Error = $"Error accured while update configuration with id {id}." });
     }
 
-    [HttpDelete]
+    [HttpDelete("client/{id:int}")]
     public async Task<IActionResult> DeleteClientConfiguration(int id, CancellationToken ct)
     {
         var config = await _store.GetUaClientConfigurationByIdAsync(id, ct);

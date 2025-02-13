@@ -53,7 +53,7 @@ export class ConfigPage implements m.ClassComponent {
   }
 
   async oninit() {
-    this.clientConfigs = await this._service.getClientConfigs();
+    this.clientConfigs = await this._service.getClients();
   }
 
   toggleModal = () => {
