@@ -1,5 +1,5 @@
-export class FormFieldModel {
-  value: string = '';
+export class FormControlComponent {
+  value: string;
   error: string = '';
   isTouched: boolean = false;
 
@@ -9,8 +9,12 @@ export class FormFieldModel {
     public type: 'text' | 'password' | 'email' | 'number' | 'textarea',
     public placeholder?: string,
     public required?: boolean,
-    public validation?: (value: string) => string | null
-  ) {}
+    public validation?: (value: string) => string | null,
+    public hidden: boolean = false,
+    public initialValue: string = ''
+  ) {
+    this.value = initialValue;
+  }
 
   setValue(value: string) {
     this.value = value;

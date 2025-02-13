@@ -1,17 +1,12 @@
 import m from 'mithril';
 
 interface ModalAttrs {
-  isOpen: boolean;
   onClose: () => void;
 }
 
 export class ModalComponent implements m.Component<ModalAttrs> {
   view(vnode: m.Vnode<ModalAttrs>) {
-    const { isOpen, onClose } = vnode.attrs;
-
-    if (!isOpen) {
-      return null;
-    }
+    const { onClose } = vnode.attrs;
 
     return m(
       'div',

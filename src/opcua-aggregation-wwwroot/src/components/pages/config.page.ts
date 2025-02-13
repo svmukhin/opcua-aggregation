@@ -3,14 +3,19 @@ import { CardComponent } from '../shared/card.component';
 import { ClientConfigTableComponent } from '../common/config/client-config-table.component';
 import { ButtonGroupComponent } from '../shared/button-group.component';
 import { ButtonComponent } from '../shared/button.component';
-import { ModalComponent } from '../shared/modal.component';
-import { FormComponent } from '../shared/form/form.component';
-import { FormFieldConfig } from '../shared/form/form.model';
+import { FormFieldConfig } from '../shared/form/form-group.component';
 import { container } from '../../utils/di-container';
 import { IClientConfigService } from '../../services/client-config.service';
 import { UaClientConfig } from '../../models/config/ua-client-config.model';
+import { ConfigEditModalComponent } from '../common/config/config-edit-modal.component';
 
-const formFiledConfigs: FormFieldConfig[] = [
+export const formFieldConfigs: FormFieldConfig[] = [
+  {
+    name: 'id',
+    label: 'ID',
+    type: 'text',
+    hidden: true,
+  },
   {
     name: 'sessionName',
     label: 'Session Name',
@@ -39,6 +44,7 @@ export class ConfigPage implements m.ClassComponent {
 
   private _service: IClientConfigService;
   clientConfigs: UaClientConfig[] | undefined;
+  selectedConfig: UaClientConfig | undefined;
 
   constructor() {
     this._service = container.resolve<IClientConfigService>(
@@ -55,14 +61,13 @@ export class ConfigPage implements m.ClassComponent {
     m.redraw();
   };
 
-  addClient = async (formData: Record<string, string>) => {
-    const client = await this._service.addClient({
-      sessionName: formData.sessionName,
-      serverUri: formData.serverUri,
-      description: formData.description,
-    });
+  addOrUpdateClient = async (config: UaClientConfig) => {
+    if (config.id) {
+      await this._service.updateClient(config);
+      return;
+    }
+    const client = await this._service.createClient(config);
     this.clientConfigs?.push(client);
-    this.toggleModal();
   };
 
   view() {
@@ -74,19 +79,13 @@ export class ConfigPage implements m.ClassComponent {
         CardComponent,
         m(ClientConfigTableComponent, { configs: this.clientConfigs })
       ),
-      m(
-        ModalComponent,
-        {
-          isOpen: this.isModalOpen,
+      this.isModalOpen &&
+        m(ConfigEditModalComponent, {
+          formFieldConfigs,
+          config: this.selectedConfig || new UaClientConfig({}),
+          onSubmit: this.addOrUpdateClient,
           onClose: this.toggleModal,
-        },
-        [
-          m(FormComponent, {
-            onSubmit: this.addClient,
-            configs: formFiledConfigs,
-          }),
-        ]
-      ),
+        }),
     ]);
   }
 }

@@ -7,7 +7,8 @@ export interface IClientConfigService {
   getClientConfig(id: number): Promise<UaClientConfig>;
   getClientChannels(clientId: number): Promise<UaClientChannelConfig[]>;
   getChannel(id: number): Promise<UaClientChannelConfig>;
-  addClient(client: UaClientConfig): Promise<UaClientConfig>;
+  createClient(client: UaClientConfig): Promise<UaClientConfig>;
+  updateClient(client: UaClientConfig): Promise<UaClientConfig>;
 }
 
 export class ClientConfigService {
@@ -31,10 +32,19 @@ export class ClientConfigService {
     });
   }
 
-  async addClient(client: UaClientConfig) {
+  async createClient(client: UaClientConfig) {
     return await m.request<UaClientConfig>({
       method: 'POST',
       url: this._baseUrl + 'client',
+      body: client,
+      withCredentials: true,
+    });
+  }
+
+  async updateClient(client: UaClientConfig) {
+    return await m.request<UaClientConfig>({
+      method: 'PUT',
+      url: this._baseUrl + 'client/' + client.id,
       body: client,
       withCredentials: true,
     });

@@ -1,27 +1,33 @@
-import { FormFieldModel } from './form-field.model';
+import { FormControlComponent } from './form-control.component';
 
 export interface FormFieldConfig {
   name: string;
   label: string;
   type: 'text' | 'password' | 'email' | 'number' | 'textarea';
   placeholder?: string;
+  hidden?: boolean;
   required?: boolean;
   validation?: (value: string) => string | null;
 }
 
-export class FormModel {
-  fields: FormFieldModel[] = [];
+export class FormGroupComponent {
+  fields: FormControlComponent[] = [];
 
-  constructor(configs: FormFieldConfig[]) {
+  constructor(
+    configs: FormFieldConfig[],
+    initialValues?: Record<string, string>
+  ) {
     this.fields = configs.map(
       (config) =>
-        new FormFieldModel(
+        new FormControlComponent(
           config.name,
           config.label,
           config.type,
           config.placeholder,
           config.required,
-          config.validation
+          config.validation,
+          config.hidden,
+          initialValues ? initialValues[config.name] : ''
         )
     );
   }
